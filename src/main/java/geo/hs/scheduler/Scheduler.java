@@ -1,13 +1,16 @@
 package geo.hs.scheduler;
 
 import geo.hs.crawling.Crawler;
+import geo.hs.model.dsm.Dsm;
 import geo.hs.model.scheduler.SchedulerSunInfo;
+import geo.hs.repository.GetDsmRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -15,13 +18,14 @@ public class Scheduler {
 	
 	private Crawler crawler = new Crawler();
 	private ArrayList<SchedulerSunInfo> ssi = new ArrayList<>();
+	private GetDsmRepository getDsmRepository = new GetDsmRepository();
 	
 	/**
 	 * 태양 파라미터 크롤링
 	 * 해당 함수가 가장 먼저 매일 0시에 호출됨
 	 * 이유는 한 번만 전국적으로 크롤링 후 저장해놓고 hillshade 값을 계산하게 함
 	 */
-	@Scheduled()
+	@Scheduled(cron = "0 0 0 * * * " ) // 매일 0시에 호출
 	public void sunCrawler(){
 		LocalDate now = LocalDate.now();
 		crawler.setDate(now.toString());
@@ -44,13 +48,13 @@ public class Scheduler {
 		}
 	}
 	
-	// @Scheduled(cron = "0 0 0 * * * " ) 매일 찍는 코드
-	// @Scheduled(fixedRateString = "5", initialDelay = 3000)
-	public void scheduler_128_37(){
-		// dsm select from db
+	// @Scheduled(cron = "0 0 0 * * * " ) 매일 0시에 호출
+	public void scheduler_128_37(){ // Thread로 만들기 위해 이렇게 이름 지었음
+		// get dsm from db
+		List<Dsm> dsm = getDsmRepository.getDsm(12837);
 		
 		// hillShade 값 계산
 		
-		
+		// shp 파일과 비교 후 hillShade 값 계산
 	}
 }
