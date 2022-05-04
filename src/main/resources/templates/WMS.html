@@ -49,50 +49,6 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
 
-    function analysisStart(){
-
-        window.alert(addressInput);
-
-        let addressInput = document.getElementById('address').value;
-        let dateInput = document.getElementById('date').value;
-        let timeInput = document.getElementById('time').value;
-
-        let weatherOption = document.getElementById('weatherCheck').value;
-        let bridgeOption = document.getElementById('bridgeCheck').value;
-        let frostOption = document.getElementById('frostCheck').value;
-
-    }
-
-
-
-    let vectorSource = new ol.source.Vector({
-        format: new ol.format.GeoJSON(),
-        url: function (extent) {
-            console.log(extent.join(','));
-            let strUrl = 'http://localhost:8088/geoserver/GeoOr/wfs?' +
-                'service=WFS&' +
-                'version=1.1.0&' +
-                'request=GetFeature&' +
-                'typename=GeoOr:PostGis_SHP&' +
-                'outputFormat=application/json&' +
-                'srsname=EPSG:3857&' +
-                'bbox=' + extent.join(',') + ',EPSG:3857';
-            return strUrl;
-        },
-        strategy: ol.loadingstrategy.bbox
-    });
-
-    let vector = new ol.layer.Vector({
-        className: "wfsLayer",
-        source: vectorSource,
-        style: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: 'rgba(0, 0, 255, 1.0)',
-                width: 2
-            })
-        })
-    })
-
     // vworld 배경지도 띄우기
     let map = new ol.Map({
         target: 'map',
@@ -112,23 +68,18 @@
         })
     });
 
-    // stroke = 경계선, fill = 채우기
-
-    // 미리 3개의 색깔 스타일 지정 (빨, 노, 초)
-    let styleRed = new ol.style.Style({
-        stroke: new ol.style.Stroke({color: '#d80303'}),
-        fill: new ol.style.Fill({color: '#d80303'})
-    });
-
-    let styleYellow = new ol.style.Style({
-        stroke: new ol.style.Stroke({color: '#f4e571'}),
-        fill: new ol.style.Fill({color: '#f4e571'})
-    });
-
-    let styleGreen = new ol.style.Style({
-        stroke: new ol.style.Stroke({color: '#32ec54'}),
-        fill: new ol.style.Fill({color: '#32ec54'})
-    });
+    // wms layer 생성
+    let wmsLayer = new ol.layer.Tile({
+        visible: true,
+        source: new ol.source.TileWMS({
+            url: 'http://localhost:8088/geoserver/GeoOr/wms',
+            params: {
+                'FORMAT': 'image/png',
+                'TILED' : true,
+                'LAYERS': 'GeoOr:road'
+            }
+        })
+    })
 
     function showMarker() {
         hideMarker(); //기존에 있던 마커 제거
@@ -166,28 +117,27 @@
         map.getView().setZoom(16);
     }
 
-    function showWMS() {
-        let features = vectorSource.getFeatures();
-
-        // for문 돌면서 각 값의 범위에 따라 색깔 다르게 지정
-        let i;
-        for (i = 0; i < features.length; i++) {
-            if (features[i]['values_'].hillshade <= 50) features[i].setStyle(styleRed);
-            else if (features[i]['values_'].hillshade <= 70) features[i].setStyle(styleYellow);
-            else features[i].setStyle(styleGreen);
-        }
-
-        map.removeLayer(vector);
-        map.addLayer(vector);
-
-    }
-
     //EPSG:4326 -> EPSG:3857
     function convertCoordinates(lon, lat) {
         let x = (lon * 20037508.34) / 180;
         let y = Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / (Math.PI / 180);
         y = (y * 20037508.34) / 180;
         return [x, y];
+    }
+
+    function analysisStart(){
+
+        map.addLayer(wmsLayer);
+
+        window.alert(addressInput);
+
+        let addressInput = document.getElementById('address').value;
+        let dateInput = document.getElementById('date').value;
+        let timeInput = document.getElementById('time').value;
+
+        let weatherOption = document.getElementById('weatherCheck').value;
+        let bridgeOption = document.getElementById('bridgeCheck').value;
+        let frostOption = document.getElementById('frostCheck').value;
     }
 
 </script>
