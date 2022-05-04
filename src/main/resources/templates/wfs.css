@@ -1,0 +1,94 @@
+
+/* hillshade 타이틀 */
+
+#title{
+    width: 29%;
+    margin-left: 3px;
+
+    background-color: #69BDEA;
+    color: white;
+
+    height: 60px;
+    text-indent: 20px;
+    line-height: 60px;
+}
+
+/* 지도 */
+
+#map {
+    width: 70%;
+    height: 650px;
+    float: right;
+}
+
+/* 주소 날짜 시간 */
+
+#data{
+    width: 30%;
+    margin-left: 20px;
+    margin-top: 20px;
+
+    line-height: 50px;
+}
+
+#weather{
+    width: 28%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-right: 5px;
+    font-size: 15px;
+
+}
+
+.inputData{
+    width: 70%;
+    padding: 10px;
+    margin-left: 30px;
+    font-size: 15px;
+
+    border: 0px;
+
+}
+
+.inputData:focus{
+    outline: none;
+}
+
+/* 옵션 */
+
+#option{
+    width: 30%;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+label{
+    margin-right: 30px;
+}
+
+/* 분석 버튼 */
+
+#startButton{
+    width: 30%;
+    margin-top: 250px;
+
+}
+
+#analysisButton{
+    width: 90%;
+    padding: 15px;
+    margin-left: 4%;
+    font-size: 15px;
+
+    background-color: #69BDEA;
+    color: white;
+
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+#analysisButton:hover{
+    background-color: darkgray;
+}
+
