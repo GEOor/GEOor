@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="wfs.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/css/ol.css">
     <!-- javascript -->
-    <script type="text/javascript" src="map.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/build/ol.js"></script>
 
     <title>GEOorWeb</title>
@@ -21,16 +20,13 @@
 </div>
 
 <div id="data">
-
-    주소 <input id="adress" class="inputData" type="text" placeholder="주소 입력"> <br>
+    주소 <input id="address" class="inputData" type="text" placeholder="주소 입력"> <br>
     날짜 <input id="date" class="inputData" type="date" value="2022-05-01" min="2022-04-27" max="2022-05-30"> <br>
-    시간 <input id="time" class="inputData" type="time" value="00:00:00"> <br>
+    시간 <input id="time" class="inputData" type="time" value="00:00:00" step="3600" required> <br>
     옵션 <br>
-
 </div>
 
 <div id="option">
-
     <input id="weatherCheck" type="checkbox">
     <label for="weatherCheck"> 날씨 🌈️ </label>
 
@@ -39,7 +35,6 @@
 
     <input id="frostCheck" type="checkbox">
     <label for="frostCheck"> 결빙 ️❄️ </label>
-
 </div>
 
 <div id="startButton">
@@ -125,20 +120,112 @@
         return [x, y];
     }
 
+    //주소를 xy좌표로 변환하기
+    function addressToCoordinates(address) {
+        let request = new XMLHttpRequest();
+
+        request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
+            + "&crs=epsg:3857" // EPSG:3857
+            + "&address=" + encodeURI(address) + "&refine=true&simple=false&format=xml&type=road"
+            + "&key=4480D1CC-812E-33AC-8A4D-05E08AC71B7A");
+        request.send();
+        request.onreadystatechange = function() {
+            if (request.readyState === 4) {
+                if (request.status >= 200 && request.status < 300) {
+                    let xml = request.responseXML;
+                    let xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
+                    let yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
+
+                    console.log(xCoordinate, yCoordinate);
+                    return [Number(xCoordinate), Number(yCoordinate)];
+                } else {
+                    alert(request.status);
+                }
+            }
+        }
+    }
+
+    //입력받는 날짜범위 수정하기
+    function inputDataRange(){
+        let today = new Date();
+
+        //오늘 날짜
+        let year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        month = month < 10 ? '0' + month : month;
+        let date = today.getDate();
+        date = date < 10 ? '0' + date : date;
+
+        document.getElementById('date').value = String(year + '-' + month + '-' + date);
+        document.getElementById('date').min = String(year + '-' + month + '-' + date);
+
+        //일주일 뒤
+        let weekDay = today.getTime() + (7*24*60*60*1000);
+        today.setTime(weekDay);
+
+        let weekYear = today.getFullYear();
+        let weekMonth = today.getMonth() + 1;
+        weekMonth = weekMonth < 10 ? '0' + weekMonth : weekMonth;
+        let weekDate = today.getDate();
+        weekDate = weekDate < 10 ? '0' + weekDate : weekDate;
+
+        document.getElementById('date').max = String(weekYear + '-' + weekMonth + '-' + weekDate);
+    }
+
+    function inputAddress(){
+        let addressInput = document.getElementById('address').value;
+        console.log("입력한 주소: ", addressInput);
+        return addressInput;
+    }
+
+    function inputDate(){
+        let dateInput = document.getElementById('date').value;
+        console.log("입력한 날짜: ", dateInput);
+        return dateInput;
+    }
+
+    function inputTime(){
+        let timeInput = document.getElementById('time').value;
+        timeInput = String(timeInput).substring(0, 2);
+        console.log("입력한 시간: ", timeInput);
+        return timeInput;
+    }
+
+    function inputWeather(){
+        let weatherOption = document.getElementById('weatherCheck').checked;
+        console.log("날씨 옵션: ", weatherOption);
+        return weatherOption;
+    }
+
+    function inputBridge(){
+        let bridgeOption = document.getElementById('bridgeCheck').checked;
+        console.log("교량 옵션: ", bridgeOption);
+        return bridgeOption;
+    }
+
+    function inputFrost(){
+        let frostOption = document.getElementById('frostCheck').checked;
+        console.log("결빙 옵션: ", frostOption);
+        return frostOption;
+    }
+
     function analysisStart(){
 
-        map.addLayer(wmsLayer);
+        //map.addLayer(wmsLayer);
+        //window.alert(addressInput);
+        ////
+        addressToCoordinates(inputAddress());
+        inputDate();
+        inputTime();
 
-        window.alert(addressInput);
-
-        let addressInput = document.getElementById('address').value;
-        let dateInput = document.getElementById('date').value;
-        let timeInput = document.getElementById('time').value;
-
-        let weatherOption = document.getElementById('weatherCheck').value;
-        let bridgeOption = document.getElementById('bridgeCheck').value;
-        let frostOption = document.getElementById('frostCheck').value;
+        inputWeather();
+        inputBridge();
+        inputFrost();
     }
+
+    <!-- 날짜 범위 설정 -->
+    inputDataRange();
+
 
 </script>
 
