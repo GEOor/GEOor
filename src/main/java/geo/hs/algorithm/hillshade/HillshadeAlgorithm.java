@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- 2021-11-5
- 작성자 : 천수환
  내용 : Hillshade Algorithm 구현, 태양고도각(si), dem값(di) 2차원 ArrayList를 이용해 똑같은 크기의 Hillshade(음영기복도) 2차원 ArrayList 로 변환
  작동 원리
  1) i, j가 모두 0이 아닌 점에서, 해당 점을 가운데로하는 3 by 3 정사각형을 만든다.
