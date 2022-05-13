@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <!-- css -->
     <link rel="stylesheet" href="wfs.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/css/ol.css">
@@ -22,13 +23,13 @@
 <div id="data">
     주소 <input id="address" class="inputData" type="text" placeholder="주소 입력"> <br>
     날짜 <input id="date" class="inputData" type="date" value="2022-05-01" min="2022-04-27" max="2022-05-30"> <br>
-    시간 <input id="time" class="inputData" type="time" value="00:00:00" step="3600" required> <br>
+    시간 <input id="time" class="inputData" type="time" value="00:00:00" step="3600"> <br>
     옵션 <br>
 </div>
 
 <div id="option">
     <input id="weatherCheck" type="checkbox">
-    <label for="weatherCheck"> 날씨 🌈️ </label>
+    <label for="weatherCheck"> 터널 🌈 </label>
 
     <input id="bridgeCheck" type="checkbox">
     <label for="bridgeCheck"> 교량 🚙 </label>
@@ -39,6 +40,10 @@
 
 <div id="startButton">
     <button id="analysisButton" onclick="analysisStart()"> 분석시작 </button>
+</div>
+
+<div class="layerPopup">
+    <div class="spinner"></div>
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -137,7 +142,7 @@
                     let yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
 
                     console.log(xCoordinate, yCoordinate);
-                    return [Number(xCoordinate), Number(yCoordinate)];
+                    return Number(xCoordinate), Number(yCoordinate);
                 } else {
                     alert(request.status);
                 }
@@ -171,6 +176,7 @@
 
         document.getElementById('date').max = String(weekYear + '-' + weekMonth + '-' + weekDate);
     }
+    inputDataRange();
 
     function inputAddress(){
         let addressInput = document.getElementById('address').value;
@@ -209,6 +215,7 @@
         return frostOption;
     }
 
+    //분석시작 버튼 눌렀을 때, 실행시키기
     function analysisStart(){
 
         //map.addLayer(wmsLayer);
@@ -222,9 +229,6 @@
         inputBridge();
         inputFrost();
     }
-
-    <!-- 날짜 범위 설정 -->
-    inputDataRange();
 
 
 </script>
