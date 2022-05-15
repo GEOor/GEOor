@@ -3,14 +3,13 @@
 
 #title{
     width: 29%;
-    margin-left: 3px;
+    margin-left: 0.1%;
 
     background-color: #69BDEA;
     color: white;
 
-    height: 60px;
-    text-indent: 20px;
-    line-height: 60px;
+    text-indent: 5%;
+    line-height: 380%;
 }
 
 /* 지도 */
@@ -25,28 +24,18 @@
 
 #data{
     width: 30%;
-    margin-left: 20px;
-    margin-top: 20px;
-
-    line-height: 50px;
-}
-
-#weather{
-    width: 28%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-right: 5px;
-    font-size: 15px;
-
+    margin-left: 1.5%;
+    margin-top: 1.5%;
+    line-height: 350%;
 }
 
 .inputData{
     width: 70%;
-    padding: 10px;
-    margin-left: 30px;
+    padding: 1.5%;
+    margin-left: 5%;
     font-size: 15px;
 
-    border: 0px;
+    border: none;
 
 }
 
@@ -58,25 +47,25 @@
 
 #option{
     width: 30%;
-    margin-left: 20px;
-    margin-top: 20px;
+    margin-left: 1.5%;
+    margin-top: 1.5%;
 }
 
 label{
-    margin-right: 30px;
+    margin-right: 8%;
 }
 
 /* 분석 버튼 */
 
 #startButton{
     width: 30%;
-    margin-top: 250px;
+    margin-top: 17%;
 
 }
 
 #analysisButton{
     width: 90%;
-    padding: 15px;
+    padding: 4%;
     margin-left: 4%;
     font-size: 15px;
 
@@ -92,3 +81,4 @@ label{
     background-color: darkgray;
 }
 
+/* 로딩 창 */
