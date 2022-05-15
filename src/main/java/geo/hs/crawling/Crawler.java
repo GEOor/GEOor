@@ -1,6 +1,8 @@
 package geo.hs.crawling;
 
 import geo.hs.model.sun.SunInfo;
+import lombok.Getter;
+import lombok.Setter;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,13 +13,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Getter
+@Setter
 public class Crawler {
 	
 	private String url = "https://astro.kasi.re.kr/life/pageView/10";
 	private String address = "crawl";
 	private Double latitude, longitude;
 	private double x_dir, y_dir;
-	private String date = "2021-12-28";
+	private String date;
 	private ArrayList<SunInfo> si = new ArrayList<>();
 	
 	public void run(Double lat, Double lng, double x, double y){
@@ -86,7 +90,4 @@ public class Crawler {
 		}
 	}
 	
-	public ArrayList<SunInfo> get(){
-		return si;
-	}
 }

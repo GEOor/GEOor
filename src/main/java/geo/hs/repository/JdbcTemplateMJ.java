@@ -3,13 +3,13 @@ package geo.hs.repository;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class JdbcTemplate {
+public class JdbcTemplateMJ {
     private final String connectUrl;
     private final String user;
     private final String password;
     private final String tableName;
 
-    public JdbcTemplate(String tableName) {
+    public JdbcTemplateMJ(String tableName) {
         connectUrl = "jdbc:postgresql://localhost:5432/geor";
         user = "postgres";
         password = "1";
