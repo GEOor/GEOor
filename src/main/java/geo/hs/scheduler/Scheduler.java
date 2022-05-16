@@ -60,14 +60,15 @@ public class Scheduler {
 		ArrayList<ArrayList<Dsm>> dsm2DArr = getDsmRepository.dsm2DConverter(dsm);
 
 		// hillShade 값 계산
-		ArrayList<ArrayList<Hillshade>> hs2DArr;
+		ArrayList<Hillshade> hs1DArr;
 		// 알맞은 위,경도에 대한 태양고도각 입력
 		for(SchedulerSunInfo schedulerSunInfo : ssi) {
 			if(schedulerSunInfo.getLng() == 128 && schedulerSunInfo.getLat() == 37) {
-				hs2DArr = hillShadeService.run(dsm2DArr, schedulerSunInfo.getArr().get(0));
+				hs1DArr = hillShadeService.run(dsm2DArr, schedulerSunInfo.getArr().get(0));
 				break;
 			}
 		}
+
 
 		// shp 파일과 비교 후 hillShade 값 계산
 	}

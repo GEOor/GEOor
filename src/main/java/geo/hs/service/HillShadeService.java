@@ -12,10 +12,16 @@ public class HillShadeService {
 
     HillshadeAlgorithm hillshadeAlgorithm = new HillshadeAlgorithm();
 
-    public ArrayList<ArrayList<Hillshade>> run(ArrayList<ArrayList<Dsm>> dsm2DArr, SunInfo sunInfo){
+    public ArrayList<Hillshade> run(ArrayList<ArrayList<Dsm>> dsm2DArr, SunInfo sunInfo){
 
         ArrayList<Hillshade> hillshadeArr = new ArrayList<Hillshade>();
         ArrayList<ArrayList<Hillshade>> hs2DArr = hillshadeAlgorithm.hsConverter(sunInfo, dsm2DArr);
-        return hs2DArr;
+        ArrayList<Hillshade> hillshades = new ArrayList<Hillshade>();
+
+        for(ArrayList<Hillshade> hs1DArr : hs2DArr) {
+            hillshades.addAll(hs1DArr);
+        }
+
+        return hillshades;
     }
 }
