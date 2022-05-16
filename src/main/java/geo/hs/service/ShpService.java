@@ -69,15 +69,5 @@ public class ShpService {
             conn.commit();
         }
     }
-    /*
-     * 교량, 터널을 더이상 hillshade 값으로 치환하지 않아도 돼서 필요없어진 부분입니다.
-    public void applyHazard(ArrayList<Hazard> lake, ArrayList<Hazard> turnel) throws SQLException {
-        HazardRepository hazardRepository = new HazardRepository();
-        try (Connection conn = jdbcTemplate.getConnection()) {
-            //hazardRepository.applyHazard(conn, lake, turnel);
-            conn.commit();
-        }
-    }
-    */
 
 }

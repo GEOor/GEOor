@@ -2,8 +2,10 @@ package geo.hs.scheduler;
 
 import geo.hs.crawling.Crawler;
 import geo.hs.model.dsm.Dsm;
+import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.scheduler.SchedulerSunInfo;
 import geo.hs.repository.GetDsmRepository;
+import geo.hs.service.HillShadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,7 @@ public class Scheduler {
 	private Crawler crawler = new Crawler();
 	private ArrayList<SchedulerSunInfo> ssi = new ArrayList<>();
 	private GetDsmRepository getDsmRepository = new GetDsmRepository();
+	private HillShadeService hillShadeService = new HillShadeService();
 	
 	/**
 	 * 태양 파라미터 크롤링
@@ -52,8 +55,19 @@ public class Scheduler {
 	public void scheduler_128_37(){ // Thread로 만들기 위해 이렇게 이름 지었음
 		// get dsm from db
 		List<Dsm> dsm = getDsmRepository.getDsm(12837);
+
+		// 1차원 dsm -> 2차원 dsm으로 변환
+		ArrayList<ArrayList<Dsm>> dsm2DArr = getDsmRepository.dsm2DConverter(dsm);
 		
 		// hillShade 값 계산
+		ArrayList<ArrayList<Hillshade>> hs2DArr;
+		// 알맞은 위,경도에 대한 태양고도각 입력
+		for(SchedulerSunInfo schedulerSunInfo : ssi) {
+			if(schedulerSunInfo.getLng() == 128 && schedulerSunInfo.getLat() == 37) {
+				hs2DArr = hillShadeService.run(dsm2DArr, schedulerSunInfo.getArr().get(0));
+				break;
+			}
+		}
 		
 		// shp 파일과 비교 후 hillShade 값 계산
 	}
