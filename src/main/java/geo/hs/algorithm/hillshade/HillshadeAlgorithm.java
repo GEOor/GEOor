@@ -1,5 +1,6 @@
 package geo.hs.algorithm.hillshade;
 
+import geo.hs.model.dsm.Dsm;
 import geo.hs.model.dsm.DsmXyz;
 import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.sun.SunInfo;
@@ -15,18 +16,18 @@ import java.util.HashMap;
  3) Hillshade ArrayList에 저장
  */
 public class HillshadeAlgorithm {
-    public ArrayList<ArrayList<Hillshade>> hsConverter(ArrayList<ArrayList<SunInfo>> si, ArrayList<ArrayList<DsmXyz>> di){
+    public ArrayList<ArrayList<Hillshade>> hsConverter(SunInfo si, ArrayList<ArrayList<Dsm>> di){
         ArrayList<ArrayList<Hillshade>> hs = new ArrayList<ArrayList<Hillshade>>();
         //맨 위, 아래 행에 빈 arraylist 하나씩 추가해주기 (배열 크기 맞추기 위함)
-        ArrayList<Hillshade> tmp = new ArrayList<Hillshade>(si.get(0).size());
+        ArrayList<Hillshade> tmp = new ArrayList<Hillshade>(di.get(0).size());
         hs.add(tmp);
 
-        for(int i=1; i<si.size() - 1; i++){
-            ArrayList<Hillshade> row = new ArrayList<Hillshade>(si.get(i).size());
+        for(int i=1; i<di.size() - 1; i++){
+            ArrayList<Hillshade> row = new ArrayList<Hillshade>(di.get(i).size());
             Hillshade row_hs = new Hillshade(0D, 0D, 0D, 0D, 0D, new ArrayList<Double>());
             row.add(row_hs);
 
-            for(int j=1; j<si.get(i).size() - 1; j++){
+            for(int j=1; j<di.get(i).size() - 1; j++){
                 /*
                 3x3 window
                 (a, b, c)
@@ -43,13 +44,13 @@ public class HillshadeAlgorithm {
                 }
 
                 // (2) Zenith_deg = 90 - Altitude
-                Double Zenith_deg = 90 - si.get(i).get(j).getAltitude();
+                Double Zenith_deg = 90 - si.getAltitude();
 
                 // (3) Zenith_rad = Zenith * pi / 180.0
                 Double Zenith_rad = (Zenith_deg * Math.PI) / 180.0;
 
                 // (4) Azimuth_math = 360.0 - Azimuth + 90
-                Double Azimuth_math = 360.0 - si.get(i).get(j).getAzimuth();
+                Double Azimuth_math = 360.0 - si.getAzimuth();
 
                 // (5) if Azimuth_math >= 360.0, then: Azimuth_math = Azimuth_math - 360.0
                 if(Azimuth_math >= 360.0) Azimuth_math = Azimuth_math - 360.0;
@@ -99,20 +100,20 @@ public class HillshadeAlgorithm {
                 for(int grid_y = i-1; grid_y <= i+1; grid_y +=2){
                     if(grid_y == i-1) {
                         for (int grid_x = j - 1; grid_x <= j + 1; grid_x += 2) {
-                            tmp_grid.add(si.get(grid_y).get(grid_x).getLatitude());
-                            tmp_grid.add(si.get(grid_y).get(grid_x).getLongitude());
+                            tmp_grid.add(si.getLatitude());
+                            tmp_grid.add(si.getLongitude());
                         }
                     }
                     else {
                         for (int grid_x = j + 1; grid_x >= j - 1; grid_x -= 2) {
-                            tmp_grid.add(si.get(grid_y).get(grid_x).getLatitude());
-                            tmp_grid.add(si.get(grid_y).get(grid_x).getLongitude());
+                            tmp_grid.add(si.getLatitude());
+                            tmp_grid.add(si.getLongitude());
                         }
                     }
                 }
 
-                Hillshade hs_xy = new Hillshade(si.get(i).get(j).getX(), si.get(i).get(j).getY(),
-                        si.get(i).get(j).getLatitude(), si.get(i).get(j).getLongitude(), hs_cell, tmp_grid);
+                Hillshade hs_xy = new Hillshade(si.getX(), si.getY(),
+                        si.getLatitude(), si.getLongitude(), hs_cell, tmp_grid);
 
                 row.add(hs_xy);
             }

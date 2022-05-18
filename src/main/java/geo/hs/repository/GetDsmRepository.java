@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -28,6 +29,26 @@ public class GetDsmRepository {
 						0),
 				did
 		);
+	}
+
+	public ArrayList<ArrayList<Dsm>> dsm2DConverter(List<Dsm> dsms) {
+
+		ArrayList<ArrayList<Dsm>> arr = new ArrayList<ArrayList<Dsm>>();
+
+		double prev_x = -1;
+
+		ArrayList<Dsm> dsmArrayList = new ArrayList<Dsm>();
+
+		for(Dsm dsm : dsms) {
+			if(dsm.getX() != prev_x) {
+				arr.add(dsmArrayList);
+				dsmArrayList = new ArrayList<Dsm>();
+			}
+			dsmArrayList.add(dsm);
+		}
+
+		return arr;
+
 	}
 	
 }
