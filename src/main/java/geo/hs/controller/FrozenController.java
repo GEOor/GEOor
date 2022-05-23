@@ -4,11 +4,13 @@ import geo.hs.model.Frozen.Frozen;
 import geo.hs.repository.FrozenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/hazard")
 public class FrozenController {
 
 	private final FrozenRepository frozenRepository;

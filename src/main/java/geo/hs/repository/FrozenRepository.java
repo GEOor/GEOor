@@ -41,10 +41,11 @@ public class FrozenRepository {
 	 */
 	public List<Frozen> getFrozenRoad(){
 		List<Frozen> ret = new ArrayList<>();
-		
+
+
 		try {
 			//파일 객체 생성
-			File file = new File("C:/Users/Taehyun/GEOor/src/main/resources/files/상습결빙구간.txt");
+			File file = new File("/Users/suhwan/Desktop/geo&/GEOor/src/main/resources/files/상습결빙구간.txt");
 			//입력 스트림 생성
 			FileReader file_reader = new FileReader(file);
 			
