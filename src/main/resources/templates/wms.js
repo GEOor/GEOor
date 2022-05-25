@@ -123,15 +123,53 @@ function addressToCoordinates(address) {
                 xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
                 yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
 
+                //행정구역 번호
                 districtNumber = xml.getElementsByTagName('level4AC')[0].childNodes[0].nodeValue;
                 console.log(districtNumber);
 
 
 
-                let tmpx, tmpy;
+                let lat, lng; //위, 경도
 
-                [tmpx, tmpy] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
-                lookAtMe(tmpx, tmpy);
+                [lat, lng] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
+                lookAtMe(lat, lng);
+
+                let date = inputDate();
+                let time = inputTime();
+
+                //api 호출 부분
+                fetch("http://localhost:8080/execute/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        latitude: lat,
+                        longitude: lng,
+                        cityId: districtNumber,
+                        date: date,
+                        time: time,
+                    }),
+                }).then((response) => {
+                    console.log(response)
+                    // wms layer 생성
+                    let wmsLayer = new ol.layer.Tile({
+                        visible: true,
+                        source: new ol.source.TileWMS({
+                            url: 'http://localhost:8088/geoserver/GeoOr/wms',
+                            params: {
+                                'FORMAT': 'image/png',
+                                'TILED' : true,
+                                'LAYERS': 'GeoOr:road'
+                            }
+                        })
+                    });
+
+                    map.addLayer(wmsLayer);
+
+                });
+
+
 
                 return [Number(xCoordinate), Number(yCoordinate)];
             } else {
