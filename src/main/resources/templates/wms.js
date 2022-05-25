@@ -7,7 +7,6 @@ let map = new ol.Map({
                 url: 'http://xdworld.vworld.kr:8080/2d/Base/202002/{z}/{x}/{y}.png'
             })
         }),
-        //vector
     ],
     view: new ol.View({
         center: convertCoordinates(127.6176, 36.8724),
@@ -30,6 +29,10 @@ let wmsLayer = new ol.layer.Tile({
     })
 })
 
+/*
+    가장 큰 단위인 레이어 선언부
+    feature 단위의 스타일 속성을 지정할 수 있다.
+ */
 let vectorLayer = new ol.layer.Vector({
     source: new ol.source.Vector(),
     style: new ol.style.Style({
@@ -40,8 +43,10 @@ let vectorLayer = new ol.layer.Vector({
     })
 });
 
-map.addLayer(vectorLayer);
-
+/*
+    input : 위도, 경도, id(must unique)
+    source에 넣을 feature를 생성하는 함수 (마커 생성기)
+ */
 function createMarker(lng, lat, id) {
     return new ol.Feature({
         geometry: new ol.geom.Point(ol.proj.fromLonLat([parseFloat(lng), parseFloat(lat)])),
@@ -49,10 +54,17 @@ function createMarker(lng, lat, id) {
     });
 }
 
-function showTunnelMarker() {
+/*
+    input: hazardName(tunnel, bridge, frozen)
+    vectorlayer - source에다가 feature(좌표, 아이콘으로 구성) 넣기
+    즉, layer - source - feature 순으로 단위가 형성되어 있다. (내림차순)
+ */
+function showHazardMarker(hazardName) {
+
+    map.addLayer(vectorLayer);
 
     //api 호출 부분
-    fetch('http://localhost:8080/hazard/tunnel')
+    fetch('http://localhost:8080/hazard/' + hazardName)
         .then(res => res.json())
         .then(data => {
 
@@ -74,9 +86,13 @@ function showTunnelMarker() {
 }
 
 
-function lookAtMe(lat, long) {
+function lookAtMe(lat, lng) {
 
-    map.getView().setCenter(ol.proj.transform([lat, long], 'EPSG:4326', 'EPSG:3857'));
+    /*
+        우리가 알고 있는 위,경도 좌표계(EPSG:4326) -> 구글 맵 좌표계(EPSG:3857) 변환
+        EPSG:4326..ex) (37.5, 131.2)
+     */
+    map.getView().setCenter(ol.proj.transform([lat, lng], 'EPSG:4326', 'EPSG:3857'));
     map.getView().setZoom(16);
 }
 
@@ -85,12 +101,15 @@ function convertCoordinates(lon, lat) {
     let x = (lon * 20037508.34) / 180;
     let y = Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / (Math.PI / 180);
     y = (y * 20037508.34) / 180;
+
+    console.log("x: " + x + " y: " + y);
     return [x, y];
 }
 
 //주소를 xy좌표로 변환하기
 function addressToCoordinates(address) {
     let request = new XMLHttpRequest();
+    let xCoordinate, yCoordinate;
 
     request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
         + "&crs=epsg:3857" // EPSG:3857
@@ -101,16 +120,21 @@ function addressToCoordinates(address) {
         if (request.readyState === 4) {
             if (request.status >= 200 && request.status < 300) {
                 let xml = request.responseXML;
-                let xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
-                let yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
+                xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
+                yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
 
-                console.log(xCoordinate, yCoordinate);
+                let tmpx, tmpy;
+
+                [tmpx, tmpy] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
+                lookAtMe(tmpx, tmpy);
+
                 return [Number(xCoordinate), Number(yCoordinate)];
             } else {
                 alert(request.status);
             }
         }
     }
+
 }
 
 //입력받는 날짜범위 수정하기
@@ -159,17 +183,20 @@ function inputTime(){
     return timeInput;
 }
 
-function inputWeather(){
-    let weatherOption = document.getElementById('weatherCheck').checked;
-    console.log("날씨 옵션: ", weatherOption);
-    return weatherOption;
+function inputTunnel(){
+    let tunnelOption = document.getElementById('tunnelCheck').checked;
+    console.log("터널 옵션: ", tunnelOption);
+
+    if(tunnelOption) showHazardMarker("tunnel");
+
+    return tunnelOption;
 }
 
 function inputBridge(){
     let bridgeOption = document.getElementById('bridgeCheck').checked;
     console.log("교량 옵션: ", bridgeOption);
 
-    if(bridgeOption) showTunnelMarker();
+    if(bridgeOption) showHazardMarker("bridge");
 
     return bridgeOption;
 }
@@ -177,21 +204,32 @@ function inputBridge(){
 function inputFrost(){
     let frostOption = document.getElementById('frostCheck').checked;
     console.log("결빙 옵션: ", frostOption);
+
+    if(frostOption) showHazardMarker("frozen");
     return frostOption;
 }
 
+/*
+    분석 시작 버튼(#id:analysisButton) 클릭 이벤트 발생 시 실행되는 함수
+ */
 function analysisStart(){
 
-    //map.addLayer(wmsLayer);
-    //window.alert(addressInput);
-    ////
+    //이전에 생성한 마커 레이어 제거
+    map.removeLayer(vectorLayer);
+
+    //1. 사용자가 입력한 위치 -> 위,경도 변환 후 지도 내 카메라 줌
     addressToCoordinates(inputAddress());
+
+    //2. 사용자가 입력한 (위치, 날짜, 시간) -> 알맞은 wms를 받아올 수 있는 api 호출
     inputDate();
     inputTime();
+    //map.addLayer(wmsLayer);
 
-    inputWeather();
+    //3. (교량, 터널, 상습결빙구역) -> 마커 생성
+    inputTunnel();
     inputBridge();
     inputFrost();
+
 }
 
 <!-- 날짜 범위 설정 -->

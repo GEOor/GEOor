@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Frozen {
 
-	double lat;
-	
-	double lng;
+	double longitude;
+
+	double latitude;
 }
