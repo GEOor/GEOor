@@ -109,7 +109,7 @@ function convertCoordinates(lon, lat) {
 //주소를 xy좌표로 변환하기
 function addressToCoordinates(address) {
     let request = new XMLHttpRequest();
-    let xCoordinate, yCoordinate;
+    let xCoordinate, yCoordinate, districtNumber;
 
     request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
         + "&crs=epsg:3857" // EPSG:3857
@@ -122,6 +122,11 @@ function addressToCoordinates(address) {
                 let xml = request.responseXML;
                 xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
                 yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
+
+                districtNumber = xml.getElementsByTagName('level4AC')[0].childNodes[0].nodeValue;
+                console.log(districtNumber);
+
+
 
                 let tmpx, tmpy;
 
