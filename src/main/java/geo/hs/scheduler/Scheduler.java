@@ -28,7 +28,7 @@ public class Scheduler {
 	 * 해당 함수가 가장 먼저 매일 0시에 호출됨
 	 * 이유는 한 번만 전국적으로 크롤링 후 저장해놓고 hillshade 값을 계산하게 함
 	 */
-	@Scheduled(cron = "0 0 0 * * * " ) // 매일 0시에 호출
+	/*@Scheduled(cron = "0 0 0 * * * " ) // 매일 0시에 호출
 	public void sunCrawler(){
 		LocalDate now = LocalDate.now();
 		crawler.setDate(now.toString());
@@ -49,10 +49,10 @@ public class Scheduler {
 				ssi.add(new SchedulerSunInfo(lat, lng, crawler.getSi()));
 			}
 		}
-	}
+	}*/
 
 	// @Scheduled(cron = "0 0 0 * * * " ) 매일 0시에 호출
-	public void scheduler_128_37(){ // Thread로 만들기 위해 이렇게 이름 지었음
+	/*public void scheduler_128_37(){ // Thread로 만들기 위해 이렇게 이름 지었음
 		// get dsm from db
 		List<Dsm> dsm = getDsmRepository.getDsm(12837);
 
@@ -71,5 +71,5 @@ public class Scheduler {
 
 
 		// shp 파일과 비교 후 hillShade 값 계산
-	}
+	}*/
 }
