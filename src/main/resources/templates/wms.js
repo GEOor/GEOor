@@ -126,8 +126,6 @@ function addressToCoordinates(address) {
                 districtNumber = xml.getElementsByTagName('level4AC')[0].childNodes[0].nodeValue;
                 console.log(districtNumber);
 
-
-
                 let tmpx, tmpy;
 
                 [tmpx, tmpy] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
@@ -139,7 +137,6 @@ function addressToCoordinates(address) {
             }
         }
     }
-
 }
 
 //입력받는 날짜범위 수정하기
@@ -184,6 +181,7 @@ function inputDate(){
 function inputTime(){
     let timeInput = document.getElementById('time').value;
     timeInput = String(timeInput).substring(0, 2);
+
     console.log("입력한 시간: ", timeInput);
     return timeInput;
 }
@@ -193,7 +191,6 @@ function inputTunnel(){
     console.log("터널 옵션: ", tunnelOption);
 
     if(tunnelOption) showHazardMarker("tunnel");
-
     return tunnelOption;
 }
 
@@ -202,7 +199,6 @@ function inputBridge(){
     console.log("교량 옵션: ", bridgeOption);
 
     if(bridgeOption) showHazardMarker("bridge");
-
     return bridgeOption;
 }
 
@@ -239,3 +235,14 @@ function analysisStart(){
 
 <!-- 날짜 범위 설정 -->
 inputDataRange();
+
+/* 로딩창 */
+const modal = document.getElementById("modal")
+function loadingOn() { modal.style.display = "flex" }
+function loadingOff() { modal.style.display = "none" }
+
+// 로딩창 on
+loadingOn()
+// 로딩창 off
+loadingOff()
+
