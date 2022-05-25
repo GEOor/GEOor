@@ -17,9 +17,6 @@ public class Hillshade {
     private Double x;
     private Double y;
 
-    //위도, 경도
-    private Double latitude, longitude;
-
     //hillshade 값
     private Double hillshade;
 

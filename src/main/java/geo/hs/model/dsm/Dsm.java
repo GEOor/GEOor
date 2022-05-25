@@ -12,7 +12,7 @@ public class Dsm  implements Comparable<Dsm>{
 	
 	private String y;
 	
-	private int z;
+	private double z;
 	
 	private int hillShade;
 	
