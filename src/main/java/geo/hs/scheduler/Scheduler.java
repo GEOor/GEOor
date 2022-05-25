@@ -52,7 +52,7 @@ public class Scheduler {
 	}
 
 	// @Scheduled(cron = "0 0 0 * * * " ) 매일 0시에 호출
-	public void scheduler_128_37(){ // Thread로 만들기 위해 이렇게 이름 지었음
+	/*public void scheduler_128_37(){ // Thread로 만들기 위해 이렇게 이름 지었음
 		// get dsm from db
 		List<Dsm> dsm = getDsmRepository.getDsm(12837);
 
@@ -71,5 +71,5 @@ public class Scheduler {
 
 
 		// shp 파일과 비교 후 hillShade 값 계산
-	}
+	}*/
 }

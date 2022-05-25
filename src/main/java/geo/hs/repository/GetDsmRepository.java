@@ -19,36 +19,17 @@ public class GetDsmRepository {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	public List<Dsm> getDsm(int did){
-		String query = "select * from DSM where did = ?";
+	public List<Dsm> getDsm(int cityId){
+		// where 문의 city 부분은 db의 컬럼에 따라 변경
+		String query = "select * from DSM where city = ?";
 		return this.jdbcTemplate.query(query,
 				(rs, rowNum) -> new Dsm(
-						rs.getDouble("x"),
-						rs.getDouble("y"),
-						rs.getDouble("z"),
+						rs.getString("x"),
+						rs.getString("y"),
+						rs.getInt("z"),
 						0),
-				did
+				cityId
 		);
-	}
-
-	public ArrayList<ArrayList<Dsm>> dsm2DConverter(List<Dsm> dsms) {
-
-		ArrayList<ArrayList<Dsm>> arr = new ArrayList<ArrayList<Dsm>>();
-
-		double prev_x = -1;
-
-		ArrayList<Dsm> dsmArrayList = new ArrayList<Dsm>();
-
-		for(Dsm dsm : dsms) {
-			if(dsm.getX() != prev_x) {
-				arr.add(dsmArrayList);
-				dsmArrayList = new ArrayList<Dsm>();
-			}
-			dsmArrayList.add(dsm);
-		}
-
-		return arr;
-
 	}
 	
 }
