@@ -1,10 +1,16 @@
+/* 웹 폰트 */
+
+@font-face {
+    font-family: 'Happiness-Sans-Title';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/Happiness-Sans-Title.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
 
 /* hillshade 타이틀 */
 
 #title{
-    width: 29%;
-    margin-left: 0.1%;
-
+    width: 30%;
     background-color: #69BDEA;
     color: white;
 
@@ -15,9 +21,10 @@
 /* 지도 */
 
 #map {
+    position: fixed;
     width: 70%;
-    height: 650px;
-    float: right;
+    height: 100%;
+    margin-left: 30%;
 }
 
 /* 주소 날짜 시간 */
@@ -33,10 +40,13 @@
     width: 70%;
     padding: 1.5%;
     margin-left: 5%;
-    font-size: 15px;
+    font-size: 100%;
 
     border: none;
+}
 
+::placeholder {
+    font-size: 85%;
 }
 
 .inputData:focus{
@@ -58,16 +68,16 @@ label{
 /* 분석 버튼 */
 
 #startButton{
+    position: fixed;
     width: 30%;
-    margin-top: 17%;
-
+    bottom: 3%;
 }
 
 #analysisButton{
     width: 90%;
     padding: 4%;
     margin-left: 4%;
-    font-size: 15px;
+    font-size: 100%;
 
     background-color: #69BDEA;
     color: white;
@@ -82,3 +92,48 @@ label{
 }
 
 /* 로딩 창 */
+
+#modal.modal-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(1.5px);
+}
+#modal .modal-window {
+    position: relative;
+    top: 40%;
+    background: rgba(0, 0, 0, 0);
+}
+#modal .title {
+    font-family: 'Happiness-Sans-Title';
+    font-size: 200%;
+    color: white;
+}
+
+/* 로딩 효과 */
+
+@keyframes anime_textup { 0% { top: 0; } 20% { top: -0.2rem; } 40% { top: 0 } 60% { top: 0 } 80% { top: 0 } 100% { top: 0 } }
+
+.title span {
+    position: relative;
+    animation: anime_textup 1.5s infinite;
+}
+
+.title span:nth-of-type(1) { animation-delay: .1s; }
+.title span:nth-of-type(2) { animation-delay: .2s; }
+.title span:nth-of-type(3) { animation-delay: .3s; }
+.title span:nth-of-type(4) { animation-delay: .4s; }
+.title span:nth-of-type(5) { animation-delay: .5s; }
+.title span:nth-of-type(6) { animation-delay: .6s; }
+.title span:nth-of-type(7) { animation-delay: .7s; }
+.title span:nth-of-type(8) { animation-delay: .8s; }
+.title span:nth-of-type(9) { animation-delay: .9s; }
+
+/* 미디어 쿼리 */
+
