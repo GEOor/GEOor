@@ -26,7 +26,7 @@ public class GetDsmRepository {
 				(rs, rowNum) -> new Dsm(
 						rs.getString("x"),
 						rs.getString("y"),
-						rs.getInt("z"),
+						rs.getDouble("z"),
 						0),
 				cityId
 		);
