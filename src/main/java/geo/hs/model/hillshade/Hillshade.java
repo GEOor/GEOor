@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Setter
 @AllArgsConstructor
 @ToString
-public class Hillshade {
+public class HillShade {
 
     //x,y 좌표 값
     private Double x;

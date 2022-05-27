@@ -1,14 +1,14 @@
-package geo.hs.model.shp;
+package geo.hs.model.road;
 
 import lombok.Getter;
 
 @Getter
-public class RoadStatus {
+public class Road {
     String rbid;
     int count;
     double hillShade;
 
-    public RoadStatus(String rbid, double hillShade) {
+    public Road(String rbid, double hillShade) {
         this.rbid = rbid;
         this.count = 1;
         this.hillShade = hillShade;
