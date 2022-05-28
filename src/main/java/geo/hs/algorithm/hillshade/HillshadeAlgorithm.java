@@ -1,30 +1,29 @@
 package geo.hs.algorithm.hillshade;
 
 import geo.hs.model.dsm.Dsm;
-import geo.hs.model.dsm.DsmXyz;
-import geo.hs.model.hillshade.Hillshade;
+import geo.hs.model.hillshade.HillShade;
 import geo.hs.model.sun.SunInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- 내용 : Hillshade Algorithm 구현, 태양고도각(si), dem값(di) 2차원 ArrayList를 이용해 똑같은 크기의 Hillshade(음영기복도) 2차원 ArrayList 로 변환
+ 내용 : HillShade Algorithm 구현, 태양고도각(si), dem값(di) 2차원 ArrayList를 이용해 똑같은 크기의 HillShade(음영기복도) 2차원 ArrayList 로 변환
  작동 원리
  1) i, j가 모두 0이 아닌 점에서, 해당 점을 가운데로하는 3 by 3 정사각형을 만든다.
  2) 이미 구한 태양고도각 정보들과, 주변 dem 값들을 이용해 공식에 대입
- 3) Hillshade ArrayList에 저장
+ 3) HillShade ArrayList에 저장
  */
 public class HillshadeAlgorithm {
-    public ArrayList<ArrayList<Hillshade>> hsConverter(SunInfo si, ArrayList<ArrayList<Dsm>> di){
-        ArrayList<ArrayList<Hillshade>> hs = new ArrayList<ArrayList<Hillshade>>();
+    public ArrayList<ArrayList<HillShade>> hsConverter(SunInfo si, ArrayList<ArrayList<Dsm>> di){
+        ArrayList<ArrayList<HillShade>> hs = new ArrayList<ArrayList<HillShade>>();
         //맨 위, 아래 행에 빈 arraylist 하나씩 추가해주기 (배열 크기 맞추기 위함)
-        ArrayList<Hillshade> tmp = new ArrayList<Hillshade>(di.get(0).size());
+        ArrayList<HillShade> tmp = new ArrayList<HillShade>(di.get(0).size());
         hs.add(tmp);
 
         for(int i=1; i<di.size() - 1; i++){
-            ArrayList<Hillshade> row = new ArrayList<Hillshade>(di.get(i).size());
-            Hillshade row_hs = new Hillshade(0D, 0D, 0D, new ArrayList<Double>());
+            ArrayList<HillShade> row = new ArrayList<HillShade>(di.get(i).size());
+            HillShade row_hs = new HillShade(0D, 0D, 0D, new ArrayList<Double>());
             row.add(row_hs);
 
             for(int j=1; j<di.get(i).size() - 1; j++){
@@ -112,11 +111,11 @@ public class HillshadeAlgorithm {
                     }
                 }
 
-                Hillshade hs_xy = new Hillshade(si.getX(), si.getY(), hs_cell, tmp_grid);
+                HillShade hs_xy = new HillShade(si.getX(), si.getY(), hs_cell, tmp_grid);
 
                 row.add(hs_xy);
             }
-            row_hs = new Hillshade(0D, 0D, 0D, new ArrayList<Double>());
+            row_hs = new HillShade(0D, 0D, 0D, new ArrayList<Double>());
             row.add(row_hs);
 
             hs.add(row);

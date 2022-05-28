@@ -2,28 +2,27 @@ package geo.hs.service;
 
 import geo.hs.algorithm.hillshade.HillshadeAlgorithm;
 import geo.hs.model.dsm.Dsm;
-import geo.hs.model.hillshade.Hillshade;
+import geo.hs.model.hillshade.HillShade;
 import geo.hs.model.sun.SunInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class HillShadeService {
 
     HillshadeAlgorithm hillshadeAlgorithm = new HillshadeAlgorithm();
 
-    public ArrayList<Hillshade> run(ArrayList<ArrayList<Dsm>> dsm2DArr, SunInfo sunInfo){
+    public ArrayList<HillShade> run(ArrayList<ArrayList<Dsm>> dsm2DArr, SunInfo sunInfo){
 
-        ArrayList<Hillshade> hillshadeArr = new ArrayList<Hillshade>();
-        ArrayList<ArrayList<Hillshade>> hs2DArr = hillshadeAlgorithm.hsConverter(sunInfo, dsm2DArr);
-        ArrayList<Hillshade> hillshades = new ArrayList<Hillshade>();
+        ArrayList<HillShade> hillShadeArr = new ArrayList<HillShade>();
+        ArrayList<ArrayList<HillShade>> hs2DArr = hillshadeAlgorithm.hsConverter(sunInfo, dsm2DArr);
+        ArrayList<HillShade> hillShades = new ArrayList<HillShade>();
 
-        for(ArrayList<Hillshade> hs1DArr : hs2DArr) {
-            hillshades.addAll(hs1DArr);
+        for(ArrayList<HillShade> hs1DArr : hs2DArr) {
+            hillShades.addAll(hs1DArr);
         }
 
-        return hillshades;
+        return hillShades;
     }
 }

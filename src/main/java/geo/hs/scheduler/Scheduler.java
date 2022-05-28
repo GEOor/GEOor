@@ -1,18 +1,13 @@
 package geo.hs.scheduler;
 
 import geo.hs.crawling.Crawler;
-import geo.hs.model.dsm.Dsm;
-import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.scheduler.SchedulerSunInfo;
 import geo.hs.repository.GetDsmRepository;
 import geo.hs.service.HillShadeService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -60,7 +55,7 @@ public class Scheduler {
 		ArrayList<ArrayList<Dsm>> dsm2DArr = getDsmRepository.dsm2DConverter(dsm);
 
 		// hillShade 값 계산
-		ArrayList<Hillshade> hs1DArr;
+		ArrayList<HillShade> hs1DArr;
 		// 알맞은 위,경도에 대한 태양고도각 입력
 		for(SchedulerSunInfo schedulerSunInfo : ssi) {
 			if(schedulerSunInfo.getLng() == 128 && schedulerSunInfo.getLat() == 37) {
