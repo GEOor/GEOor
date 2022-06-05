@@ -1,11 +1,10 @@
 package geo.hs.repository;
 
 import geo.hs.geoUtil.WKB;
-import geo.hs.model.hillshade.HillShade;
+import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.road.Road;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.HashMap;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,7 +21,7 @@ public class RoadRepository {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void findByGeom(HashMap<Integer, Road> roadHashMap, HillShade hillShades) {
+    public void findByGeom(HashMap<Integer, Road> roadHashMap, Hillshade hillShades) {
         String sql = "SELECT id FROM road WHERE ST_Overlaps(?, geom)";
         jdbcTemplate.query(sql, new RowMapper<Integer>() {
             @Override

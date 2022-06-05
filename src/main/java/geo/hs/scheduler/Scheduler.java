@@ -1,12 +1,9 @@
 package geo.hs.scheduler;
 
 import geo.hs.crawling.Crawler;
-import geo.hs.model.hillshade.HillShade;
 import geo.hs.model.scheduler.SchedulerSunInfo;
 import geo.hs.repository.GetDsmRepository;
 import geo.hs.service.HillShadeService;
-import geo.hs.service.RoadService;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

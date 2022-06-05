@@ -3,7 +3,7 @@ package geo.hs.controller;
 import geo.hs.crawling.Crawler;
 import geo.hs.model.DTO.PostHillShadeReq;
 import geo.hs.model.dsm.Dsm;
-import geo.hs.model.hillshade.HillShade;
+import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.scheduler.SchedulerSunInfo;
 import geo.hs.service.DsmService;
 import geo.hs.service.HillShadeService;
@@ -39,6 +39,7 @@ public class HillShadeController {
 		
 		// 해당 cityCode에 맞는 지역의 DSM 가져오기
 		List<Dsm> dsms = dsmService.getDsm(req.getCityId());
+
 		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
 		
 		// 태양고도각 크롤링
@@ -51,8 +52,9 @@ public class HillShadeController {
 		
 		// 각 DSM 파일들 HillShade 계산
 		int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.valueOf(req.getTime());
-		ArrayList<HillShade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
-		
+		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
+
+
 		// 계산된 HillShade값 DB에 갱신
 		roadService.updateRoadHillShade(hs1DArr);
 	}

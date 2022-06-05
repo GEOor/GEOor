@@ -1,7 +1,7 @@
 package geo.hs.algorithm.hillshade;
 
 import geo.hs.model.dsm.Dsm;
-import geo.hs.model.hillshade.HillShade;
+import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.sun.SunInfo;
 
 import java.util.ArrayList;
@@ -15,16 +15,10 @@ import java.util.HashMap;
  3) HillShade ArrayList에 저장
  */
 public class HillshadeAlgorithm {
-    public ArrayList<ArrayList<HillShade>> hsConverter(SunInfo si, ArrayList<ArrayList<Dsm>> di){
-        ArrayList<ArrayList<HillShade>> hs = new ArrayList<ArrayList<HillShade>>();
-        //맨 위, 아래 행에 빈 arraylist 하나씩 추가해주기 (배열 크기 맞추기 위함)
-        ArrayList<HillShade> tmp = new ArrayList<HillShade>(di.get(0).size());
-        hs.add(tmp);
+    public ArrayList<Hillshade> hsConverter(SunInfo si, ArrayList<ArrayList<Dsm>> di){
+        ArrayList<Hillshade> hs = new ArrayList<Hillshade>();
 
         for(int i=1; i<di.size() - 1; i++){
-            ArrayList<HillShade> row = new ArrayList<HillShade>(di.get(i).size());
-            HillShade row_hs = new HillShade(0D, 0D, 0D, new ArrayList<Double>());
-            row.add(row_hs);
 
             for(int j=1; j<di.get(i).size() - 1; j++){
                 /*
@@ -35,12 +29,19 @@ public class HillshadeAlgorithm {
                  */
                 HashMap<Character, Double>windows = new HashMap<Character, Double>();
                 int cnt = 0;
+
+                //만약 9개 칸에 z값이 -1인 경우, hillshade를 정상적으로 계산할 수 없다. 그 부분 체크
+                int flag = 0;
+
                 for(int y=i-1; y<=i+1; y++){
                     for(int x=j-1; x<=j+1; x++){
                         windows.put((char) ('a' + cnt), di.get(y).get(x).getZ());
                         cnt++;
+                        if(di.get(y).get(x).getZ() == -1) flag = 1;
                     }
                 }
+
+                if(flag == 1) continue;
 
                 // (2) Zenith_deg = 90 - Altitude
                 Double Zenith_deg = 90 - si.getAltitude();
@@ -98,30 +99,24 @@ public class HillshadeAlgorithm {
                 //왼쪽 위, 오른쪽 위, 오른쪽 아래, 왼쪽 아래 (한붓그리기 형태)
                 for(int grid_y = i-1; grid_y <= i+1; grid_y +=2){
                     if(grid_y == i-1) {
-                        for (int grid_x = j - 1; grid_x <= j + 1; grid_x += 2) {
+                        for (int grid_x = j - 1; grid_x <= j + 1; grid_x += 22) {
                             tmp_grid.add(Double.parseDouble(di.get(grid_y).get(grid_x).getY()));
                             tmp_grid.add(Double.parseDouble(di.get(grid_y).get(grid_x).getX()));
                         }
                     }
                     else {
-                        for (int grid_x = j + 1; grid_x >= j - 1; grid_x -= 2) {
+                        for (int grid_x = j + 1; grid_x >= j - 1; grid_x -= 22) {
                             tmp_grid.add(Double.parseDouble(di.get(grid_y).get(grid_x).getY()));
                             tmp_grid.add(Double.parseDouble(di.get(grid_y).get(grid_x).getX()));
                         }
                     }
                 }
 
-                HillShade hs_xy = new HillShade(si.getX(), si.getY(), hs_cell, tmp_grid);
+                Hillshade hs_xy = new Hillshade(si.getX(), si.getY(), hs_cell, tmp_grid);
 
-                row.add(hs_xy);
+                hs.add(hs_xy);
             }
-            row_hs = new HillShade(0D, 0D, 0D, new ArrayList<Double>());
-            row.add(row_hs);
-
-            hs.add(row);
         }
-        //맨 위, 아래 행에 빈 arraylist 하나씩 추가해주기 (배열 크기 맞추기 위함)
-        hs.add(tmp);
         return hs;
     }
 }
