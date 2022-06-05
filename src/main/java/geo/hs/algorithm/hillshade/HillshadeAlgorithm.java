@@ -99,13 +99,13 @@ public class HillshadeAlgorithm {
                 //왼쪽 위, 오른쪽 위, 오른쪽 아래, 왼쪽 아래 (한붓그리기 형태)
                 for(int grid_y = i-1; grid_y <= i+1; grid_y +=2){
                     if(grid_y == i-1) {
-                        for (int grid_x = j - 1; grid_x <= j + 1; grid_x += 2) {
+                        for (int grid_x = j - 1; grid_x <= j + 1; grid_x += 22) {
                             tmp_grid.add(Double.parseDouble(di.get(grid_y).get(grid_x).getY()));
                             tmp_grid.add(Double.parseDouble(di.get(grid_y).get(grid_x).getX()));
                         }
                     }
                     else {
-                        for (int grid_x = j + 1; grid_x >= j - 1; grid_x -= 2) {
+                        for (int grid_x = j + 1; grid_x >= j - 1; grid_x -= 22) {
                             tmp_grid.add(Double.parseDouble(di.get(grid_y).get(grid_x).getY()));
                             tmp_grid.add(Double.parseDouble(di.get(grid_y).get(grid_x).getX()));
                         }
