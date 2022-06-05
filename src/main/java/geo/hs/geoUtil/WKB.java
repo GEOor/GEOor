@@ -1,6 +1,6 @@
 package geo.hs.geoUtil;
 
-import geo.hs.model.hillshade.HillShade;
+import geo.hs.model.hillshade.Hillshade;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -13,7 +13,7 @@ public class WKB {
     private final WKBWriter wkbWriter = new WKBWriter();
     private final SRID srid = new SRID();
 
-    public byte[] convertPolygonWKB(HillShade hillShade) {
+    public byte[] convertPolygonWKB(Hillshade hillShade) {
         double x1 = hillShade.getGrid().get(0);
         double y1 = hillShade.getGrid().get(1);
         double x2 = hillShade.getGrid().get(2);
