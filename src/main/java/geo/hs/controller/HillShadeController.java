@@ -7,6 +7,7 @@ import geo.hs.model.hillshade.HillShade;
 import geo.hs.model.scheduler.SchedulerSunInfo;
 import geo.hs.service.DsmService;
 import geo.hs.service.HillShadeService;
+import geo.hs.service.RoadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,14 +21,16 @@ public class HillShadeController {
 	
 	private final DsmService dsmService;
 	private final HillShadeService hillShadeService;
+	private final RoadService roadService;
 	
 	private Crawler crawler = new Crawler();
 	private ArrayList<SchedulerSunInfo> ssi = new ArrayList<>();
 	
 	@Autowired
-	public HillShadeController(DsmService dsmService, HillShadeService hillShadeService) {
+	public HillShadeController(DsmService dsmService, HillShadeService hillShadeService, RoadService roadService) {
 		this.dsmService = dsmService;
 		this.hillShadeService = hillShadeService;
+		this.roadService = roadService;
 	}
 	
 	
@@ -51,7 +54,7 @@ public class HillShadeController {
 		ArrayList<HillShade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
 		
 		// 계산된 HillShade값 DB에 갱신
-		
+		roadService.updateRoadHillShade(hs1DArr);
 	}
 	
 }
