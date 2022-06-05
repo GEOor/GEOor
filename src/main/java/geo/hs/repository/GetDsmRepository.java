@@ -32,4 +32,15 @@ public class GetDsmRepository {
 		);
 	}
 	
+	public List<Dsm> getAllDsm(){
+		String query = "select * from DSM";
+		return this.jdbcTemplate.query(query,
+				(rs, rowNum) -> new Dsm(
+						rs.getString("x"),
+						rs.getString("y"),
+						rs.getDouble("z"),
+						0)
+		);
+	}
+	
 }

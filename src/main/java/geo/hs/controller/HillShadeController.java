@@ -8,6 +8,7 @@ import geo.hs.model.scheduler.SchedulerSunInfo;
 import geo.hs.service.DsmService;
 import geo.hs.service.HillShadeService;
 import geo.hs.service.RoadService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class HillShadeController {
 	
 	private final DsmService dsmService;
@@ -59,4 +61,29 @@ public class HillShadeController {
 		roadService.updateRoadHillShade(hs1DArr);
 	}
 	
+	@PostMapping("/test")
+	void testHillShade(@ModelAttribute PostHillShadeReq req){
+		
+		// 모든 DSM 가져오는 코드 테스트
+		log.info("Start Time");
+		List<Dsm> dsms = dsmService.getAllDsm();
+		
+		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
+		
+		// 태양고도각 크롤링
+		// crawler 호출
+		double lat = Double.valueOf(req.getLatitude());
+		double lng = Double.valueOf(req.getLongitude());
+		crawler.run(lat, lng, req.getDate()); // 현재는 임시로 x, y = 0 으로 둠, hillshade 알고리즘과 맞춰봐야됨
+		
+		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
+		
+		// 각 DSM 파일들 HillShade 계산
+		int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.valueOf(req.getTime());
+		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
+		
+		for(Hillshade hs : hs1DArr) {
+			System.out.println(hs.toString());
+		}
+	}
 }
