@@ -119,6 +119,10 @@ function addressToCoordinates(address) {
     request.onreadystatechange = function() {
         if (request.readyState === 4) {
             if (request.status >= 200 && request.status < 300) {
+
+                // 로딩창 on
+                loadingOn()
+
                 let xml = request.responseXML;
                 xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
                 yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
@@ -137,8 +141,10 @@ function addressToCoordinates(address) {
                 let date = inputDate();
                 let time = inputTime();
 
+
+
                 //api 호출 부분
-                fetch("http://localhost:8080/execute/", {
+                fetch("http://localhost:8080/hillShade/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -152,11 +158,13 @@ function addressToCoordinates(address) {
                     }),
                 }).then((response) => {
                     console.log(response)
+                    // 로딩창 off
+                    loadingOff()
                     // wms layer 생성
                     let wmsLayer = new ol.layer.Tile({
                         visible: true,
                         source: new ol.source.TileWMS({
-                            url: 'http://localhost:8088/geoserver/GeoOr/wms',
+                            url: 'http://localhost:8088/geoserver/GeoOr/wms', //행정구역 16개 따로?
                             params: {
                                 'FORMAT': 'image/png',
                                 'TILED' : true,
@@ -280,9 +288,3 @@ inputDataRange();
 const modal = document.getElementById("modal")
 function loadingOn() { modal.style.display = "flex" }
 function loadingOff() { modal.style.display = "none" }
-
-// 로딩창 on
-loadingOn()
-// 로딩창 off
-loadingOff()
-
