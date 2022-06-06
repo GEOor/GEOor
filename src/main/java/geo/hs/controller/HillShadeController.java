@@ -57,9 +57,10 @@ public class HillShadeController {
 		int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.valueOf(req.getTime());
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
 
-
-		// 계산된 HillShade값 DB에 갱신
-		roadService.updateRoadHillShade(hs1DArr);
+		// 일정 크기의 HillShade 리스트에 대한 road HillShade 값 계산
+		roadService.calcRoadHillShade(hs1DArr);
+		// 최종 계산된 road HillShade 값 DB에 갱신
+		roadService.updateRoadHillShade();
 	}
 	
 	@PostMapping("/test")

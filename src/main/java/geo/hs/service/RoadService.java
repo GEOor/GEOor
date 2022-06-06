@@ -15,10 +15,13 @@ public class RoadService {
     private final RoadRepository roadRepository;
     private final HashMap<Integer, Road> roadHashMap = new HashMap<>();
 
-    public void updateRoadHillShade(List<Hillshade> hillShades) {
+    public void calcRoadHillShade(List<Hillshade> hillShades) {
         for (Hillshade hillShade : hillShades) {
             roadRepository.findByGeom(roadHashMap, hillShade);
         }
+    }
+
+    public void updateRoadHillShade() {
         for (Road value : roadHashMap.values()) {
             roadRepository.updateHillShade(value);
         }
