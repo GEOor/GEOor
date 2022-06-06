@@ -28,6 +28,7 @@ dependencies {
 	implementation 'org.geotools:gt-epsg-hsql:26.1'
 
 	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
