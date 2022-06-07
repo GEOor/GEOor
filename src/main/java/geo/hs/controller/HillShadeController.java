@@ -155,7 +155,8 @@ public class HillShadeController {
 			
 			// 계산된 HillShade값 DB에 갱신
 			startTime = System.currentTimeMillis();
-			roadService.updateRoadHillShade(hs1DArr);
+			roadService.calcRoadHillShade(hs1DArr);
+			roadService.updateRoadHillShade();
 			endTime = System.currentTimeMillis();
 			log.info("계산된 hillShade 값을 DB에 갱신하는데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
 		}
