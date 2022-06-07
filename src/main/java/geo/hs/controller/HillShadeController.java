@@ -62,7 +62,7 @@ public class HillShadeController {
 		roadService.updateRoadHillShade(hs1DArr);
 	}
 	
-	@PostMapping("/test")
+	// @PostMapping("/test")
 	void testHillShade(@RequestBody PostHillShadeReq req){
 		// 모든 DSM 가져오는 코드 테스트
 		long startTime = System.currentTimeMillis();
@@ -74,6 +74,9 @@ public class HillShadeController {
 		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
 		endTime = System.currentTimeMillis();
 		log.info("Dsm을 2D Arr로 변경하는데 걸리는 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
+		log.info("DSMS ARR 크기 = {}", dsms.size());
+		dsms = null;
+		System.gc();
 		
 		// 태양고도각 크롤링
 		// crawler 호출
@@ -98,9 +101,65 @@ public class HillShadeController {
 		endTime = System.currentTimeMillis();
 		log.info("hillShade 값을 계산하는데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
 		
+	}
+	
+	@PostMapping("/test")
+	void testDivide(@RequestBody PostHillShadeReq req){
+		long allStartTime, allEndTime;
+		long startTime, endTime;
 		
-		for(Hillshade hs : hs1DArr) {
-			System.out.println(hs.toString());
+		allStartTime = System.currentTimeMillis();
+		
+		// 태양고도각 크롤링
+		// crawler 호출
+		double lat = Double.valueOf(req.getLatitude());
+		double lng = Double.valueOf(req.getLongitude());
+		log.info("lat = {}, lng = {}", lat, lng);
+		
+		log.info("Sun parameter Crawling Start!!!");
+		startTime = System.currentTimeMillis();
+		crawler.run(lat, lng, req.getDate()); // 현재는 임시로 x, y = 0 으로 둠, hillshade 알고리즘과 맞춰봐야됨
+		endTime = System.currentTimeMillis();
+		log.info("Sun parameter 크롤링에 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
+		
+		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
+		
+		// 모든 DSM 가져오는 코드 테스트
+		startTime = System.currentTimeMillis();
+		List<Dsm> dsms = dsmService.getAllDsm();
+		endTime = System.currentTimeMillis();
+		log.info("전체 DSM을 가져오는 데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
+		
+		// 전체 DSM을 분할하여 계산
+		int cnt = 1;
+		for(int i=0; i<dsms.size(); i+=3000000){
+			System.out.println();
+			log.warn("dsm 분할 {} 번 째!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", cnt++);
+			startTime = System.currentTimeMillis();
+			ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms.subList(i, Math.min(dsms.size(), i + 3000000)));
+			endTime = System.currentTimeMillis();
+			log.info("Dsm을 2D Arr로 변경하는데 걸리는 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
+			/*log.info("DSMS ARR 크기 = {}", dsms.size());
+			dsms = null;
+			System.gc();*/
+			
+			// 각 DSM 파일들 HillShade 계산
+			log.info("start calc hillshade!!!");
+			startTime = System.currentTimeMillis();
+			int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.valueOf(req.getTime());
+
+			ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
+			endTime = System.currentTimeMillis();
+			log.info("hillShade 값을 계산하는데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
+			
+			// 계산된 HillShade값 DB에 갱신
+			startTime = System.currentTimeMillis();
+			roadService.updateRoadHillShade(hs1DArr);
+			endTime = System.currentTimeMillis();
+			log.info("계산된 hillShade 값을 DB에 갱신하는데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
 		}
+		
+		allEndTime = System.currentTimeMillis();
+		log.info("모든 코드를 수행하는데 걸린 시간 = {} sec 입니다.", (allEndTime - allStartTime) / 1000);
 	}
 }
