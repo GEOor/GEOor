@@ -49,7 +49,7 @@ public class GetDsmRepository {
 		}
 		return ret;*/
 		// where 문의 city 부분은 db의 컬럼에 따라 변경
-		String query = "select * from DSM ORDER BY x asc, y asc OFFSET 0 LIMIT 100000";
+		String query = "select * from DSM";
 		return this.jdbcTemplate.query(query,
 				(rs, rowNum) -> new Dsm(
 						rs.getString("x"),

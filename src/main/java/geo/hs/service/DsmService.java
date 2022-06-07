@@ -74,7 +74,11 @@ public class DsmService {
 			}
 			arr.add(dsmArrayList);
 		}
-
+		
+		mapX = null;
+		mapX = null;
+		y = null; x = null;
+		
 		return arr;
 		
 	}
