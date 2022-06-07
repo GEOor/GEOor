@@ -11,18 +11,17 @@ public class WKB {
 
     private final GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
     private final WKBWriter wkbWriter = new WKBWriter();
-    private final SRID srid = new SRID();
 
     public byte[] convertPolygonWKB(Hillshade hillShade) {
-        double x1 = hillShade.getGrid().get(0);
-        double y1 = hillShade.getGrid().get(1);
-        double x2 = hillShade.getGrid().get(2);
-        double y2 = hillShade.getGrid().get(3);
+        double lat1 = hillShade.getGrid().get(0);
+        double lon1 = hillShade.getGrid().get(1);
+        double lat2 = hillShade.getGrid().get(2);
+        double lon2 = hillShade.getGrid().get(3);
 
-        Coordinate coord1 = srid.convertPoint(x1, y1);
-        Coordinate coord2 = srid.convertPoint(x1, y2);
-        Coordinate coord3 = srid.convertPoint(x2, y2);
-        Coordinate coord4 = srid.convertPoint(x2, y1);
+        Coordinate coord1 = new Coordinate(lat1, lon1);
+        Coordinate coord2 = new Coordinate(lat2, lon1);
+        Coordinate coord3 = new Coordinate(lat2, lon2);
+        Coordinate coord4 = new Coordinate(lat1, lon2);
 
         Coordinate[] coords =
             new Coordinate[]{coord1, coord2, coord3, coord4, coord1};
