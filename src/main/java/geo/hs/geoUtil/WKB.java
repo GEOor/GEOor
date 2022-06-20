@@ -18,10 +18,10 @@ public class WKB {
         double lat2 = hillShade.getGrid().get(2);
         double lon2 = hillShade.getGrid().get(3);
 
-        Coordinate coord1 = new Coordinate(lat1, lon1);
-        Coordinate coord2 = new Coordinate(lat2, lon1);
-        Coordinate coord3 = new Coordinate(lat2, lon2);
-        Coordinate coord4 = new Coordinate(lat1, lon2);
+        Coordinate coord1 = new Coordinate(lon1, lat1);
+        Coordinate coord2 = new Coordinate(lon1, lat2);
+        Coordinate coord3 = new Coordinate(lon2, lat2);
+        Coordinate coord4 = new Coordinate(lon2, lat1);
 
         Coordinate[] coords =
             new Coordinate[]{coord1, coord2, coord3, coord4, coord1};

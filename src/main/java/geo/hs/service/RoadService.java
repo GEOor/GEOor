@@ -26,4 +26,12 @@ public class RoadService {
             roadRepository.updateHillShade(value);
         }
     }
+
+    public void test() {
+        int count = 0;
+        for (Road value : roadHashMap.values()) {
+            count += value.getIntersectCount();
+        }
+        System.out.println(count);
+    }
 }

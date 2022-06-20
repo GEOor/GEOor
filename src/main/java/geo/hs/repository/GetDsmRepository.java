@@ -19,16 +19,16 @@ public class GetDsmRepository {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	public List<Dsm> getDsm(int cityId){
+	public List<Dsm> getDsm(String cityId){
 		// where 문의 city 부분은 db의 컬럼에 따라 변경
-		String query = "select * from DSM where city = ?";
+		String query = "select * from dsm where sig_cd like ?";
 		return this.jdbcTemplate.query(query,
 				(rs, rowNum) -> new Dsm(
 						rs.getString("x"),
 						rs.getString("y"),
 						rs.getDouble("z"),
 						0),
-				cityId
+				cityId + "%"
 		);
 	}
 	
@@ -49,7 +49,7 @@ public class GetDsmRepository {
 		}
 		return ret;*/
 		// where 문의 city 부분은 db의 컬럼에 따라 변경
-		String query = "select * from DSM";
+		String query = "select * from dsm";
 		return this.jdbcTemplate.query(query,
 				(rs, rowNum) -> new Dsm(
 						rs.getString("x"),

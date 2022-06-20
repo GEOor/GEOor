@@ -63,11 +63,14 @@ public class HillShadeController {
 		roadService.updateRoadHillShade();
 	}
 	
-	// @PostMapping("/test")
+	@PostMapping("/test")
 	void testHillShade(@RequestBody PostHillShadeReq req){
 		// 모든 DSM 가져오는 코드 테스트
 		long startTime = System.currentTimeMillis();
-		List<Dsm> dsms = dsmService.getAllDsm();
+		/**
+		 * 시군구 코드가 앞 2자리가 온다고 가정함
+		 */
+		List<Dsm> dsms = dsmService.getDsm(req.getCityId());
 		long endTime = System.currentTimeMillis();
 		log.info("전체 DSM을 가져오는 데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
 		
@@ -76,8 +79,8 @@ public class HillShadeController {
 		endTime = System.currentTimeMillis();
 		log.info("Dsm을 2D Arr로 변경하는데 걸리는 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
 		log.info("DSMS ARR 크기 = {}", dsms.size());
-		dsms = null;
-		System.gc();
+//		dsms = null;
+//		System.gc();
 		
 		// 태양고도각 크롤링
 		// crawler 호출
@@ -101,10 +104,20 @@ public class HillShadeController {
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
 		endTime = System.currentTimeMillis();
 		log.info("hillShade 값을 계산하는데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
-		
+
+		startTime = System.currentTimeMillis();
+		roadService.calcRoadHillShade(hs1DArr);
+		endTime = System.currentTimeMillis();
+		log.info("road hillshade 값을 계산하는데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
+
+		startTime = System.currentTimeMillis();
+		roadService.updateRoadHillShade();
+		endTime = System.currentTimeMillis();
+		log.info("road hillshade 값을 update 하는데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
+		roadService.test();
 	}
 	
-	@PostMapping("/test")
+//	@PostMapping("/test")
 	void testDivide(@RequestBody PostHillShadeReq req){
 		long allStartTime, allEndTime;
 		long startTime, endTime;
@@ -127,7 +140,7 @@ public class HillShadeController {
 		
 		// 모든 DSM 가져오는 코드 테스트
 		startTime = System.currentTimeMillis();
-		List<Dsm> dsms = dsmService.getAllDsm();
+		List<Dsm> dsms = dsmService.getDsm("11");
 		endTime = System.currentTimeMillis();
 		log.info("전체 DSM을 가져오는 데 걸린 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
 		

@@ -2,7 +2,6 @@ package geo.hs.service;
 
 import geo.hs.model.dsm.Dsm;
 import geo.hs.repository.GetDsmRepository;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ public class DsmService {
 	
 	public List<Dsm> getDsm(String cityId){
 		// 만약 cityId가 길게 넘어온다면 parsing Code 짜기
-		List<Dsm> dsm = getDsmRepository.getDsm(Integer.valueOf(cityId));
+		List<Dsm> dsm = getDsmRepository.getDsm(cityId);
 		Collections.sort(dsm);
 		return dsm;
 	}
