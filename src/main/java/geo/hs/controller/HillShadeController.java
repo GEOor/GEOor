@@ -80,7 +80,6 @@ public class HillShadeController {
 		log.info("Dsm을 2D Arr로 변경하는데 걸리는 시간 = {} sec 입니다.", (endTime - startTime) / 1000);
 		log.info("DSMS ARR 크기 = {}", dsms.size());
 //		dsms = null;
-//		System.gc();
 		
 		// 태양고도각 크롤링
 		// crawler 호출

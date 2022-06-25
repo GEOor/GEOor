@@ -23,7 +23,7 @@ public class DsmService {
 	public List<Dsm> getDsm(String cityId){
 		// 만약 cityId가 길게 넘어온다면 parsing Code 짜기
 		List<Dsm> dsm = getDsmRepository.getDsm(cityId);
-		Collections.sort(dsm);
+		//Collections.sort(dsm);
 		return dsm;
 	}
 	
