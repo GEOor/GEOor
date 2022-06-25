@@ -22,15 +22,15 @@ public class RoadRepository {
     }
 
     public void findByGeom(HashMap<Integer, Road> roadHashMap, Hillshade hillShades) {
-        String sql = "SELECT id FROM road WHERE ST_Overlaps(?, geom)";
+        String sql = "SELECT id FROM road_centroid WHERE ST_Intersects(?, centroid)";
         jdbcTemplate.query(sql, new RowMapper<Integer>() {
             @Override
             public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
                 int roadId = rs.getInt(1);
-                if (roadHashMap.containsKey(roadId)) {
+                if (!roadHashMap.containsKey(roadId)) {
                     roadHashMap.put(roadId, new Road(roadId));
                 }
-                roadHashMap.get(roadId).overlapsGrid(hillShades.getHillshade().intValue());
+                roadHashMap.get(roadId).interSects(hillShades.getHillshade().intValue());
                 return 0;
             }
         }, wkb.convertPolygonWKB(hillShades));

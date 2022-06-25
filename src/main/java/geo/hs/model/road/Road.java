@@ -3,28 +3,36 @@ package geo.hs.model.road;
 public class Road {
 
     private int id;
-    private int overlapsCount;
+    private int interSectCount;
     private int totalHillShadeSum;
 
     public Road(int id) {
         this.id = id;
-        this.overlapsCount = 0;
+        this.interSectCount = 0;
         this.totalHillShadeSum = 0;
     }
 
-    public void overlapsGrid(int hillShade) {
-        overlapsCount++;
+    public void interSects(int hillShade) {
+        interSectCount++;
         totalHillShadeSum += hillShade;
     }
 
     public int getHillShadeAverage() {
-        if(overlapsCount == 0 && totalHillShadeSum == 0) {
+        if(interSectCount == 0 && totalHillShadeSum == 0) {
             return 0;
         }
-        return totalHillShadeSum / overlapsCount;
+        return totalHillShadeSum / interSectCount;
     }
 
     public int getId() {
         return id;
+    }
+
+    public int getIntersectCount() {
+        return interSectCount;
+    }
+
+    public int getTotalHillShadeSum() {
+        return totalHillShadeSum;
     }
 }
