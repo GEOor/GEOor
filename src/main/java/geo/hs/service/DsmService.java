@@ -84,7 +84,7 @@ public class DsmService {
 	
 	public List<Dsm> getAllDsm(){
 		// 만약 cityId가 길게 넘어온다면 parsing Code 짜기
-		List<Dsm> dsm = getDsmRepository.getAllDsm();
+		List<Dsm> dsm = null;
 		/*ArrayList<Dsm> dsm = new ArrayList<>();
 		dsm.addAll(getDsmRepository.getAllDsm());*/
 		// Collections.sort(dsm);

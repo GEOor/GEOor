@@ -16,6 +16,7 @@ public class RoadService {
     private final HashMap<Integer, Road> roadHashMap = new HashMap<>();
 
     public void calcRoadHillShade(List<Hillshade> hillShades) {
+        roadHashMap.clear();
         for (Hillshade hillShade : hillShades) {
             roadRepository.findByGeom(roadHashMap, hillShade);
         }

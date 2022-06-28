@@ -22,7 +22,7 @@ public class RoadRepository {
     }
 
     public void findByGeom(HashMap<Integer, Road> roadHashMap, Hillshade hillShades) {
-        String sql = "SELECT id FROM road_split WHERE ST_Intersects(st_setSRID(? ::geometry, 4326), the_geom)";
+        String sql = "SELECT origin_id FROM road_divide WHERE ST_Intersects(st_setSRID(? ::geometry, 4326), the_geom)";
         jdbcTemplate.query(sql, new RowMapper<Integer>() {
             @Override
             public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {

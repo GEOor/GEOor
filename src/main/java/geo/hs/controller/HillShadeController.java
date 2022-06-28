@@ -42,7 +42,6 @@ public class HillShadeController {
 		
 		// 해당 cityCode에 맞는 지역의 DSM 가져오기
 		List<Dsm> dsms = dsmService.getDsm(req.getCityId());
-
 		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
 		
 		// 태양고도각 크롤링
