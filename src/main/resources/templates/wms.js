@@ -124,14 +124,13 @@ function addressToCoordinates(address) {
                 loadingOn()
 
                 let xml = request.responseXML;
+                console.log(xml);
                 xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
                 yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
-
                 //행정구역 번호
                 districtNumber = xml.getElementsByTagName('level4AC')[0].childNodes[0].nodeValue;
+                districtNumber = districtNumber.substr(0, 5)
                 console.log(districtNumber);
-
-
 
                 let lat, lng; //위, 경도
 
@@ -140,14 +139,11 @@ function addressToCoordinates(address) {
 
                 let date = inputDate();
                 let time = inputTime();
-
-
-
                 //api 호출 부분
                 fetch("http://localhost:8080/hillShade/", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "application/json; charset=UTF-8"
                     },
                     body: JSON.stringify({
                         latitude: lat,
@@ -168,7 +164,8 @@ function addressToCoordinates(address) {
                             params: {
                                 'FORMAT': 'image/png',
                                 'TILED' : true,
-                                'LAYERS': 'GeoOr:road'
+                                'LAYERS': 'GeoOr:road',
+                                'CQL_FILTER': 'sig_cd = ' + districtNumber
                             }
                         })
                     });
@@ -176,9 +173,6 @@ function addressToCoordinates(address) {
                     map.addLayer(wmsLayer);
 
                 });
-
-
-
                 return [Number(xCoordinate), Number(yCoordinate)];
             } else {
                 alert(request.status);
@@ -286,5 +280,5 @@ inputDataRange();
 
 /* 로딩창 */
 const modal = document.getElementById("modal")
-function loadingOn() { modal.style.display = "flex" }
-function loadingOff() { modal.style.display = "none" }
+function loadingOn() {  }
+function loadingOff() { }

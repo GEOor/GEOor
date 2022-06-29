@@ -10,7 +10,6 @@ import geo.hs.service.HillShadeService;
 import geo.hs.service.RoadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,9 +38,8 @@ public class HillShadeController {
 	
 	@PostMapping("/hillShade")
 	void updateHillShade(@RequestBody PostHillShadeReq req){
-		
 		// 해당 cityCode에 맞는 지역의 DSM 가져오기
-		List<Dsm> dsms = dsmService.getDsm(req.getCityId());
+		List<Dsm> dsms = dsmService.getDsm(req.cityId);
 		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
 		
 		// 태양고도각 크롤링
@@ -55,11 +53,12 @@ public class HillShadeController {
 		// 각 DSM 파일들 HillShade 계산
 		int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.valueOf(req.getTime());
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
-
+		System.out.println("start");
 		// 일정 크기의 HillShade 리스트에 대한 road HillShade 값 계산
 		roadService.calcRoadHillShade(hs1DArr);
 		// 최종 계산된 road HillShade 값 DB에 갱신
 		roadService.updateRoadHillShade();
+		roadService.test();
 	}
 	
 	@PostMapping("/test")
