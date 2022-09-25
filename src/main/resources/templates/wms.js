@@ -20,11 +20,11 @@ let map = new ol.Map({
 let wmsLayer = new ol.layer.Tile({
     visible: true,
     source: new ol.source.TileWMS({
-        url: 'http://localhost:8088/geoserver/GeoOr/wms',
+        url: 'http://localhost:8600/geoserver/geor/wms',
         params: {
             'FORMAT': 'image/png',
             'TILED' : true,
-            'LAYERS': 'GeoOr:road'
+            'LAYERS': 'geor:road'
         }
     })
 })
@@ -112,9 +112,9 @@ function addressToCoordinates(address) {
     let xCoordinate, yCoordinate, districtNumber;
 
     request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
-        + "&crs=epsg:3857" // EPSG:3857
+        + "&crs=epsg:3857"
         + "&address=" + encodeURI(address) + "&refine=true&simple=false&format=xml&type=road"
-        + "&key=4480D1CC-812E-33AC-8A4D-05E08AC71B7A");
+        + "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
     request.send();
     request.onreadystatechange = function() {
         if (request.readyState === 4) {
@@ -160,11 +160,11 @@ function addressToCoordinates(address) {
                     let wmsLayer = new ol.layer.Tile({
                         visible: true,
                         source: new ol.source.TileWMS({
-                            url: 'http://localhost:8088/geoserver/GeoOr/wms', //행정구역 16개 따로?
+                            url: 'http://localhost:8600/geoserver/geor/wms', //행정구역 16개 따로?
                             params: {
                                 'FORMAT': 'image/png',
                                 'TILED' : true,
-                                'LAYERS': 'GeoOr:road',
+                                'LAYERS': 'geor:road',
                                 'CQL_FILTER': 'sig_cd = ' + districtNumber
                             }
                         })
