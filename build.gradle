@@ -20,14 +20,14 @@ repositories {
 }
 
 dependencies {
-	implementation files("lib/postgresql-42.3.1.jar")
+	implementation 'org.postgresql:postgresql:42.5.0'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.seleniumhq.selenium:selenium-java:2.41.0'
-	implementation 'org.geotools:gt-shapefile:26.1'
-	implementation 'org.geotools:gt-epsg-hsql:26.1'
+	implementation 'org.geotools:gt-shapefile:27.0'
+	implementation 'org.geotools:gt-epsg-hsql:27.0'
 
-	compileOnly 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok';
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'

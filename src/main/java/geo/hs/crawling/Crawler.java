@@ -39,14 +39,14 @@ public class Crawler {
 			driver = new ChromeDriver(chromeOptions);
 			
 			// URL로 접속 (이때 address는 중요하지 않다. 위,경도 좌표만 제대로 입력하면 고도각이 출력된다)
-			driver.get(url+"?useElevation=1&lat="+String.valueOf(lat)+"&lng="+String.valueOf(lng)+"&elevation=0&output_range=1&date="+date+"&hour=&minute=&second=&address="+address);
+			driver.get(url+"?useElevation=1&lat="+ lat +"&lng="+ lng +"&elevation=0&output_range=1&date="+date+"&hour=&minute=&second=&address="+address);
 			// 대기 설정
 			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 			
 			List<WebElement> tr = ((ChromeDriver) driver).findElementsByXPath("//*[@id=\"sun-height-table\"]/table/tbody/tr");
 			
 			// 출력
-			// for(int i = 0; i<tr.size(); i++) System.out.println(tr.get(i).getText());
+			for(int i = 0; i<tr.size(); i++) System.out.println(tr.get(i).getText());
 			
 			crawlerParsing(tr);
 			
