@@ -59,10 +59,10 @@ public class FrozenRepository {
 				char c = (char) cur;
 				if (c == ' ' || c == '	' || c == '\n') {
 					if (flag) {
-						lat = Double.valueOf(temp);
+						lat = Double.parseDouble(temp);
 						flag = false;
 					} else {
-						lng = Double.valueOf(temp);
+						lng = Double.parseDouble(temp);
 						ret.add(new Frozen(lat, lng));
 						flag = true;
 					}
@@ -75,7 +75,7 @@ public class FrozenRepository {
 		} catch (IOException e) {
 			e.getStackTrace();
 		}
-		
+
 		return ret;
 	}
 }

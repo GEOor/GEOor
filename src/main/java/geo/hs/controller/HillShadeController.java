@@ -44,14 +44,14 @@ public class HillShadeController {
 		
 		// 태양고도각 크롤링
 		// crawler 호출
-		double lat = Double.valueOf(req.getLatitude());
-		double lng = Double.valueOf(req.getLongitude());
+		double lat = Double.parseDouble(req.getLatitude());
+		double lng = Double.parseDouble(req.getLongitude());
 		crawler.run(lat, lng, req.getDate()); // 현재는 임시로 x, y = 0 으로 둠, hillshade 알고리즘과 맞춰봐야됨
 		
 		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
 		
 		// 각 DSM 파일들 HillShade 계산
-		int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.valueOf(req.getTime());
+		int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.parseInt(req.getTime());
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
 		System.out.println("start");
 		// 일정 크기의 HillShade 리스트에 대한 road HillShade 값 계산

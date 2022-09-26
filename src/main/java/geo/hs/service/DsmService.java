@@ -41,17 +41,21 @@ public class DsmService {
 		ArrayList<Double> x = new ArrayList<Double>();
 
 		for(Dsm dsm : dsms) {
+			String dsmX = dsm.getX();
+			String dsmY = dsm.getY();
+
 			//map에 없었던 것들 추가
-			if(!mapX.containsKey(dsm.getX())) {
-				mapX.put(dsm.getX(), 1);
-				x.add(Double.parseDouble(dsm.getX()));
-			}
-			if(!mapY.containsKey(dsm.getY())) {
-				mapY.put(dsm.getY(), 1);
-				y.add(Double.parseDouble(dsm.getY()));
+			if(!mapX.containsKey(dsmX)) {
+				mapX.put(dsmX, 1);
+				x.add(Double.parseDouble(dsmX));
 			}
 
-			mapXY.put(dsm.getY() + dsm.getX(), dsm);
+			if(!mapY.containsKey(dsmY)) {
+				mapY.put(dsmY, 1);
+				y.add(Double.parseDouble(dsmY));
+			}
+
+			mapXY.put(dsmX + dsmY, dsm);
 		}
 
 		// y, x 좌표 순서대로 정렬 (y축은 내림차순으로, x축은 오름차순으로)
@@ -73,10 +77,6 @@ public class DsmService {
 			}
 			arr.add(dsmArrayList);
 		}
-		
-		mapX = null;
-		mapX = null;
-		y = null; x = null;
 		
 		return arr;
 		

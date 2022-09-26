@@ -15,9 +15,7 @@ public class HillShadeService {
 
     public ArrayList<Hillshade> run(ArrayList<ArrayList<Dsm>> dsm2DArr, SunInfo sunInfo){
 
-        ArrayList<Hillshade> hillShadeArr = new ArrayList<Hillshade>();
         ArrayList<Hillshade> hillShades = hillshadeAlgorithm.hsConverter(sunInfo, dsm2DArr);
-
 
         return hillShades;
     }
