@@ -1,6 +1,7 @@
 package geo.hs.crawling;
 
 import geo.hs.model.sun.SunInfo;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.openqa.selenium.WebDriver;
@@ -30,8 +31,9 @@ public class Crawler {
 		latitude = lat; longitude = lng; x_dir = lat; y_dir = lng;
 		
 		try {
-			// drvier 설정 - resource에 넣어놓음
-			System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+			// 크롬 버전에 맞게 chromedriver 설치
+			WebDriverManager.chromedriver().setup();
+
 			// Chrome 드라이버 인스턴스 설정
 			ChromeOptions chromeOptions = new ChromeOptions();
 			chromeOptions.addArguments("--headless");
@@ -40,6 +42,7 @@ public class Crawler {
 			
 			// URL로 접속 (이때 address는 중요하지 않다. 위,경도 좌표만 제대로 입력하면 고도각이 출력된다)
 			driver.get(url+"?useElevation=1&lat="+ lat +"&lng="+ lng +"&elevation=0&output_range=1&date="+date+"&hour=&minute=&second=&address="+address);
+
 			// 대기 설정
 			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 			
@@ -49,11 +52,11 @@ public class Crawler {
 			for(int i = 0; i<tr.size(); i++) System.out.println(tr.get(i).getText());
 			
 			crawlerParsing(tr);
-			
+
 		} catch (Throwable e) {
 			e.printStackTrace();
 		} finally {
-			driver.close();
+			driver.quit();
 		}
 	}
 
