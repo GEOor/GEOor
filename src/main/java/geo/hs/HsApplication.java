@@ -9,10 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class HsApplication {
 
 	public static void main(String[] args) {
-
-		//hillshade test
-		System.out.println("--start--");
-		//hsService.run();
 		SpringApplication.run(HsApplication.class, args);
 	}
 
