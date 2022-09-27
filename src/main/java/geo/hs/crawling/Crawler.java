@@ -49,7 +49,7 @@ public class Crawler {
 			List<WebElement> tr = ((ChromeDriver) driver).findElementsByXPath("//*[@id=\"sun-height-table\"]/table/tbody/tr");
 			
 			// 출력
-			for(int i = 0; i<tr.size(); i++) System.out.println(tr.get(i).getText());
+//			for(int i = 0; i<tr.size(); i++) System.out.println(tr.get(i).getText());
 			
 			crawlerParsing(tr);
 

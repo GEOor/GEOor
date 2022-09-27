@@ -16,6 +16,10 @@ services:
       - POSTGRES_MULTIPLE_EXTENSIONS=postgis
     ports:
       - "5431:5432"
+    networks:
+      geor_net:
+        ipv4_address: 172.18.0.2
+      
 
   geoserver:
     image: kartoza/geoserver
@@ -26,6 +30,9 @@ services:
       - GEOSERVER_ADMIN_PASSWORD=geoserver
     ports:
       - "8600:8080"
+    networks:
+      geor_net:
+        ipv4_address: 172.18.0.3
 
   pgadmin4:
     image: dpage/pgadmin4
@@ -34,4 +41,13 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=geor
     ports:
       - "5430:80"
+    networks:
+      geor_net:
+        ipv4_address: 172.18.0.4
 
+networks:
+  geor_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.18.0.0/16"
