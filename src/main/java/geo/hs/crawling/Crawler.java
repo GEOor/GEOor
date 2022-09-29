@@ -71,23 +71,30 @@ public class Crawler {
 		for(int i = 0; i < arr.size(); i++){
 			List<String> strings = Arrays.asList(arr.get(i).getText().split(" "));
 			SunInfo s = new SunInfo(0, 0, 0D, 0D, 0,0D,0D,0D,0D);
+
 			s.setTime(i);
-			for(int k = 1; k <= 12; k += 3){
-				Double degree = Double.parseDouble(strings.get(k));
-				Double minute = Double.parseDouble(strings.get(k+1));
-				Double second = Double.parseDouble(strings.get(k+2));
+			s.setLatitude(latitude);
+			s.setLongitude(longitude);
+			s.setX(x_dir);
+			s.setY(y_dir);
+
+			for(int k = 1; k <= 12; k += 3) {
+				double hour = Double.parseDouble(strings.get(k));
+				double minute = Double.parseDouble(strings.get(k + 1));
+				double second = Double.parseDouble(strings.get(k + 2));
+
 				// 적경은 단위가 시분초임 -> 초단위로 바꾸기
-				Double t = degree*3600 + minute*60 + second;
-				// 도분초 -> degree로 변환 : 소수자리 = (분/60)+(초/3600)
-				degree += (minute/60) + (second/3600);
-				if(k == 1) s.setAzimuth(degree);
+				double t = hour * 3600 + minute * 60 + second;
+
+				// 적경을 각도로 변환. 각도 = 시간 + (분/60) + (초/3600))
+				double degree = hour + minute / 60 + second / 3600;
+
+				if (k == 1) s.setAzimuth(degree);
 				else if (k == 4) s.setAltitude(degree);
 				else if (k == 7) s.setAscension(t);
 				else s.setDeclination(degree);
-
-				s.setLatitude(latitude); s.setLongitude(longitude);
-				s.setX(x_dir); s.setY(y_dir);
 			}
+
 			si.add(s);
 		}
 	}
