@@ -55,7 +55,7 @@ public class DsmService {
 				y.add(Double.parseDouble(dsmY));
 			}
 
-			mapXY.put(dsmX + dsmY, dsm);
+			mapXY.put(dsmY + dsmX, dsm);
 		}
 
 		// y, x 좌표 순서대로 정렬 (y축은 내림차순으로, x축은 오름차순으로)
@@ -79,7 +79,7 @@ public class DsmService {
 		}
 		
 		return arr;
-		
+
 	}
 	
 	public List<Dsm> getAllDsm(){
