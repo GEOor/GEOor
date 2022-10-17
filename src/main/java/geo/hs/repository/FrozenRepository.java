@@ -46,7 +46,7 @@ public class FrozenRepository {
 
 		try {
 			//파일 객체 생성
-			File file = new File("/Users/suhwan/Desktop/geo&/GEOor/src/main/resources/files/frozen.txt");
+			File file = new File("../GEOor/src/main/resources/files/frozen.txt");
 			//입력 스트림 생성
 			FileReader file_reader = new FileReader(file);
 			
