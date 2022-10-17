@@ -23,8 +23,7 @@ public class WKB {
         Coordinate coord3 = new Coordinate(lon2, lat2);
         Coordinate coord4 = new Coordinate(lon2, lat1);
 
-        Coordinate[] coords =
-            new Coordinate[]{coord1, coord2, coord3, coord4, coord1};
+        Coordinate[] coords = new Coordinate[]{coord1, coord2, coord3, coord4, coord1};
         LinearRing ring = geometryFactory.createLinearRing(coords);
         LinearRing holes[] = null;
 

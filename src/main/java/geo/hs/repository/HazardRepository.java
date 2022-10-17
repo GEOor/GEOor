@@ -6,11 +6,11 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class HazardRepository {
+    private final String url = "jdbc:postgresql://localhost:5432/geor";
+    private final String user = "postgres";
+    String password = ""; //password 입력
 
     public void saveBridge(ArrayList<Hazard> hazards) throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/geor";
-        String user = "postgres";
-        String password = ""; //password 입력
         try
         {
             Connection connect = null;
@@ -48,9 +48,6 @@ public class HazardRepository {
     public ArrayList<Hazard> getBridge() throws SQLException {
         ArrayList<Hazard> hazards = new ArrayList<>();
 
-        String url = "jdbc:postgresql://localhost:5432/geor";
-        String user = "postgres";
-        String password = ""; //password 입력
         try
         {
             Connection connect = null;
@@ -87,9 +84,6 @@ public class HazardRepository {
     }
 
     public void saveTunnel(ArrayList<Hazard> hazards) throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/geor";
-        String user = "postgres";
-        String password = ""; //password 입력
         try
         {
             Connection connect = null;
@@ -127,9 +121,6 @@ public class HazardRepository {
     public ArrayList<Hazard> getTunnel() throws SQLException {
         ArrayList<Hazard> hazards = new ArrayList<>();
 
-        String url = "jdbc:postgresql://localhost:5432/geor";
-        String user = "postgres";
-        String password = ""; //password 입력
         try
         {
             Connection connect = null;

@@ -39,14 +39,12 @@ public class FrozenRepository {
 	 * txt 파일로 가지고 있기
 	 * @return List<Frozen>
 	 */
-	public List<Frozen>
-	getFrozenRoad(){
+	public List<Frozen> getFrozenRoad(){
 		List<Frozen> ret = new ArrayList<>();
-
 
 		try {
 			//파일 객체 생성
-			File file = new File("/Users/suhwan/Desktop/geo&/GEOor/src/main/resources/files/frozen.txt");
+			File file = new File("../GEOor/src/main/resources/files/frozen.txt");
 			//입력 스트림 생성
 			FileReader file_reader = new FileReader(file);
 			
