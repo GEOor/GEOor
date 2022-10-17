@@ -39,10 +39,8 @@ public class FrozenRepository {
 	 * txt 파일로 가지고 있기
 	 * @return List<Frozen>
 	 */
-	public List<Frozen>
-	getFrozenRoad(){
+	public List<Frozen> getFrozenRoad(){
 		List<Frozen> ret = new ArrayList<>();
-
 
 		try {
 			//파일 객체 생성

@@ -81,7 +81,8 @@ function showHazardMarker(hazardName) {
             }
         })
         .catch(err => {
-            console.log(err);
+            alert(arr);
+            //console.log(err);
         })
 }
 
@@ -102,7 +103,7 @@ function convertCoordinates(lon, lat) {
     let y = Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / (Math.PI / 180);
     y = (y * 20037508.34) / 180;
 
-    console.log("x: " + x + " y: " + y);
+    //console.log("x: " + x + " y: " + y);
     return [x, y];
 }
 
@@ -124,13 +125,13 @@ function addressToCoordinates(address) {
                 loadingOn()
 
                 let xml = request.responseXML;
-                console.log(xml);
+                //console.log(xml);
                 xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
                 yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
                 //행정구역 번호
                 districtNumber = xml.getElementsByTagName('level4AC')[0].childNodes[0].nodeValue;
                 districtNumber = districtNumber.substr(0, 5)
-                console.log(districtNumber);
+                //console.log(districtNumber);
 
                 let lat, lng; //위, 경도
 
@@ -153,7 +154,7 @@ function addressToCoordinates(address) {
                         time: time,
                     }),
                 }).then((response) => {
-                    console.log(response)
+                    //console.log(response)
                     // 로딩창 off
                     loadingOff()
                     // wms layer 생성
@@ -210,13 +211,13 @@ function inputDataRange(){
 
 function inputAddress(){
     let addressInput = document.getElementById('address').value;
-    console.log("입력한 주소: ", addressInput);
+    //console.log("입력한 주소: ", addressInput);
     return addressInput;
 }
 
 function inputDate(){
     let dateInput = document.getElementById('date').value;
-    console.log("입력한 날짜: ", dateInput);
+    //console.log("입력한 날짜: ", dateInput);
     return dateInput;
 }
 
@@ -224,13 +225,13 @@ function inputTime(){
     let timeInput = document.getElementById('time').value;
     timeInput = String(timeInput).substring(0, 2);
 
-    console.log("입력한 시간: ", timeInput);
+    //console.log("입력한 시간: ", timeInput);
     return timeInput;
 }
 
 function inputTunnel(){
     let tunnelOption = document.getElementById('tunnelCheck').checked;
-    console.log("터널 옵션: ", tunnelOption);
+    //console.log("터널 옵션: ", tunnelOption);
 
     if(tunnelOption) showHazardMarker("tunnel");
     return tunnelOption;
@@ -238,7 +239,7 @@ function inputTunnel(){
 
 function inputBridge(){
     let bridgeOption = document.getElementById('bridgeCheck').checked;
-    console.log("교량 옵션: ", bridgeOption);
+    //console.log("교량 옵션: ", bridgeOption);
 
     if(bridgeOption) showHazardMarker("bridge");
     return bridgeOption;
@@ -246,7 +247,7 @@ function inputBridge(){
 
 function inputFrost(){
     let frostOption = document.getElementById('frostCheck').checked;
-    console.log("결빙 옵션: ", frostOption);
+    //console.log("결빙 옵션: ", frostOption);
 
     if(frostOption) showHazardMarker("frozen");
     return frostOption;
