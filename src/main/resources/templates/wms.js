@@ -98,12 +98,9 @@ const setHazardMarker = async (hazardName) => {
 }
 
 
-function lookAtMe(lat, lng) {
-
-    /*
-        우리가 알고 있는 위,경도 좌표계(EPSG:4326) -> 구글 맵 좌표계(EPSG:3857) 변환
-        EPSG:4326..ex) (37.5, 131.2)
-     */
+// 위/경도 좌표계(EPSG:4326)를 인자로 받아 구글 맵 좌표계(EPSG:3857)로 변환한 뒤
+// 지도의 해당 지점에 focus시킴
+function setMapCenter(lat, lng) {
     map.getView().setCenter(ol.proj.transform([lat, lng], 'EPSG:4326', 'EPSG:3857'));
     map.getView().setZoom(16);
 }
@@ -151,7 +148,7 @@ function addressToCoordinates() {
         const districtNumber = getXMLValue('level4AC')?.substr(0, 5)
 
         const [latitude, longitude] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
-        lookAtMe(latitude, longitude);
+        setMapCenter(latitude, longitude);
 
         /** @todo /hillShade가 제대로 작동한다면 주석 풀고 버그 수정할 것 */
         // await fetch("http://localhost:8080/hillShade/", {
