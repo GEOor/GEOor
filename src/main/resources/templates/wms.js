@@ -109,8 +109,7 @@ function convertCoordinates(lon, lat) {
 
 //주소를 xy좌표로 변환하기
 function addressToCoordinates(address) {
-    let request = new XMLHttpRequest();
-    let xCoordinate, yCoordinate, districtNumber;
+    const request = new XMLHttpRequest();
 
     request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
         + "&crs=epsg:3857"
@@ -118,67 +117,59 @@ function addressToCoordinates(address) {
         + "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
     request.send();
     request.onreadystatechange = function() {
-        if (request.readyState === 4) {
-            if (request.status >= 200 && request.status < 300) {
+        if (request.readyState !== 4) return
+        if (request.status < 200 || request.status >= 300)
+            return alert(request.status);
 
-                // 로딩창 on
-                loadingOn()
+        // 로딩창 on
+        loadingOn()
 
-                let xml = request.responseXML;
-                //console.log(xml);
-                xCoordinate = xml.getElementsByTagName('x')[0].childNodes[0].nodeValue;
-                yCoordinate = xml.getElementsByTagName('y')[0].childNodes[0].nodeValue;
-                //행정구역 번호
-                districtNumber = xml.getElementsByTagName('level4AC')[0].childNodes[0].nodeValue;
-                districtNumber = districtNumber.substr(0, 5)
-                //console.log(districtNumber);
+        const { responseXML } = request
+        //console.log(responseXML);
 
-                let lat, lng; //위, 경도
+        const xCoordinate = responseXML.getElementsByTagName('x')[0].childNodes[0].nodeValue;
+        const yCoordinate = responseXML.getElementsByTagName('y')[0].childNodes[0].nodeValue;
+        //행정구역 번호
+        const districtNumber = responseXML.getElementsByTagName('level4AC')[0].childNodes[0].nodeValue?.substr(0, 5)
 
-                [lat, lng] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
-                lookAtMe(lat, lng);
+        const [latitude, longitude] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
+        lookAtMe(latitude, longitude);
 
-                let date = inputDate();
-                let time = inputTime();
-                //api 호출 부분
-                fetch("http://localhost:8080/hillShade/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json; charset=UTF-8"
-                    },
-                    body: JSON.stringify({
-                        latitude: lat,
-                        longitude: lng,
-                        cityId: districtNumber,
-                        date: date,
-                        time: time,
-                    }),
-                }).then((response) => {
-                    //console.log(response)
-                    // 로딩창 off
-                    loadingOff()
-                    // wms layer 생성
-                    let wmsLayer = new ol.layer.Tile({
-                        visible: true,
-                        source: new ol.source.TileWMS({
-                            url: 'http://localhost:8600/geoserver/geor/wms', //행정구역 16개 따로?
-                            params: {
-                                'FORMAT': 'image/png',
-                                'TILED' : true,
-                                'LAYERS': 'geor:road',
-                                'CQL_FILTER': 'sig_cd = ' + districtNumber
-                            }
-                        })
-                    });
+        /** @todo /hillShade가 제대로 작동한다면 주석 풀고 버그 수정할 것 */
+        // await fetch("http://localhost:8080/hillShade/", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify({
+        //         latitude,
+        //         longitude,
+        //         cityId: districtNumber,
+        //         date: inputDate(),
+        //         time: inputTime(),
+        //     }),
+        // });
 
-                    map.addLayer(wmsLayer);
+        //console.log(response)
 
-                });
-                return [Number(xCoordinate), Number(yCoordinate)];
-            } else {
-                alert(request.status);
-            }
-        }
+        // wms layer 생성
+        map.addLayer(new ol.layer.Tile({
+            visible: true,
+            source: new ol.source.TileWMS({
+                url: 'http://localhost:8600/geoserver/geor/wms', //행정구역 16개 따로?
+                params: {
+                    FORMAT: 'image/png',
+                    TILED : true,
+                    LAYERS: 'geor:road',
+                    CQL_FILTER: 'sig_cd = ' + districtNumber
+                }
+            })
+        }));
+
+        // 로딩창 off
+        loadingOff()
+
+        return [Number(xCoordinate), Number(yCoordinate)];
     }
 }
 
