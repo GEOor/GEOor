@@ -131,10 +131,13 @@ function addressToCoordinates() {
         const { responseXML } = request
         //console.log(responseXML);
 
-        const xCoordinate = responseXML.getElementsByTagName('x')[0].childNodes[0].nodeValue;
-        const yCoordinate = responseXML.getElementsByTagName('y')[0].childNodes[0].nodeValue;
-        //행정구역 번호
-        const districtNumber = responseXML.getElementsByTagName('level4AC')[0].childNodes[0].nodeValue?.substr(0, 5)
+        const getXMLValue = (name) => responseXML.getElementsByTagName(name)[0].childNodes[0].nodeValue
+
+        // 검색한 지역의 좌표
+        const xCoordinate = getXMLValue('x');
+        const yCoordinate = getXMLValue('y');
+        // 검색한 지역의 행정구역 번호
+        const districtNumber = getXMLValue('level4AC')?.substr(0, 5)
 
         const [latitude, longitude] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
         lookAtMe(latitude, longitude);
