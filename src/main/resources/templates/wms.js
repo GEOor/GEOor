@@ -59,33 +59,45 @@ function createMarker(lng, lat, id) {
     vectorlayer - source에다가 feature(좌표, 아이콘으로 구성) 넣기
     즉, layer - source - feature 순으로 단위가 형성되어 있다. (내림차순)
  */
-function setHazardMarker(hazardName) {
+const setHazardMarker = async (hazardName) => {
     const $option = document.getElementById(hazardName)
     if (!$option.value) return;
 
     map.addLayer(vectorLayer);
 
-    //api 호출 부분
-    fetch('http://localhost:8080/hazard/' + hazardName)
-        .then(res => res.json())
-        .then(data => {
+    try {
+        // api 호출 후 데이터를 파싱
+        const res = await fetch('http://localhost:8080/hazard/' + hazardName);
+        const data = await res.json();
 
-            let lat = [];
-            let lon = [];
+        // api 호출을 통해 얻어낸 데이터를 이용해 마커를 생성
+        data.forEach(({latitude, longitude}, i) => 
+            vectorLayer.getSource().addFeature(createMarker(latitude, longitude, i))
+        )
+    } catch (error) {
+        console.error(error)
+    }
 
-            for(let i=0; i<data.length; i++) {
-                lat.push(data[i].latitude);
-                lon.push(data[i].longitude);
-            }
+    // fetch('http://localhost:8080/hazard/' + hazardName)
+    //     .then(res => res.json())
+    //     .then(data => {
 
-            for(let i=0; i<data.length; i++) {
-                vectorLayer.getSource().addFeature(createMarker(lat[i], lon[i], i));
-            }
-        })
-        .catch(err => {
-            alert(arr);
-            //console.log(err);
-        })
+    //         let lat = [];
+    //         let lon = [];
+
+    //         for(let i=0; i<data.length; i++) {
+    //             lat.push(data[i].latitude);
+    //             lon.push(data[i].longitude);
+    //         }
+
+    //         for(let i=0; i<data.length; i++) {
+    //             vectorLayer.getSource().addFeature(createMarker(lat[i], lon[i], i));
+    //         }
+    //     })
+    //     .catch(err => {
+    //         alert(arr);
+    //         //console.log(err);
+    //     })
 }
 
 
