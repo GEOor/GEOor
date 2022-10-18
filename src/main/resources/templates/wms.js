@@ -59,7 +59,9 @@ function createMarker(lng, lat, id) {
     vectorlayer - source에다가 feature(좌표, 아이콘으로 구성) 넣기
     즉, layer - source - feature 순으로 단위가 형성되어 있다. (내림차순)
  */
-function showHazardMarker(hazardName) {
+function setHazardMarker(hazardName) {
+    const $option = document.getElementById(hazardName)
+    if (!$option.value) return;
 
     map.addLayer(vectorLayer);
 
@@ -196,30 +198,6 @@ function inputDataRange(){
     $date.max = dateToString(weekLater);
 }
 
-function inputTunnel(){
-    const tunnelOption = document.getElementById('tunnelCheck').checked;
-    //console.log("터널 옵션: ", tunnelOption);
-
-    if(tunnelOption) showHazardMarker("tunnel");
-    return tunnelOption;
-}
-
-function inputBridge(){
-    const bridgeOption = document.getElementById('bridgeCheck').checked;
-    //console.log("교량 옵션: ", bridgeOption);
-
-    if(bridgeOption) showHazardMarker("bridge");
-    return bridgeOption;
-}
-
-function inputFrost(){
-    const frostOption = document.getElementById('frostCheck').checked;
-    //console.log("결빙 옵션: ", frostOption);
-
-    if(frostOption) showHazardMarker("frozen");
-    return frostOption;
-}
-
 /*
     분석 시작 버튼(#id:analysisButton) 클릭 이벤트 발생 시 실행되는 함수
  */
@@ -235,9 +213,9 @@ function analysisStart(){
     //map.addLayer(wmsLayer);
 
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
-    inputTunnel();
-    inputBridge();
-    inputFrost();
+    setHazardMarker("tunnel");
+    setHazardMarker("bridge");
+    setHazardMarker("frozen");
 
 }
 
