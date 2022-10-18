@@ -17,17 +17,17 @@ let map = new ol.Map({
 });
 
 // wms layer 생성
-let wmsLayer = new ol.layer.Tile({
-    visible: true,
-    source: new ol.source.TileWMS({
-        url: 'http://localhost:8600/geoserver/geor/wms',
-        params: {
-            'FORMAT': 'image/png',
-            'TILED' : true,
-            'LAYERS': 'geor:road'
-        }
-    })
-})
+// let wmsLayer = new ol.layer.Tile({
+//     visible: true,
+//     source: new ol.source.TileWMS({
+//         url: 'http://localhost:8600/geoserver/geor/wms',
+//         params: {
+//             'FORMAT': 'image/png',
+//             'TILED' : true,
+//             'LAYERS': 'geor:road'
+//         }
+//     })
+// })
 
 /*
     가장 큰 단위인 레이어 선언부
