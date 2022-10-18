@@ -17,20 +17,7 @@ const map = new ol.Map({
     })
 });
 
-// wms layer 생성
-// let wmsLayer = new ol.layer.Tile({
-//     visible: true,
-//     source: new ol.source.TileWMS({
-//         url: 'http://localhost:8600/geoserver/geor/wms',
-//         params: {
-//             'FORMAT': 'image/png',
-//             'TILED' : true,
-//             'LAYERS': 'geor:road'
-//         }
-//     })
-// })
-
-// 
+// 각 마커를 표시할 Vector 레이어
 const vectorLayer = new ol.layer.Vector({
     source: new ol.source.Vector(),
     style: new ol.style.Style({
@@ -67,29 +54,7 @@ const setHazardMarker = async (hazardName) => {
     } catch (error) {
         console.error(error)
     }
-
-    // fetch('http://localhost:8080/hazard/' + hazardName)
-    //     .then(res => res.json())
-    //     .then(data => {
-
-    //         let lat = [];
-    //         let lon = [];
-
-    //         for(let i=0; i<data.length; i++) {
-    //             lat.push(data[i].latitude);
-    //             lon.push(data[i].longitude);
-    //         }
-
-    //         for(let i=0; i<data.length; i++) {
-    //             vectorLayer.getSource().addFeature(createMarker(lat[i], lon[i], i));
-    //         }
-    //     })
-    //     .catch(err => {
-    //         alert(arr);
-    //         //console.log(err);
-    //     })
 }
-
 
 // 위/경도 좌표계(EPSG:4326)를 인자로 받아 구글 맵 좌표계(EPSG:3857)로 변환한 뒤
 // 지도의 해당 지점에 focus시킴
