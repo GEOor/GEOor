@@ -47,11 +47,10 @@ const vectorLayer = new ol.layer.Vector({
     input : 위도, 경도, id(must unique)
     source에 넣을 feature를 생성하는 함수 (마커 생성기)
  */
-function createMarker(lng, lat, id) {
-    return new ol.Feature({
-        geometry: new ol.geom.Point(ol.proj.fromLonLat([parseFloat(lng), parseFloat(lat)])),
-        id: id
-    });
+const createMarker = (coord, id) => {
+    const {latitude, longitude} = coord
+    const geometry = new ol.geom.Point(ol.proj.fromLonLat([parseFloat(longitude), parseFloat(latitude)]))
+    return new ol.Feature({ geometry, id });
 }
 
 /*
@@ -71,9 +70,7 @@ const setHazardMarker = async (hazardName) => {
         const data = await res.json();
 
         // api 호출을 통해 얻어낸 데이터를 이용해 마커를 생성
-        data.forEach(({latitude, longitude}, i) => 
-            vectorLayer.getSource().addFeature(createMarker(latitude, longitude, i))
-        )
+        data.forEach((coord, i) => vectorLayer.getSource().addFeature(createMarker(coord, i)))
     } catch (error) {
         console.error(error)
     }
@@ -134,7 +131,7 @@ function addressToCoordinates() {
         + "&address=" + encodeURI($address.value) + "&refine=true&simple=false&format=xml&type=road"
         + "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
     request.send();
-    request.onreadystatechange = function() {
+    request.onreadystatechange = /* async */ function() {
         if (request.readyState !== 4) return
         if (request.status < 200 || request.status >= 300)
             return alert(request.status);
