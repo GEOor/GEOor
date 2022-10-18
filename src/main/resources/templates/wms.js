@@ -9,7 +9,7 @@ const map = new ol.Map({
         }),
     ],
     view: new ol.View({
-        center: convertCoordinates(127.6176, 36.8724),
+        center: ol.proj.transform([127.6176, 36.8724], 'EPSG:4326', 'EPSG:3857'),
         zoom: 7,
         minZoom: 7,
         maxZoom: 19
@@ -103,16 +103,6 @@ const setHazardMarker = async (hazardName) => {
 function setMapCenter(lat, lng) {
     map.getView().setCenter(ol.proj.transform([lat, lng], 'EPSG:4326', 'EPSG:3857'));
     map.getView().setZoom(16);
-}
-
-//EPSG:4326 -> EPSG:3857
-function convertCoordinates(lon, lat) {
-    let x = (lon * 20037508.34) / 180;
-    let y = Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / (Math.PI / 180);
-    y = (y * 20037508.34) / 180;
-
-    //console.log("x: " + x + " y: " + y);
-    return [x, y];
 }
 
 //주소를 xy좌표로 변환하기
