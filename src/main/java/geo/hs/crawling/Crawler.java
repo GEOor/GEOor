@@ -56,7 +56,7 @@ public class Crawler {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		} finally {
-			driver.quit();
+			if (driver != null) driver.quit();
 		}
 	}
 
