@@ -1,4 +1,5 @@
-// vworld 배경지도 띄우기
+// 대한민국 지도가 한눈에 들어오는 위치를 기준으로
+// VWorld 지도를 openlayers를 이용해 표시
 const map = new ol.Map({
     target: 'map',
     layers: [
@@ -29,10 +30,7 @@ const map = new ol.Map({
 //     })
 // })
 
-/*
-    가장 큰 단위인 레이어 선언부
-    feature 단위의 스타일 속성을 지정할 수 있다.
- */
+// 
 const vectorLayer = new ol.layer.Vector({
     source: new ol.source.Vector(),
     style: new ol.style.Style({
@@ -43,21 +41,16 @@ const vectorLayer = new ol.layer.Vector({
     })
 });
 
-/*
-    input : 위도, 경도, id(must unique)
-    source에 넣을 feature를 생성하는 함수 (마커 생성기)
- */
+
+// 주어진 좌표에 주어진 id를 갖는 마커 생성
 const createMarker = (coord, id) => {
     const {latitude, longitude} = coord
     const geometry = new ol.geom.Point(ol.proj.fromLonLat([parseFloat(longitude), parseFloat(latitude)]))
     return new ol.Feature({ geometry, id });
 }
 
-/*
-    input: hazardName(tunnel, bridge, frozen)
-    vectorlayer - source에다가 feature(좌표, 아이콘으로 구성) 넣기
-    즉, layer - source - feature 순으로 단위가 형성되어 있다. (내림차순)
- */
+// tunnel, bridge, frozen 중 하나를 인자로 제공한 경우
+// 각각 터널, 교량, 결빙 상태를 지도에 마커로 표시
 const setHazardMarker = async (hazardName) => {
     const $option = document.getElementById(hazardName)
     if (!$option.value) return;
@@ -105,7 +98,8 @@ function setMapCenter(lat, lng) {
     map.getView().setZoom(16);
 }
 
-//주소를 xy좌표로 변환하기
+// 현재로서는 역할이 명확하지 않음
+// geoserver에서 도로 데이터를 받아와 지도에 그림
 function addressToCoordinates() {
     const request = new XMLHttpRequest();
 
@@ -137,6 +131,7 @@ function addressToCoordinates() {
         // 검색한 지역의 행정구역 번호
         const districtNumber = getXMLValue('level4AC')?.substr(0, 5)
 
+        // 검색한 지역 쪽으로 지도를 이동
         const [latitude, longitude] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
         setMapCenter(latitude, longitude);
 
@@ -157,7 +152,7 @@ function addressToCoordinates() {
 
         //console.log(response)
 
-        // wms layer 생성
+        // 도로 데이터를 geoserver로부터 받아와 map에 표시
         map.addLayer(new ol.layer.Tile({
             visible: true,
             source: new ol.source.TileWMS({
@@ -178,7 +173,7 @@ function addressToCoordinates() {
     }
 }
 
-// 입력받는 날짜범위 수정하기
+// 검색할 날짜의 범위를 제한
 function inputDataRange(){
     const $date = document.getElementById('date')
 
@@ -194,12 +189,10 @@ function inputDataRange(){
     $date.max = dateToString(weekLater);
 }
 
-/*
-    분석 시작 버튼(#id:analysisButton) 클릭 이벤트 발생 시 실행되는 함수
- */
+// 사용자가 입력한 값을 이용해 hillShade 알고리즘 실행
 function analysisStart(){
 
-    //이전에 생성한 마커 레이어 제거
+    // 이전에 생성한 마커 레이어 제거
     map.removeLayer(vectorLayer);
 
     //1. 사용자가 입력한 위치 -> 위,경도 변환 후 지도 내 카메라 줌
