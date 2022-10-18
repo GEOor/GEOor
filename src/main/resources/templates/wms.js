@@ -1,5 +1,5 @@
 // vworld 배경지도 띄우기
-let map = new ol.Map({
+const map = new ol.Map({
     target: 'map',
     layers: [
         new ol.layer.Tile({
@@ -33,7 +33,7 @@ let map = new ol.Map({
     가장 큰 단위인 레이어 선언부
     feature 단위의 스타일 속성을 지정할 수 있다.
  */
-let vectorLayer = new ol.layer.Vector({
+const vectorLayer = new ol.layer.Vector({
     source: new ol.source.Vector(),
     style: new ol.style.Style({
         image: new ol.style.Icon({
