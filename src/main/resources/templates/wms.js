@@ -108,12 +108,16 @@ function convertCoordinates(lon, lat) {
 }
 
 //주소를 xy좌표로 변환하기
-function addressToCoordinates(address) {
+function addressToCoordinates() {
     const request = new XMLHttpRequest();
+
+    const $address = document.getElementById('address');
+    const $date = document.getElementById('date');
+    const $time = document.getElementById('time');
 
     request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
         + "&crs=epsg:3857"
-        + "&address=" + encodeURI(address) + "&refine=true&simple=false&format=xml&type=road"
+        + "&address=" + encodeURI($address.value) + "&refine=true&simple=false&format=xml&type=road"
         + "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
     request.send();
     request.onreadystatechange = function() {
@@ -145,8 +149,8 @@ function addressToCoordinates(address) {
         //         latitude,
         //         longitude,
         //         cityId: districtNumber,
-        //         date: inputDate(),
-        //         time: inputTime(),
+        //         date: $date.value,
+        //         time: $time.value.split(":")[0],
         //     }),
         // });
 
@@ -184,33 +188,13 @@ function inputDataRange(){
     
     const dateToString = (date) => date.toISOString().split("T")[0]
 
-    $date.value = dateToString(today);
+    $date.valueAsDate = today;
     $date.min = dateToString(today)
     $date.max = dateToString(weekLater);
 }
 
-function inputAddress(){
-    let addressInput = document.getElementById('address').value;
-    //console.log("입력한 주소: ", addressInput);
-    return addressInput;
-}
-
-function inputDate(){
-    let dateInput = document.getElementById('date').value;
-    //console.log("입력한 날짜: ", dateInput);
-    return dateInput;
-}
-
-function inputTime(){
-    let timeInput = document.getElementById('time').value;
-    timeInput = String(timeInput).substring(0, 2);
-
-    //console.log("입력한 시간: ", timeInput);
-    return timeInput;
-}
-
 function inputTunnel(){
-    let tunnelOption = document.getElementById('tunnelCheck').checked;
+    const tunnelOption = document.getElementById('tunnelCheck').checked;
     //console.log("터널 옵션: ", tunnelOption);
 
     if(tunnelOption) showHazardMarker("tunnel");
@@ -218,7 +202,7 @@ function inputTunnel(){
 }
 
 function inputBridge(){
-    let bridgeOption = document.getElementById('bridgeCheck').checked;
+    const bridgeOption = document.getElementById('bridgeCheck').checked;
     //console.log("교량 옵션: ", bridgeOption);
 
     if(bridgeOption) showHazardMarker("bridge");
@@ -226,7 +210,7 @@ function inputBridge(){
 }
 
 function inputFrost(){
-    let frostOption = document.getElementById('frostCheck').checked;
+    const frostOption = document.getElementById('frostCheck').checked;
     //console.log("결빙 옵션: ", frostOption);
 
     if(frostOption) showHazardMarker("frozen");
@@ -242,11 +226,9 @@ function analysisStart(){
     map.removeLayer(vectorLayer);
 
     //1. 사용자가 입력한 위치 -> 위,경도 변환 후 지도 내 카메라 줌
-    addressToCoordinates(inputAddress());
+    addressToCoordinates();
 
     //2. 사용자가 입력한 (위치, 날짜, 시간) -> 알맞은 wms를 받아올 수 있는 api 호출
-    inputDate();
-    inputTime();
     //map.addLayer(wmsLayer);
 
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
