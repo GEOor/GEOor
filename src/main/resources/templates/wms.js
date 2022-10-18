@@ -173,31 +173,20 @@ function addressToCoordinates(address) {
     }
 }
 
-//입력받는 날짜범위 수정하기
+// 입력받는 날짜범위 수정하기
 function inputDataRange(){
-    let today = new Date();
+    const $date = document.getElementById('date')
 
-    //오늘 날짜
-    let year = today.getFullYear();
-    let month = today.getMonth() + 1;
-    month = month < 10 ? '0' + month : month;
-    let date = today.getDate();
-    date = date < 10 ? '0' + date : date;
+    // 오늘 날짜
+    const today = new Date();
+    // 일주일 뒤
+    const weekLater = new Date(today.getTime() + (7*24*60*60*1000));
+    
+    const dateToString = (date) => date.toISOString().split("T")[0]
 
-    document.getElementById('date').value = String(year + '-' + month + '-' + date);
-    document.getElementById('date').min = String(year + '-' + month + '-' + date);
-
-    //일주일 뒤
-    let weekDay = today.getTime() + (7*24*60*60*1000);
-    today.setTime(weekDay);
-
-    let weekYear = today.getFullYear();
-    let weekMonth = today.getMonth() + 1;
-    weekMonth = weekMonth < 10 ? '0' + weekMonth : weekMonth;
-    let weekDate = today.getDate();
-    weekDate = weekDate < 10 ? '0' + weekDate : weekDate;
-
-    document.getElementById('date').max = String(weekYear + '-' + weekMonth + '-' + weekDate);
+    $date.value = dateToString(today);
+    $date.min = dateToString(today)
+    $date.max = dateToString(weekLater);
 }
 
 function inputAddress(){
