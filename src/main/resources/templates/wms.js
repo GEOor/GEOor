@@ -58,7 +58,7 @@ const setHazardMarker = async (hazardName) => {
     }
 }
 
-const requestHillShade = () => {
+const requestHillShade = (latitude, longitude, districtNumber) => {
     const $date = document.getElementById('date');
     const $time = document.getElementById('time');
 
@@ -115,7 +115,7 @@ const addressToCoordinates = () => {
         map.getView().setCenter([parseFloat(latitude), parseFloat(longitude)]);
         map.getView().setZoom(16);
 
-        requestHillShade()
+        requestHillShade(latitude, longitude, districtNumber)
 
         // 도로 데이터를 geoserver로부터 받아와 map에 표시
         map.addLayer(new ol.layer.Tile({
