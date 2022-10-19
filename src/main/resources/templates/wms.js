@@ -58,6 +58,27 @@ const setHazardMarker = async (hazardName) => {
     }
 }
 
+const requestHillShade = () => {
+    const $date = document.getElementById('date');
+    const $time = document.getElementById('time');
+
+    /** @todo /hillShade가 제대로 작동한다면 주석 풀고 버그 수정할 것 */
+    // await fetch("http://localhost:8080/hillShade/", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json; charset=UTF-8"
+    //     },
+    //     body: JSON.stringify({
+    //         latitude,
+    //         longitude,
+    //         cityId: districtNumber,
+    //         date: $date.value,
+    //         time: $time.value.split(":")[0],
+    //     }),
+    // });
+    //console.log(response)
+}
+
 // 위/경도 좌표계(EPSG:4326)를 인자로 받아 구글 맵 좌표계(EPSG:3857)로 변환한 뒤
 // 지도의 해당 지점에 focus시킴
 const setMapCenter = (lat, lng) => {
@@ -69,18 +90,16 @@ const setMapCenter = (lat, lng) => {
 // 현재로서는 역할이 명확하지 않음
 // geoserver에서 도로 데이터를 받아와 지도에 그림
 const addressToCoordinates = () => {
-    const request = new XMLHttpRequest();
-
     const $address = document.getElementById('address');
-    const $date = document.getElementById('date');
-    const $time = document.getElementById('time');
+
+    const request = new XMLHttpRequest();
 
     request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
         + "&crs=epsg:3857"
         + "&address=" + encodeURI($address.value) + "&refine=true&simple=false&format=xml&type=road"
         + "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
     request.send();
-    request.onreadystatechange = /* async */ function() {
+    request.onreadystatechange = /* async */ () => {
         if (request.readyState !== 4) return
         if (request.status < 200 || request.status >= 300)
             return alert(request.status);
@@ -103,22 +122,7 @@ const addressToCoordinates = () => {
         const [latitude, longitude] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
         setMapCenter(latitude, longitude);
 
-        /** @todo /hillShade가 제대로 작동한다면 주석 풀고 버그 수정할 것 */
-        // await fetch("http://localhost:8080/hillShade/", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json; charset=UTF-8"
-        //     },
-        //     body: JSON.stringify({
-        //         latitude,
-        //         longitude,
-        //         cityId: districtNumber,
-        //         date: $date.value,
-        //         time: $time.value.split(":")[0],
-        //     }),
-        // });
-
-        //console.log(response)
+        requestHillShade()
 
         // 도로 데이터를 geoserver로부터 받아와 map에 표시
         map.addLayer(new ol.layer.Tile({
