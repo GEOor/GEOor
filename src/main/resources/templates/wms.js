@@ -49,6 +49,8 @@ const setHazardMarker = async (hazardName) => {
         const res = await fetch('http://localhost:8080/hazard/' + hazardName);
         const data = await res.json();
 
+        if (data.error) return;
+
         // api 호출을 통해 얻어낸 데이터를 이용해 마커를 생성
         data.forEach((coord, i) => vectorLayer.getSource().addFeature(createMarker(coord, i)))
     } catch (error) {
@@ -63,6 +65,7 @@ function setMapCenter(lat, lng) {
     map.getView().setZoom(16);
 }
 
+/** @todo request 보내는 부분과 지도 이동하는 부분 나누기 */
 // 현재로서는 역할이 명확하지 않음
 // geoserver에서 도로 데이터를 받아와 지도에 그림
 function addressToCoordinates() {
@@ -167,9 +170,9 @@ function analysisStart(){
     //map.addLayer(wmsLayer);
 
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
-    setHazardMarker("tunnel");
-    setHazardMarker("bridge");
-    setHazardMarker("frozen");
+    // setHazardMarker("tunnel");
+    // setHazardMarker("bridge");
+    // setHazardMarker("frozen");
 
 }
 
