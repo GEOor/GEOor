@@ -40,7 +40,7 @@ const createMarker = (coord, id) => {
 // 각각 터널, 교량, 결빙 상태를 지도에 마커로 표시
 const setHazardMarker = async (hazardName) => {
     const $option = document.getElementById(hazardName)
-    if (!$option.value) return;
+    if (!$option.checked) return;
 
     map.addLayer(vectorLayer);
 
