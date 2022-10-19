@@ -79,10 +79,9 @@ const requestHillShade = () => {
     //console.log(response)
 }
 
-// 위/경도 좌표계(EPSG:4326)를 인자로 받아 구글 맵 좌표계(EPSG:3857)로 변환한 뒤
-// 지도의 해당 지점에 focus시킴
+// 위/경도를 인자로 받아 지도의 해당 지점을 focus
 const setMapCenter = (lat, lng) => {
-    map.getView().setCenter(ol.proj.transform([lat, lng], 'EPSG:4326', 'EPSG:3857'));
+    map.getView().setCenter([parseFloat(lat), parseFloat(lng)]);
     map.getView().setZoom(16);
 }
 
@@ -113,13 +112,12 @@ const addressToCoordinates = () => {
         const getXMLValue = (name) => responseXML.getElementsByTagName(name)[0].childNodes[0].nodeValue
 
         // 검색한 지역의 좌표
-        const xCoordinate = getXMLValue('x');
-        const yCoordinate = getXMLValue('y');
+        const latitude = getXMLValue('x');
+        const longitude = getXMLValue('y');
         // 검색한 지역의 행정구역 번호
-        const districtNumber = getXMLValue('level4AC')?.substr(0, 5)
+        const districtNumber = getXMLValue('level4AC')?.substr(0, 5);
 
         // 검색한 지역 쪽으로 지도를 이동
-        const [latitude, longitude] = ol.proj.transform([xCoordinate, yCoordinate], 'EPSG:3857', 'EPSG:4326');
         setMapCenter(latitude, longitude);
 
         requestHillShade()
@@ -141,7 +139,7 @@ const addressToCoordinates = () => {
         // 로딩창 off
         loadingOff()
 
-        return [Number(xCoordinate), Number(yCoordinate)];
+        return [Number(latitude), Number(longitude)];
     }
 }
 
