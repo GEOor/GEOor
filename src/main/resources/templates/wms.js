@@ -60,7 +60,7 @@ const setHazardMarker = async (hazardName) => {
 
 // 위/경도 좌표계(EPSG:4326)를 인자로 받아 구글 맵 좌표계(EPSG:3857)로 변환한 뒤
 // 지도의 해당 지점에 focus시킴
-function setMapCenter(lat, lng) {
+const setMapCenter = (lat, lng) => {
     map.getView().setCenter(ol.proj.transform([lat, lng], 'EPSG:4326', 'EPSG:3857'));
     map.getView().setZoom(16);
 }
@@ -68,7 +68,7 @@ function setMapCenter(lat, lng) {
 /** @todo request 보내는 부분과 지도 이동하는 부분 나누기 */
 // 현재로서는 역할이 명확하지 않음
 // geoserver에서 도로 데이터를 받아와 지도에 그림
-function addressToCoordinates() {
+const addressToCoordinates = () => {
     const request = new XMLHttpRequest();
 
     const $address = document.getElementById('address');
@@ -142,7 +142,7 @@ function addressToCoordinates() {
 }
 
 // 검색할 날짜의 범위를 제한
-function inputDataRange(){
+const inputDataRange = () => {
     const $date = document.getElementById('date')
 
     // 오늘 날짜
@@ -158,7 +158,7 @@ function inputDataRange(){
 }
 
 // 사용자가 입력한 값을 이용해 hillShade 알고리즘 실행
-function analysisStart(){
+const analysisStart = () => {
 
     // 이전에 생성한 마커 레이어 제거
     map.removeLayer(vectorLayer);
@@ -181,5 +181,5 @@ inputDataRange();
 
 /* 로딩창 */
 const modal = document.getElementById("modal")
-function loadingOn() {  }
-function loadingOff() { }
+const loadingOn = () =>  { }
+const loadingOff = () =>  { }
