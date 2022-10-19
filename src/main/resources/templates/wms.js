@@ -79,12 +79,6 @@ const requestHillShade = () => {
     //console.log(response)
 }
 
-// 위/경도를 인자로 받아 지도의 해당 지점을 focus
-const setMapCenter = (lat, lng) => {
-    map.getView().setCenter([parseFloat(lat), parseFloat(lng)]);
-    map.getView().setZoom(16);
-}
-
 /** @todo request 보내는 부분과 지도 이동하는 부분 나누기 */
 // 현재로서는 역할이 명확하지 않음
 // geoserver에서 도로 데이터를 받아와 지도에 그림
@@ -118,7 +112,8 @@ const addressToCoordinates = () => {
         const districtNumber = getXMLValue('level4AC')?.substr(0, 5);
 
         // 검색한 지역 쪽으로 지도를 이동
-        setMapCenter(latitude, longitude);
+        map.getView().setCenter([parseFloat(latitude), parseFloat(longitude)]);
+        map.getView().setZoom(16);
 
         requestHillShade()
 
