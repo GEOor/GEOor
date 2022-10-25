@@ -15,34 +15,43 @@
 </head>
 
 <body>
-<!-- vworld map -->
-<div id="map"></div>
+    <div id="sidebar">
+        <h2 id="title">HillShade</h2>
+        
+        <form id="data">
+            <div class="form-group">
+                <span class="label">주소</span>
+                <input id="address" class="inputData" type="text" placeholder="주소 입력">
+            </div>
+            
+            <div class="form-group">
+                <span class="label">날짜</span>
+                <input id="date" class="inputData" type="date">
+            </div>
+            
+            <div class="form-group">
+                <span class="label">시간</span>
+                <input id="time" class="inputData" type="time" value="00:00:00">
+            </div>
+            
+            <div class="form-group">
+                <span class="label">옵션</span>
 
-<div id="title">
-    <h2>HillShade</h2>
-</div>
+                <input id="tunnel" type="checkbox">
+                <label for="tunnel">터널 🌈</label>
 
-<div id="data">
-    주소 <input id="address" class="inputData" type="text" placeholder="주소 입력"> <br>
-    날짜 <input id="date" class="inputData" type="date"> <br>
-    시간 <input id="time" class="inputData" type="time" value="00:00:00"> <br>
-    옵션 <br>
-</div>
+                <input id="bridge" type="checkbox">
+                <label for="bridge">교량 🚙</label>
 
-<div id="option">
-    <input id="tunnel" type="checkbox">
-    <label for="tunnel"> 터널 🌈 </label>
+                <input id="frozen" type="checkbox">
+                <label for="frozen">결빙 ️❄️</label>
+            </div>
 
-    <input id="bridge" type="checkbox">
-    <label for="bridge"> 교량 🚙 </label>
+            <button id="button">분석시작</button>
+        </form>
+    </div>
 
-    <input id="frozen" type="checkbox">
-    <label for="frozen"> 결빙 ️❄️ </label>
-</div>
-
-<div id="startButton">
-    <button id="analysisButton" onclick="analysisStart()"> 분석시작 </button>
-</div>
-
+    <!-- vworld map -->
+    <div id="map"></div>
 </body>
 </html>

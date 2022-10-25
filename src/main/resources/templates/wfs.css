@@ -1,5 +1,4 @@
 /* 웹 폰트 */
-
 @font-face {
     font-family: 'Happiness-Sans-Title';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/Happiness-Sans-Title.woff2') format('woff2');
@@ -7,126 +6,111 @@
     font-style: normal;
 }
 
-head * {
-    display: none;
+:root {
+    --sidebar-width: 36rem;
+    --title-height: 8rem;
+    --form-margin: 2rem;
+    --form-line-height: 3rem;
+    --form-label-width: 4rem;
+    --form-label-margin: 0.5rem;
+    --form-font-size: 1.5rem;
+    --button-margin: 0.5rem;
+    --button-height: 4rem;
+    --border-radius: 0.5rem;
+}
+
+html {
+    font-size: 62.5%;
 }
 
 body {
+    font-size: 1.6rem;
     margin: 0;
+    display: flex;
+
+    height: 100vh;
 }
 
-/* hillshade 타이틀 */
+#sidebar {
+    position: relative;
 
-#title{
-    width: 30%;
-    background-color: #69BDEA;
-    color: white;
-
-    text-indent: 5%;
-    line-height: 380%;
+    width: var(--sidebar-width);
+    height: 100%;
 }
 
 /* 지도 */
-
 #map {
-    position: fixed;
-    width: 70%;
+    width: calc(100% - var(--sidebar-width));
     height: 100%;
-    margin-left: 30%;
 }
 
-/* 주소 날짜 시간 */
+/* hillshade 타이틀 */
+#sidebar #title {
+    background-color: #69BDEA;
+    color: white;
 
-#data{
-    width: 30%;
-    margin-left: 1.5%;
-    margin-top: 1.5%;
-    line-height: 350%;
+    text-indent: 2rem;
+    line-height: var(--title-height);
+
+    margin: 0;
 }
 
-.inputData{
-    width: 70%;
-    padding: 1.5%;
-    margin-left: 5%;
-    font-size: 100%;
 
-    border: none;
+#sidebar form#data {
+    padding-top: var(--form-margin);
+    height: calc(100% - var(--title-height) - var(--form-margin));
+    position: relative;
 }
 
-::placeholder {
-    font-size: 85%;
+#sidebar form#data .form-group {
+    margin-bottom: var(--form-margin);
+    padding-left: var(--form-margin)
 }
 
-.inputData:focus{
-    outline: none;
+#sidebar form#data .form-group * {
+    display: inline-block;
+    line-height: var(--form-line-height);
 }
 
-/* 옵션 */
-
-#option{
-    width: 30%;
-    margin-left: 1.5%;
-    margin-top: 1.5%;
+#sidebar form#data .form-group span.label {
+    width: var(--form-label-width);
+    margin-right: var(--form-label-margin);
 }
 
-label{
-    margin-right: 8%;
+#sidebar form#data .form-group input:not([type=checkbox]) {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    width: calc(100% - var(--form-label-width) - var(--form-label-margin) - var(--form-margin));
+
+    border-radius: var(--border-radius);
+    font-size: var(--form-font-size);
 }
 
-/* 분석 버튼 */
+#sidebar form#data button {
+    position: absolute;
+    bottom: 0;
 
-#startButton{
-    position: fixed;
-    width: 30%;
-    bottom: 3%;
-}
-
-#analysisButton{
-    width: 90%;
-    padding: 4%;
-    margin-left: 4%;
-    font-size: 100%;
+    width: calc(100% - var(--button-margin) - var(--button-margin));
+    margin: var(--button-margin);
+    line-height: var(--button-height);
+    font-size: var(--form-font-size);
 
     background-color: #69BDEA;
     color: white;
 
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     border: none;
     outline: none;
 }
 
-#analysisButton:hover{
+#sidebar form#data button:hover {
     background-color: darkgray;
-}
-
-/* 로딩 창 */
-
-#modal.modal-overlay {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(1.5px);
-}
-#modal .modal-window {
-    position: relative;
-    top: 40%;
-    background: rgba(0, 0, 0, 0);
-}
-#modal .title {
-    font-family: 'Happiness-Sans-Title';
-    font-size: 200%;
-    color: white;
+    cursor: pointer;
 }
 
 /* 로딩 효과 */
-
-@keyframes anime_textup { 0% { top: 0; } 20% { top: -0.2rem; } 40% { top: 0 } 60% { top: 0 } 80% { top: 0 } 100% { top: 0 } }
+/* @keyframes anime_textup { 0% { top: 0; } 20% { top: -0.2rem; } 40% { top: 0 } 60% { top: 0 } 80% { top: 0 } 100% { top: 0 } }
 
 .title span {
     position: relative;
@@ -141,7 +125,6 @@ label{
 .title span:nth-of-type(6) { animation-delay: .6s; }
 .title span:nth-of-type(7) { animation-delay: .7s; }
 .title span:nth-of-type(8) { animation-delay: .8s; }
-.title span:nth-of-type(9) { animation-delay: .9s; }
+.title span:nth-of-type(9) { animation-delay: .9s; } */
 
 /* 미디어 쿼리 */
-
