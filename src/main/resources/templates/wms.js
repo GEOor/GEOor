@@ -28,7 +28,6 @@ const vectorLayer = new ol.layer.Vector({
     })
 });
 
-
 // 주어진 좌표에 주어진 id를 갖는 마커 생성
 const createMarker = (coord, id) => {
     const {latitude, longitude} = coord
@@ -42,6 +41,8 @@ const setHazardMarker = async (hazardName) => {
     const $option = document.getElementById(hazardName)
     if (!$option.checked) return;
 
+    console.log($option)
+
     map.addLayer(vectorLayer);
 
     try {
@@ -49,7 +50,7 @@ const setHazardMarker = async (hazardName) => {
         const res = await fetch('http://localhost:8080/hazard/' + hazardName);
         const data = await res.json();
 
-        if (data.error) return;
+        if (data.error) throw data.error;
 
         // api 호출을 통해 얻어낸 데이터를 이용해 마커를 생성
         data.forEach((coord, i) => vectorLayer.getSource().addFeature(createMarker(coord, i)))
@@ -58,25 +59,25 @@ const setHazardMarker = async (hazardName) => {
     }
 }
 
-const requestHillShade = (latitude, longitude, districtNumber) => {
+const requestHillShade = async (latitude, longitude, districtNumber) => {
     const $date = document.getElementById('date');
     const $time = document.getElementById('time');
 
     /** @todo /hillShade가 제대로 작동한다면 주석 풀고 버그 수정할 것 */
-    // await fetch("http://localhost:8080/hillShade/", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json; charset=UTF-8"
-    //     },
-    //     body: JSON.stringify({
-    //         latitude,
-    //         longitude,
-    //         cityId: districtNumber,
-    //         date: $date.value,
-    //         time: $time.value.split(":")[0],
-    //     }),
-    // });
-    //console.log(response)
+    const response = await fetch("http://localhost:8080/hillShade/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({
+            latitude,
+            longitude,
+            cityId: districtNumber,
+            date: $date.value,
+            time: $time.value.split(":")[0],
+        }),
+    });
+    console.log(response)
 }
 
 /** @todo request 보내는 부분과 지도 이동하는 부분 나누기 */
@@ -97,9 +98,6 @@ const addressToCoordinates = () => {
         if (request.status < 200 || request.status >= 300)
             return alert(request.status);
 
-        // 로딩창 on
-        loadingOn()
-
         const { responseXML } = request
         //console.log(responseXML);
 
@@ -115,6 +113,7 @@ const addressToCoordinates = () => {
         map.getView().setCenter([parseFloat(latitude), parseFloat(longitude)]);
         map.getView().setZoom(16);
 
+        // 검색 결과를 이용해 hillShade 알고리즘을 실행
         requestHillShade(latitude, longitude, districtNumber)
 
         // 도로 데이터를 geoserver로부터 받아와 map에 표시
@@ -130,9 +129,6 @@ const addressToCoordinates = () => {
                 }
             })
         }));
-
-        // 로딩창 off
-        loadingOff()
 
         return [Number(latitude), Number(longitude)];
     }
@@ -155,7 +151,9 @@ const inputDataRange = () => {
 }
 
 // 사용자가 입력한 값을 이용해 hillShade 알고리즘 실행
-const analysisStart = () => {
+const analysisStart = (e) => {
+    e.preventDefault();
+    console.log(e)
 
     // 이전에 생성한 마커 레이어 제거
     map.removeLayer(vectorLayer);
@@ -167,16 +165,14 @@ const analysisStart = () => {
     //map.addLayer(wmsLayer);
 
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
-    // setHazardMarker("tunnel");
-    // setHazardMarker("bridge");
-    // setHazardMarker("frozen");
+    setHazardMarker("tunnel");
+    setHazardMarker("bridge");
+    setHazardMarker("frozen");
 
 }
 
+const $button = document.getElementById("button")
+$button.onclick = analysisStart
+
 // 날짜 범위 설정
 inputDataRange();
-
-/* 로딩창 */
-const modal = document.getElementById("modal")
-const loadingOn = () =>  { }
-const loadingOff = () =>  { }
