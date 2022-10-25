@@ -38,11 +38,11 @@ const createMarker = (coord, id) => {
 // tunnel, bridge, frozen 중 하나를 인자로 제공한 경우
 // 각각 터널, 교량, 결빙 상태를 지도에 마커로 표시
 const setHazardMarker = async (hazardName) => {
+    // 마커로 설정할 필요가 없는 경우 return
     const $option = document.getElementById(hazardName)
     if (!$option.checked) return;
 
-    console.log($option)
-
+    // 마커를 설정할 vectorLayer를 추가
     map.addLayer(vectorLayer);
 
     try {
@@ -53,9 +53,9 @@ const setHazardMarker = async (hazardName) => {
         if (data.error) throw data.error;
 
         // api 호출을 통해 얻어낸 데이터를 이용해 마커를 생성
-        data.forEach((coord, i) => vectorLayer.getSource().addFeature(createMarker(coord, i)))
+        data.forEach((coord, i) => vectorLayer.getSource().addFeature(createMarker(coord, i)));
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
 }
 
@@ -77,7 +77,7 @@ const requestHillShade = async (latitude, longitude, districtNumber) => {
             time: $time.value.split(":")[0],
         }),
     });
-    console.log(response)
+    console.log(response);
 }
 
 /** @todo request 보내는 부분과 지도 이동하는 부분 나누기 */
@@ -98,10 +98,10 @@ const addressToCoordinates = () => {
         if (request.status < 200 || request.status >= 300)
             return alert(request.status);
 
-        const { responseXML } = request
+        const { responseXML } = request;
         //console.log(responseXML);
 
-        const getXMLValue = (name) => responseXML.getElementsByTagName(name)[0].childNodes[0].nodeValue
+        const getXMLValue = (name) => responseXML.getElementsByTagName(name)[0].childNodes[0].nodeValue;
 
         // 검색한 지역의 좌표
         const latitude = getXMLValue('x');
@@ -114,7 +114,7 @@ const addressToCoordinates = () => {
         map.getView().setZoom(16);
 
         // 검색 결과를 이용해 hillShade 알고리즘을 실행
-        requestHillShade(latitude, longitude, districtNumber)
+        requestHillShade(latitude, longitude, districtNumber);
 
         // 도로 데이터를 geoserver로부터 받아와 map에 표시
         map.addLayer(new ol.layer.Tile({
@@ -136,24 +136,23 @@ const addressToCoordinates = () => {
 
 // 검색할 날짜의 범위를 제한
 const inputDataRange = () => {
-    const $date = document.getElementById('date')
+    const $date = document.getElementById('date');
 
     // 오늘 날짜
     const today = new Date();
     // 일주일 뒤
     const weekLater = new Date(today.getTime() + (7*24*60*60*1000));
     
-    const dateToString = (date) => date.toISOString().split("T")[0]
+    const dateToString = (date) => date.toISOString().split("T")[0];
 
     $date.valueAsDate = today;
-    $date.min = dateToString(today)
+    $date.min = dateToString(today);
     $date.max = dateToString(weekLater);
 }
 
 // 사용자가 입력한 값을 이용해 hillShade 알고리즘 실행
 const analysisStart = (e) => {
     e.preventDefault();
-    console.log(e)
 
     // 이전에 생성한 마커 레이어 제거
     map.removeLayer(vectorLayer);
@@ -165,14 +164,13 @@ const analysisStart = (e) => {
     //map.addLayer(wmsLayer);
 
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
-    setHazardMarker("tunnel");
-    setHazardMarker("bridge");
-    setHazardMarker("frozen");
-
+    // setHazardMarker("tunnel");
+    // setHazardMarker("bridge");
+    // setHazardMarker("frozen");
 }
 
-const $button = document.getElementById("button")
-$button.onclick = analysisStart
+const $form = document.getElementById("form");
+$form.onsubmit = analysisStart;
 
 // 날짜 범위 설정
 inputDataRange();

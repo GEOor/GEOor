@@ -31,6 +31,7 @@ body {
     height: 100vh;
 }
 
+/* 검색을 위한 사이드바 */
 #sidebar {
     position: relative;
 
@@ -55,29 +56,33 @@ body {
     margin: 0;
 }
 
-
-#sidebar form#data {
+/* 검색 form */
+#sidebar form {
     padding-top: var(--form-margin);
     height: calc(100% - var(--title-height) - var(--form-margin));
     position: relative;
 }
 
-#sidebar form#data .form-group {
+/* 검색 form의 각 input을 감싸는 wrapper div */
+#sidebar form .form-group {
     margin-bottom: var(--form-margin);
     padding-left: var(--form-margin)
 }
 
-#sidebar form#data .form-group * {
+/* wrapper div의 각 태그 */
+#sidebar form .form-group * {
     display: inline-block;
     line-height: var(--form-line-height);
 }
 
-#sidebar form#data .form-group span.label {
+/* wrapper div의 각 span -> label 역할을 수행 */
+#sidebar form .form-group span.label {
     width: var(--form-label-width);
     margin-right: var(--form-label-margin);
 }
 
-#sidebar form#data .form-group input:not([type=checkbox]) {
+/* wrapper div에서 체크박스 이외의 input 태그 */
+#sidebar form .form-group input:not([type=checkbox]) {
     margin: 0;
     border: 0;
     padding: 0;
@@ -87,7 +92,8 @@ body {
     font-size: var(--form-font-size);
 }
 
-#sidebar form#data button {
+/* 검색 form의 제출 버튼 */
+#sidebar form button {
     position: absolute;
     bottom: 0;
 
@@ -104,7 +110,8 @@ body {
     outline: none;
 }
 
-#sidebar form#data button:hover {
+/* 버튼에 마우스를 올린 경우 */
+#sidebar form button:hover {
     background-color: darkgray;
     cursor: pointer;
 }
