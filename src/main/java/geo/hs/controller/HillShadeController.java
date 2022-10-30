@@ -41,7 +41,34 @@ public class HillShadeController {
 		// 해당 cityCode에 맞는 지역의 DSM 가져오기
 		List<Dsm> dsms = dsmService.getDsm(req.cityId);
 		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
-		
+
+		System.out.println(req);
+		// API 호출하기
+		try {
+			URL url = new URL("http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
+					+ "&crs=epsg:3857"
+					+ "&address=" + "강동구" + "&refine=true&simple=false&format=json&type=road"
+					+ "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
+
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Content-Type", "application/json; utf-8");
+			conn.setDoOutput(true);
+
+			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
+			os.flush();
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			JSONObject jsonObject = (JSONObject) JSONValue.parse(in.readLine());
+
+			in.close();
+			conn.disconnect();
+
+			System.out.println(jsonObject.get("response"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		// 태양고도각 크롤링
 		// crawler 호출
 		double lat = Double.parseDouble(req.getLatitude());
