@@ -102,7 +102,11 @@ public class HillShadeController {
 		String lng = (String) point.get("y");
 		String cityId = ((String) structure.get("level4AC")).substring(0, 5);
 
-		return PostHillShadeReq.builder().latitude(lat).longitude(lng).cityId(cityId).build();
+		return PostHillShadeReq.builder()
+				.latitude(lat)
+				.longitude(lng)
+				.cityId(cityId)
+				.build();
 	}
 
 	void updateHillShade(PostHillShadeReq req, String dateString, String timeString) {
