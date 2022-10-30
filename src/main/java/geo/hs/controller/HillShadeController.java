@@ -1,6 +1,7 @@
 package geo.hs.controller;
 
 import geo.hs.crawling.Crawler;
+import geo.hs.model.DTO.AddressReq;
 import geo.hs.model.DTO.PostHillShadeReq;
 import geo.hs.model.dsm.Dsm;
 import geo.hs.model.hillshade.Hillshade;
@@ -42,7 +43,35 @@ public class HillShadeController {
 		this.hillShadeService = hillShadeService;
 		this.roadService = roadService;
 	}
-	
+
+	@GetMapping("/requestHillShade")
+	void requestHillShade(@RequestBody AddressReq req) {
+		System.out.println(req.getAddress());
+		try {
+			URL url = new URL("http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
+					+ "&crs=epsg:3857"
+					+ "&address=" + req.getAddress() + "&refine=true&simple=false&format=json&type=road"
+					+ "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
+
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Content-Type", "application/json; utf-8");
+			conn.setDoOutput(true);
+
+			OutputStreamWriter os = new OutputStreamWriter(conn.getOutputStream());
+			os.flush();
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			JSONObject jsonObject = (JSONObject) JSONValue.parse(in.readLine());
+
+			in.close();
+			conn.disconnect();
+
+			System.out.println(jsonObject.get("response"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@GetMapping("/hillShade")
 	void updateHillShade(@RequestBody PostHillShadeReq req){
