@@ -1,8 +1,8 @@
 package geo.hs.controller;
 
 import geo.hs.crawling.Crawler;
-import geo.hs.model.DTO.AddressReq;
 import geo.hs.model.DTO.PostHillShadeReq;
+import geo.hs.model.DTO.basicDataReq;
 import geo.hs.model.dsm.Dsm;
 import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.scheduler.SchedulerSunInfo;
@@ -48,7 +48,7 @@ public class HillShadeController {
 	}
 
 	@PostMapping("/requestHillShade")
-	ResponseEntity<PostHillShadeReq> requestHillShade(@RequestBody AddressReq req) {
+	ResponseEntity<PostHillShadeReq> requestHillShade(@RequestBody basicDataReq req) {
 		PostHillShadeReq postHillShadeReq = null;
 		try {
 			URL url = new URL("http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
