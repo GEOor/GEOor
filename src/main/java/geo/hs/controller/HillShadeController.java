@@ -48,12 +48,8 @@ public class HillShadeController {
 
 	@PostMapping("/hillShade")
 	ResponseEntity<PostHillShadeReq> requestHillShade(@RequestBody basicDataReq req) {
-		PostHillShadeReq postHillShadeReq = null;
 		try {
-			URL url = new URL("http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
-					+ "&crs=epsg:3857"
-					+ "&address=" + req.getAddress() + "&refine=true&simple=false&format=json&type=road"
-					+ "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
+			URL url = new URL(this.getURL(req.getAddress()));
 
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -68,17 +64,8 @@ public class HillShadeController {
 
 			in.close();
 			conn.disconnect();
-			JSONObject resJsonObject = (JSONObject) jsonObject.get("response");
-			JSONObject resultJsonObject = (JSONObject) resJsonObject.get("result");
-			JSONObject pointJsonObject = (JSONObject) resultJsonObject.get("point");
-			JSONObject refinedJsonObject = (JSONObject) resJsonObject.get("refined");
-			JSONObject structureJsonObject = (JSONObject) refinedJsonObject.get("structure");
 
-			String lat = (String) pointJsonObject.get("x");
-			String lng = (String) pointJsonObject.get("y");
-			String cityId = ((String) structureJsonObject.get("level4AC")).substring(0, 5);
-
-			postHillShadeReq = new PostHillShadeReq(lat, lng, cityId);
+			PostHillShadeReq postHillShadeReq = this.jsonToDTO(jsonObject);
 
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.add(HttpHeaders.CONTENT_TYPE, "application/json");
@@ -86,6 +73,7 @@ public class HillShadeController {
 			ResponseEntity<PostHillShadeReq> responseEntity = new ResponseEntity<>(postHillShadeReq, httpHeaders,
 					HttpStatus.OK);
 
+			// TODO 에러 발생함
 			// this.updateHillShade(postHillShadeReq, req.getDate(), req.getTime());
 
 			return responseEntity;
@@ -94,6 +82,32 @@ public class HillShadeController {
 			ResponseEntity<PostHillShadeReq> responseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			return responseEntity;
 		}
+	}
+
+	private String getURL(String address) {
+		return "http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
+				+ "&crs=epsg:3857"
+				+ "&address=" + address + "&refine=true&simple=false&format=json&type=road"
+				+ "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805";
+	}
+
+	private PostHillShadeReq jsonToDTO(JSONObject obj) {
+		JSONObject response = (JSONObject) obj.get("response");
+		JSONObject result = (JSONObject) response.get("result");
+		JSONObject point = (JSONObject) result.get("point");
+		JSONObject refined = (JSONObject) response.get("refined");
+		JSONObject structure = (JSONObject) refined.get("");
+
+		String lat = (String) point.get("x");
+		String lng = (String) point.get("y");
+		String cityId = ((String) structure.get("level4AC")).substring(0, 5);
+
+		PostHillShadeReq postHillShadeReq = new PostHillShadeReq();
+		postHillShadeReq.setLatitude(lat);
+		postHillShadeReq.setLongitude(lng);
+		postHillShadeReq.setCityId(cityId);
+
+		return postHillShadeReq;
 	}
 
 	void updateHillShade(PostHillShadeReq req, String dateString, String timeString) {
