@@ -68,7 +68,6 @@ public class HillShadeController {
 
 			in.close();
 			conn.disconnect();
-			System.out.println(jsonObject);
 			JSONObject resJsonObject = (JSONObject) jsonObject.get("response");
 			JSONObject resultJsonObject = (JSONObject) resJsonObject.get("result");
 			JSONObject pointJsonObject = (JSONObject) resultJsonObject.get("point");
@@ -77,12 +76,7 @@ public class HillShadeController {
 
 			String lat = (String) pointJsonObject.get("x");
 			String lng = (String) pointJsonObject.get("y");
-			System.out.println(lat);
-			System.out.println(lng);
 			String cityId = ((String) structureJsonObject.get("level4AC")).substring(0, 5);
-			System.out.println(cityId);
-
-			System.out.println(lat + ", " + lng + ", " + cityId);
 
 			postHillShadeReq = new PostHillShadeReq(lat, lng, cityId);
 
