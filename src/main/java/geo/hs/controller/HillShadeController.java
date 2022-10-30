@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +44,7 @@ public class HillShadeController {
 	}
 	
 	
-	@PostMapping("/hillShade")
+	@GetMapping("/hillShade")
 	void updateHillShade(@RequestBody PostHillShadeReq req){
 		// 해당 cityCode에 맞는 지역의 DSM 가져오기
 		List<Dsm> dsms = dsmService.getDsm(req.cityId);
