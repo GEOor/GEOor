@@ -64,7 +64,7 @@ const requestHillShade = async () => {
     const $date = document.getElementById('date');
     const $time = document.getElementById('time');
 
-    const res = await fetch('/requestHillShade', { 
+    const res = await fetch('/hillShade', { 
         method: 'POST',
         headers: {
             "Content-Type": "application/json; charset=UTF-8"

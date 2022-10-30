@@ -46,7 +46,7 @@ public class HillShadeController {
 		this.roadService = roadService;
 	}
 
-	@PostMapping("/requestHillShade")
+	@PostMapping("/hillShade")
 	ResponseEntity<PostHillShadeReq> requestHillShade(@RequestBody basicDataReq req) {
 		PostHillShadeReq postHillShadeReq = null;
 		try {
