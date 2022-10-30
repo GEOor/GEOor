@@ -18,8 +18,4 @@ public class PostHillShadeReq {
 	
 	public String cityId;
 	
-	public String date;
-	
-	public String time;
-	
 }
