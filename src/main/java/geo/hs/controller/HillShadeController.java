@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,7 +75,6 @@ public class HillShadeController {
 			JSONObject refinedJsonObject = (JSONObject) resJsonObject.get("refined");
 			JSONObject structureJsonObject = (JSONObject) refinedJsonObject.get("structure");
 
-
 			String lat = (String) pointJsonObject.get("x");
 			String lng = (String) pointJsonObject.get("y");
 			System.out.println(lat);
@@ -91,7 +89,11 @@ public class HillShadeController {
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.add(HttpHeaders.CONTENT_TYPE, "application/json");
 
-			ResponseEntity<PostHillShadeReq> responseEntity = new ResponseEntity<>(postHillShadeReq, httpHeaders,HttpStatus.OK);
+			ResponseEntity<PostHillShadeReq> responseEntity = new ResponseEntity<>(postHillShadeReq, httpHeaders,
+					HttpStatus.OK);
+
+			this.updateHillShade(postHillShadeReq, req.getDate(), req.getTime());
+
 			return responseEntity;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,28 +102,27 @@ public class HillShadeController {
 		}
 	}
 
-//	@PostMapping("/hillShade")
-//	void updateHillShade(@RequestBody PostHillShadeReq req) {
-//		// 해당 cityCode에 맞는 지역의 DSM 가져오기
-//		List<Dsm> dsms = dsmService.getDsm(req.cityId);
-//		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
-//
-//		// 태양고도각 크롤링
-//		// crawler 호출
-//		double lat = Double.parseDouble(req.getLatitude());
-//		double lng = Double.parseDouble(req.getLongitude());
-//		crawler.run(lat, lng, req.getDate()); // 현재는 임시로 x, y = 0 으로 둠, hillshade 알고리즘과 맞춰봐야됨
-//
-//		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
-//
-//		// 각 DSM 파일들 HillShade 계산
-//		int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.parseInt(req.getTime());
-//		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
-//		System.out.println("start");
-//		// 일정 크기의 HillShade 리스트에 대한 road HillShade 값 계산
-//		roadService.calcRoadHillShade(hs1DArr);
-//		// 최종 계산된 road HillShade 값 DB에 갱신
-//		roadService.updateRoadHillShade();
-//		roadService.test();
-//	}
+	void updateHillShade(PostHillShadeReq req, String dateString, String timeString) {
+		// 해당 cityCode에 맞는 지역의 DSM 가져오기
+		List<Dsm> dsms = dsmService.getDsm(req.cityId);
+		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
+
+		// 태양고도각 크롤링
+		// crawler 호출
+		double lat = Double.parseDouble(req.getLatitude());
+		double lng = Double.parseDouble(req.getLongitude());
+		crawler.run(lat, lng, dateString); // 현재는 임시로 x, y = 0 으로 둠, hillshade 알고리즘과 맞춰봐야됨
+
+		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
+
+		// 각 DSM 파일들 HillShade 계산
+		int time = timeString.charAt(0) == '0' ? timeString.charAt(1) - '0' : Integer.parseInt(timeString);
+		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
+		System.out.println("start");
+		// 일정 크기의 HillShade 리스트에 대한 road HillShade 값 계산
+		roadService.calcRoadHillShade(hs1DArr);
+		// 최종 계산된 road HillShade 값 DB에 갱신
+		roadService.updateRoadHillShade();
+		roadService.test();
+	}
 }
