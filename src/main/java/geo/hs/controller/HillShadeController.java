@@ -29,14 +29,14 @@ import java.util.List;
 @RestController
 @Slf4j
 public class HillShadeController {
-	
+
 	private final DsmService dsmService;
 	private final HillShadeService hillShadeService;
 	private final RoadService roadService;
-	
+
 	private Crawler crawler = new Crawler();
 	private ArrayList<SchedulerSunInfo> ssi = new ArrayList<>();
-	
+
 	@Autowired
 	public HillShadeController(DsmService dsmService, HillShadeService hillShadeService, RoadService roadService) {
 		this.dsmService = dsmService;
@@ -44,7 +44,7 @@ public class HillShadeController {
 		this.roadService = roadService;
 	}
 
-	@GetMapping("/requestHillShade")
+	@PostMapping("/requestHillShade")
 	void requestHillShade(@RequestBody AddressReq req) {
 		System.out.println(req.getAddress());
 		try {
@@ -72,9 +72,9 @@ public class HillShadeController {
 			e.printStackTrace();
 		}
 	}
-	
-	@GetMapping("/hillShade")
-	void updateHillShade(@RequestBody PostHillShadeReq req){
+
+	@PostMapping("/hillShade")
+	void updateHillShade(@RequestBody PostHillShadeReq req) {
 		// 해당 cityCode에 맞는 지역의 DSM 가져오기
 		List<Dsm> dsms = dsmService.getDsm(req.cityId);
 		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
@@ -111,9 +111,9 @@ public class HillShadeController {
 		double lat = Double.parseDouble(req.getLatitude());
 		double lng = Double.parseDouble(req.getLongitude());
 		crawler.run(lat, lng, req.getDate()); // 현재는 임시로 x, y = 0 으로 둠, hillshade 알고리즘과 맞춰봐야됨
-		
+
 		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
-		
+
 		// 각 DSM 파일들 HillShade 계산
 		int time = req.getTime().charAt(0) == '0' ? req.getTime().charAt(1) - '0' : Integer.parseInt(req.getTime());
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));

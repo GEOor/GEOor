@@ -86,52 +86,62 @@ const requestHillShade = async (latitude, longitude, districtNumber) => {
 const addressToCoordinates = () => {
     const $address = document.getElementById('address');
 
-    const request = new XMLHttpRequest();
+    fetch('/requestHillShade', { 
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+        },
+        body: JSON.stringify({ address: $address.value })
+    })
+        .then(res => res.json())
+        .then(data => console.log(data))
 
-    request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
-        + "&crs=epsg:3857"
-        + "&address=" + encodeURI($address.value) + "&refine=true&simple=false&format=xml&type=road"
-        + "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
-    request.send();
-    request.onreadystatechange = /* async */ () => {
-        if (request.readyState !== 4) return
-        if (request.status < 200 || request.status >= 300)
-            return alert(request.status);
+    // const request = new XMLHttpRequest();
 
-        const { responseXML } = request;
-        //console.log(responseXML);
+    // request.open("GET","http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
+    //     + "&crs=epsg:3857"
+    //     + "&address=" + encodeURI($address.value) + "&refine=true&simple=false&format=xml&type=road"
+    //     + "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805");
+    // request.send();
+    // request.onreadystatechange = /* async */ () => {
+    //     if (request.readyState !== 4) return
+    //     if (request.status < 200 || request.status >= 300)
+    //         return alert(request.status);
 
-        const getXMLValue = (name) => responseXML.getElementsByTagName(name)[0].childNodes[0].nodeValue;
+    //     const { responseXML } = request;
+    //     //console.log(responseXML);
 
-        // 검색한 지역의 좌표
-        const latitude = getXMLValue('x');
-        const longitude = getXMLValue('y');
-        // 검색한 지역의 행정구역 번호
-        const districtNumber = getXMLValue('level4AC')?.substr(0, 5);
+    //     const getXMLValue = (name) => responseXML.getElementsByTagName(name)[0].childNodes[0].nodeValue;
 
-        // 검색한 지역 쪽으로 지도를 이동
-        map.getView().setCenter([parseFloat(latitude), parseFloat(longitude)]);
-        map.getView().setZoom(16);
+    //     // 검색한 지역의 좌표
+    //     const latitude = getXMLValue('x');
+    //     const longitude = getXMLValue('y');
+    //     // 검색한 지역의 행정구역 번호
+    //     const districtNumber = getXMLValue('level4AC')?.substr(0, 5);
 
-        // 검색 결과를 이용해 hillShade 알고리즘을 실행
-        requestHillShade(latitude, longitude, districtNumber);
+    //     // 검색한 지역 쪽으로 지도를 이동
+    //     map.getView().setCenter([parseFloat(latitude), parseFloat(longitude)]);
+    //     map.getView().setZoom(16);
 
-        // 도로 데이터를 geoserver로부터 받아와 map에 표시
-        map.addLayer(new ol.layer.Tile({
-            visible: true,
-            source: new ol.source.TileWMS({
-                url: 'http://localhost:8600/geoserver/geor/wms', //행정구역 16개 따로?
-                params: {
-                    FORMAT: 'image/png',
-                    TILED : true,
-                    LAYERS: 'geor:road',
-                    CQL_FILTER: 'sig_cd = ' + districtNumber
-                }
-            })
-        }));
+    //     // 검색 결과를 이용해 hillShade 알고리즘을 실행
+    //     requestHillShade(latitude, longitude, districtNumber);
 
-        return [Number(latitude), Number(longitude)];
-    }
+    //     // 도로 데이터를 geoserver로부터 받아와 map에 표시
+    //     map.addLayer(new ol.layer.Tile({
+    //         visible: true,
+    //         source: new ol.source.TileWMS({
+    //             url: 'http://localhost:8600/geoserver/geor/wms', //행정구역 16개 따로?
+    //             params: {
+    //                 FORMAT: 'image/png',
+    //                 TILED : true,
+    //                 LAYERS: 'geor:road',
+    //                 CQL_FILTER: 'sig_cd = ' + districtNumber
+    //             }
+    //         })
+    //     }));
+
+    //     return [Number(latitude), Number(longitude)];
+    // }
 }
 
 // 검색할 날짜의 범위를 제한
