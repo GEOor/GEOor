@@ -1,8 +1,8 @@
 package geo.hs.controller;
 
 import geo.hs.crawling.Crawler;
+import geo.hs.model.DTO.BasicDataReq;
 import geo.hs.model.DTO.PostHillShadeReq;
-import geo.hs.model.DTO.basicDataReq;
 import geo.hs.model.dsm.Dsm;
 import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.scheduler.SchedulerSunInfo;
@@ -47,7 +47,7 @@ public class HillShadeController {
 	}
 
 	@PostMapping("/hillShade")
-	ResponseEntity<PostHillShadeReq> requestHillShade(@RequestBody basicDataReq req) {
+	ResponseEntity<PostHillShadeReq> requestHillShade(@RequestBody BasicDataReq req) {
 		try {
 			URL url = new URL(this.getURL(req.getAddress()));
 
@@ -73,8 +73,7 @@ public class HillShadeController {
 			ResponseEntity<PostHillShadeReq> responseEntity = new ResponseEntity<>(postHillShadeReq, httpHeaders,
 					HttpStatus.OK);
 
-			// TODO 에러 발생함
-			// this.updateHillShade(postHillShadeReq, req.getDate(), req.getTime());
+			this.updateHillShade(postHillShadeReq, req);
 
 			return responseEntity;
 		} catch (Exception e) {
@@ -96,7 +95,7 @@ public class HillShadeController {
 		JSONObject result = (JSONObject) response.get("result");
 		JSONObject point = (JSONObject) result.get("point");
 		JSONObject refined = (JSONObject) response.get("refined");
-		JSONObject structure = (JSONObject) refined.get("");
+		JSONObject structure = (JSONObject) refined.get("structure");
 
 		String lat = (String) point.get("x");
 		String lng = (String) point.get("y");
@@ -109,7 +108,10 @@ public class HillShadeController {
 				.build();
 	}
 
-	void updateHillShade(PostHillShadeReq req, String dateString, String timeString) {
+	void updateHillShade(PostHillShadeReq req, BasicDataReq basicDataReq) {
+		String dateString = basicDataReq.getDate();
+		String timeString = basicDataReq.getTime();
+
 		// 해당 cityCode에 맞는 지역의 DSM 가져오기
 		List<Dsm> dsms = dsmService.getDsm(req.cityId);
 		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);

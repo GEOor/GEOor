@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class basicDataReq {
+public class BasicDataReq {
     public String address;
 
     public String date;
