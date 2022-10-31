@@ -99,7 +99,7 @@ public class HillShadeController {
 
 		String lat = (String) point.get("x");
 		String lng = (String) point.get("y");
-		String cityId = ((String) structure.get("level4AC")).substring(0, 5);
+		int cityId = Integer.parseInt(((String) structure.get("level4AC")).substring(0, 5));
 
 		return PostHillShadeReq.builder()
 				.latitude(lat)
@@ -113,25 +113,22 @@ public class HillShadeController {
 		String timeString = basicDataReq.getTime();
 
 		// 해당 cityCode에 맞는 지역의 DSM 가져오기
-		List<Dsm> dsms = dsmService.getDsm(req.cityId);
+		List<Dsm> dsms = dsmService.getDsm(req.getCityId());
 		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
 
 		// 태양고도각 크롤링
 		// crawler 호출
 		double lat = Double.parseDouble(req.getLatitude());
 		double lng = Double.parseDouble(req.getLongitude());
-		crawler.run(lat, lng, dateString); // 현재는 임시로 x, y = 0 으로 둠, hillshade 알고리즘과 맞춰봐야됨
+		crawler.run(lat, lng, dateString); // 현재는 임시로 x, y = 0 으로 둠, Hillshade 알고리즘과 맞춰봐야됨
 
 		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
 
 		// 각 DSM 파일들 HillShade 계산
 		int time = timeString.charAt(0) == '0' ? timeString.charAt(1) - '0' : Integer.parseInt(timeString);
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
-		System.out.println("start");
-		// 일정 크기의 HillShade 리스트에 대한 road HillShade 값 계산
-		roadService.calcRoadHillShade(hs1DArr);
-		// 최종 계산된 road HillShade 값 DB에 갱신
+		roadService.calcRoadHillShade(hs1DArr, req.getCityId());
 		roadService.updateRoadHillShade();
-		roadService.test();
+		roadService.printResult();
 	}
 }
