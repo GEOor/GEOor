@@ -19,6 +19,6 @@ public class PostHillShadeReq {
 
 	public String longitude;
 
-	public String cityId;
+	public int cityId;
 
 }
