@@ -120,7 +120,7 @@ public class HillShadeController {
 		// crawler 호출
 		double lat = Double.parseDouble(req.getLatitude());
 		double lng = Double.parseDouble(req.getLongitude());
-		crawler.run(lat, lng, dateString); // 현재는 임시로 x, y = 0 으로 둠, HillShade 알고리즘과 맞춰봐야됨
+		crawler.run(lat, lng, dateString); // 현재는 임시로 x, y = 0 으로 둠, Hillshade 알고리즘과 맞춰봐야됨
 
 		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
 
