@@ -1,4 +1,5 @@
 /* 웹 폰트 */
+
 @font-face {
     font-family: 'Happiness-Sans-Title';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/Happiness-Sans-Title.woff2') format('woff2');
@@ -6,118 +7,126 @@
     font-style: normal;
 }
 
-:root {
-    --sidebar-width: 36rem;
-    --title-height: 8rem;
-    --form-margin: 2rem;
-    --form-line-height: 3rem;
-    --form-label-width: 4rem;
-    --form-label-margin: 0.5rem;
-    --form-font-size: 1.5rem;
-    --button-margin: 0.5rem;
-    --button-height: 4rem;
-    --border-radius: 0.5rem;
-}
-
-html {
-    font-size: 62.5%;
+head * {
+    display: none;
 }
 
 body {
-    font-size: 1.6rem;
     margin: 0;
-    display: flex;
-
-    height: 100vh;
-}
-
-/* 검색을 위한 사이드바 */
-#sidebar {
-    position: relative;
-
-    width: var(--sidebar-width);
-    height: 100%;
-}
-
-/* 지도 */
-#map {
-    width: calc(100% - var(--sidebar-width));
-    height: 100%;
 }
 
 /* hillshade 타이틀 */
-#sidebar #title {
+
+#title{
+    width: 30%;
     background-color: #69BDEA;
     color: white;
 
-    text-indent: 2rem;
-    line-height: var(--title-height);
-
-    margin: 0;
+    text-indent: 5%;
+    line-height: 380%;
 }
 
-/* 검색 form */
-#sidebar form {
-    padding-top: var(--form-margin);
-    height: calc(100% - var(--title-height) - var(--form-margin));
-    position: relative;
+/* 지도 */
+
+#map {
+    position: fixed;
+    width: 70%;
+    height: 100%;
+    margin-left: 30%;
 }
 
-/* 검색 form의 각 input을 감싸는 wrapper div */
-#sidebar form .form-group {
-    margin-bottom: var(--form-margin);
-    padding-left: var(--form-margin)
+/* 주소 날짜 시간 */
+
+#data{
+    width: 30%;
+    margin-left: 1.5%;
+    margin-top: 1.5%;
+    line-height: 350%;
 }
 
-/* wrapper div의 각 태그 */
-#sidebar form .form-group * {
-    display: inline-block;
-    line-height: var(--form-line-height);
+.inputData{
+    width: 70%;
+    padding: 1.5%;
+    margin-left: 5%;
+    font-size: 100%;
+
+    border: none;
 }
 
-/* wrapper div의 각 span -> label 역할을 수행 */
-#sidebar form .form-group span.label {
-    width: var(--form-label-width);
-    margin-right: var(--form-label-margin);
+::placeholder {
+    font-size: 85%;
 }
 
-/* wrapper div에서 체크박스 이외의 input 태그 */
-#sidebar form .form-group input:not([type=checkbox]) {
-    margin: 0;
-    border: 0;
-    padding: 0;
-    width: calc(100% - var(--form-label-width) - var(--form-label-margin) - var(--form-margin));
-
-    border-radius: var(--border-radius);
-    font-size: var(--form-font-size);
+.inputData:focus{
+    outline: none;
 }
 
-/* 검색 form의 제출 버튼 */
-#sidebar form button {
-    position: absolute;
-    bottom: 0;
+/* 옵션 */
 
-    width: calc(100% - var(--button-margin) - var(--button-margin));
-    margin: var(--button-margin);
-    line-height: var(--button-height);
-    font-size: var(--form-font-size);
+#option{
+    width: 30%;
+    margin-left: 1.5%;
+    margin-top: 1.5%;
+}
+
+label{
+    margin-right: 8%;
+}
+
+/* 분석 버튼 */
+
+#startButton{
+    position: fixed;
+    width: 30%;
+    bottom: 3%;
+}
+
+#analysisButton{
+    width: 90%;
+    padding: 4%;
+    margin-left: 4%;
+    font-size: 100%;
 
     background-color: #69BDEA;
     color: white;
 
-    border-radius: var(--border-radius);
+    border-radius: 5px;
     border: none;
     outline: none;
 }
 
-/* 버튼에 마우스를 올린 경우 */
-#sidebar form button:hover {
+#analysisButton:hover{
     background-color: darkgray;
-    cursor: pointer;
+}
+
+/* 로딩 창 */
+
+#modal.modal-overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(1.5px);
+}
+#modal .modal-window {
+    position: relative;
+    top: 40%;
+    background: rgba(0, 0, 0, 0);
+}
+#modal .title {
+    font-family: 'Happiness-Sans-Title';
+    font-size: 200%;
+    color: white;
 }
 
 /* 로딩 효과 */
-/* @keyframes anime_textup { 0% { top: 0; } 20% { top: -0.2rem; } 40% { top: 0 } 60% { top: 0 } 80% { top: 0 } 100% { top: 0 } }
+
+@keyframes anime_textup { 0% { top: 0; } 20% { top: -0.2rem; } 40% { top: 0 } 60% { top: 0 } 80% { top: 0 } 100% { top: 0 } }
 
 .title span {
     position: relative;
@@ -132,6 +141,7 @@ body {
 .title span:nth-of-type(6) { animation-delay: .6s; }
 .title span:nth-of-type(7) { animation-delay: .7s; }
 .title span:nth-of-type(8) { animation-delay: .8s; }
-.title span:nth-of-type(9) { animation-delay: .9s; } */
+.title span:nth-of-type(9) { animation-delay: .9s; }
 
 /* 미디어 쿼리 */
+
