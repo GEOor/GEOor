@@ -23,7 +23,7 @@ class DsmServiceTest {
         // given
 
         // when
-        List<Dsm> dsmList = dsmService.getDsm("11740");
+        List<Dsm> dsmList = dsmService.getDsm(11740);
 
         // then
         assertEquals(32438, dsmList.size());
@@ -33,7 +33,7 @@ class DsmServiceTest {
     @DisplayName("강동구에 있는 첫번째 Dsm의 세부적인 정보 확인")
     void getDsmDetailTest() {
         // given
-        List<Dsm> dsmList = dsmService.getDsm("11740");
+        List<Dsm> dsmList = dsmService.getDsm(11740);
 
         // when
         Dsm dsm = dsmList.get(0);
@@ -49,7 +49,7 @@ class DsmServiceTest {
     @DisplayName("강동구 dsm2DConverter 데이터 개수 확인")
     void dsm2DConverterTest() {
         // given
-        List<Dsm> dsmList = dsmService.getDsm("11740");
+        List<Dsm> dsmList = dsmService.getDsm(11740);
 
         // when
         ArrayList<ArrayList<Dsm>> dsmArrayList = dsmService.dsm2DConverter(dsmList);
@@ -65,7 +65,7 @@ class DsmServiceTest {
     @DisplayName("강동구 dsm2DConverter 데이터 세부 확인")
     void dsm2DConverterDetailTest() {
         // given
-        List<Dsm> dsmList = dsmService.getDsm("11740");
+        List<Dsm> dsmList = dsmService.getDsm(11740);
 
         // when
         ArrayList<ArrayList<Dsm>> dsmArrayList = dsmService.dsm2DConverter(dsmList);

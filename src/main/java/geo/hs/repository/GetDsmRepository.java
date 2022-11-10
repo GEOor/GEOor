@@ -19,9 +19,9 @@ public class GetDsmRepository {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	public List<Dsm> getDsm(String cityId){
+	public List<Dsm> getDsm(int cityId){
 		// where 문의 city 부분은 db의 컬럼에 따라 변경
-		String query = "select * from dsm where sig_cd like ?";
+		String query = "select * from dsm where sig_cd = ?";
 		return this.jdbcTemplate.query(query,
 				(rs, rowNum) -> new Dsm(
 						rs.getString("x"),
