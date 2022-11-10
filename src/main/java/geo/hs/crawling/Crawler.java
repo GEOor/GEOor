@@ -42,6 +42,7 @@ public class Crawler {
 			chromeOptions.addArguments("--headless");
 			chromeOptions.addArguments("--no-sandbox");
 
+			// TODO ChromeDriver를 설정할 때 오류가 발생하고 있습니다.
 			driver = new ChromeDriver(chromeOptions);
 
 			// URL로 접속 (이때 address는 중요하지 않다. 위,경도 좌표만 제대로 입력하면 고도각이 출력된다)
