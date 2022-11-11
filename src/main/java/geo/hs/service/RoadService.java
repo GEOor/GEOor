@@ -15,11 +15,9 @@ public class RoadService {
     private final RoadRepository roadRepository;
     private final HashMap<Integer, Road> roadHashMap = new HashMap<>();
 
-    public void calcRoadHillShade(List<Hillshade> hillShades) {
+    public void calcRoadHillShade(List<Hillshade> hillShades, int cityId) {
         roadHashMap.clear();
-        for (Hillshade hillShade : hillShades) {
-            roadRepository.findByGeom(roadHashMap, hillShade);
-        }
+        roadRepository.findByGeom(roadHashMap, hillShades, cityId);
     }
 
     public void updateRoadHillShade() {
@@ -28,7 +26,11 @@ public class RoadService {
         }
     }
 
-    public void test() {
+    /**
+     * 테스트 용도로만 써야 한다
+     * 즉, 배포할 때는 이 함수 호출을 하면 안 됨
+     */
+    public void printResult() {
         int count = 0;
         for (Road value : roadHashMap.values()) {
             count += value.getIntersectCount();
