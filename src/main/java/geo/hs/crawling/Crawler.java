@@ -24,10 +24,13 @@ public class Crawler {
 	private double x_dir, y_dir;
 	private ArrayList<SunInfo> si = new ArrayList<>();
 
+	/**
+	 * 태양 고도 및 방위각 표를 전부 가져오는 코드
+	 * @param lat 위도 - HillShadeController에서 vworld API를 통해 가져옴
+	 * @param lng 경도 - HillShadeController에서 vworld API를 통해 가져옴
+	 * @param date 날짜 - 프론트에서 가져옴
+	 */
 	public void run(double lat, double lng, String date) {
-		WebDriver driver = null;
-		WebElement element = null;
-
 		latitude = lat;
 		longitude = lng;
 		x_dir = lat;
@@ -42,29 +45,30 @@ public class Crawler {
 			chromeOptions.addArguments("--headless");
 			chromeOptions.addArguments("--no-sandbox");
 
-			// TODO ChromeDriver를 설정할 때 오류가 발생하고 있습니다.
 			driver = new ChromeDriver(chromeOptions);
 
 			// URL로 접속 (이때 address는 중요하지 않다. 위,경도 좌표만 제대로 입력하면 고도각이 출력된다)
-			driver.get(url + "?useElevation=1&lat=" + lat + "&lng=" + lng + "&elevation=0&output_range=1&date=" + date
+			driver.get(url + "?useElevation=1"
+					+ "&lat=" + lat
+					+ "&lng=" + lng
+					+ "&elevation=0&output_range=1&date=" + date
 					+ "&hour=&minute=&second=&address=" + address);
 
 			// 대기 설정
 			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
-			List<WebElement> tr = ((ChromeDriver) driver)
-					.findElementsByXPath("//*[@id=\"sun-height-table\"]/table/tbody/tr");
+			// 20XX년 XX월 XX일 태양의 고도 및 방위각 변화 표 값을 가져오는 것
+			// 개발자 도구로 확인해볼 수 있음
+			List<WebElement> tr = driver.findElementsByXPath("//*[@id=\"sun-height-table\"]/table/tbody/tr");
 
-			// 출력
+			// 출력 테스트
 			// for(int i = 0; i<tr.size(); i++) System.out.println(tr.get(i).getText());
 
 			crawlerParsing(tr);
 
+			driver.quit();
 		} catch (Throwable e) {
 			e.printStackTrace();
-		} finally {
-			if (driver != null)
-				driver.quit();
 		}
 	}
 
@@ -74,7 +78,6 @@ public class Crawler {
 	 * 내용 : 태양 고도각 관련 정보 크롤링 결과 파싱
 	 * 목적 : 크롤러 정보 get 함수로 깔끔하게 보내기 위함
 	 */
-
 	private void crawlerParsing(List<WebElement> arr) {
 		for (int i = 0; i < arr.size(); i++) {
 			List<String> strings = Arrays.asList(arr.get(i).getText().split(" "));
