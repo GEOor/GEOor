@@ -17,16 +17,22 @@ const map = new ol.Map({
     })
 });
 
-// 각 마커를 표시할 Vector 레이어
-const vectorLayer = new ol.layer.Vector({
-    source: new ol.source.Vector(),
-    style: new ol.style.Style({
-        image: new ol.style.Icon({
-            scale: 0.05,
-            src: "img/marker.png"
+// 마커의 종류
+const markerTypes = ['tunnel', 'bridge', 'frozen'];
+
+// 마커를 담을 레이어의 집합
+const markerLayers = markerTypes.reduce((prev, type) => ({
+    ...prev, 
+    [type]: new ol.layer.Vector({
+        source: new ol.source.Vector(),
+        style: new ol.style.Style({
+            image: new ol.style.Icon({
+                scale: 0.05,
+                src: `img/${type}.png`
+            })
         })
     })
-});
+}), {})
 
 // 주어진 좌표에 주어진 id를 갖는 마커 생성
 const createMarker = (coord, id) => {
@@ -37,23 +43,22 @@ const createMarker = (coord, id) => {
 
 // tunnel, bridge, frozen 중 하나를 인자로 제공한 경우
 // 각각 터널, 교량, 결빙 상태를 지도에 마커로 표시
-const setHazardMarker = async (hazardName) => {
+const setMarkers = async (markerType) => {
     // 마커로 설정할 필요가 없는 경우 return
-    const $option = document.getElementById(hazardName)
+    const $option = document.getElementById(markerType)
     if (!$option.checked) return;
 
-    // 마커를 설정할 vectorLayer를 추가
-    map.addLayer(vectorLayer);
-
     try {
-        // api 호출 후 데이터를 파싱
-        const res = await fetch('http://localhost:8080/hazard/' + hazardName);
-        const data = await res.json();
+        // 마커를 담을 레이어를 생성
+        const markerLayer = markerLayers[markerType]
 
+        // api 호출 후 데이터를 파싱
+        const res = await fetch(`http://localhost:8080/hazard/${markerType}`);
+        const data = await res.json();
         if (data.error) throw data.error;
 
         // api 호출을 통해 얻어낸 데이터를 이용해 마커를 생성
-        data.forEach((coord, i) => vectorLayer.getSource().addFeature(createMarker(coord, i)));
+        data.forEach((coord, i) => markerLayer.getSource().addFeature(createMarker(coord, i)));
     } catch (error) {
         console.error(error);
     }
@@ -78,6 +83,7 @@ const requestHillShade = async () => {
     const { latitude, longitude, cityId } = await res.json()
 
     // 검색한 지역 쪽으로 지도를 이동
+    // 이 떄 위도와 경도를 openlayers의 지도에서 사용할 수 있는 방식으로 먼저 변환해야 함
     map.getView().setCenter([parseFloat(latitude), parseFloat(longitude)]);
     map.getView().setZoom(16);
 
@@ -115,11 +121,11 @@ const inputDataRange = () => {
 }
 
 // 사용자가 입력한 값을 이용해 hillShade 알고리즘 실행
-const analysisStart = (e) => {
+const analysisStart = async (e) => {
     e.preventDefault();
-
+    
     // 이전에 생성한 마커 레이어 제거
-    map.removeLayer(vectorLayer);
+    markerTypes.forEach(name => markerLayers[name].getSource().clear())
 
     //1. 사용자가 입력한 위치 -> 위,경도 변환 후 지도 내 카메라 줌
     requestHillShade();
@@ -128,9 +134,7 @@ const analysisStart = (e) => {
     //map.addLayer(wmsLayer);
 
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
-    // setHazardMarker("tunnel");
-    // setHazardMarker("bridge");
-    setHazardMarker("frozen");
+    markerTypes.forEach(async (name) => await setMarkers(name))
 }
 
 const $form = document.getElementById("form");
