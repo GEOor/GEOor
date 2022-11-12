@@ -4,7 +4,6 @@ import geo.hs.model.sun.SunInfo;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.Getter;
 import lombok.Setter;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -45,7 +44,7 @@ public class Crawler {
 			chromeOptions.addArguments("--headless");
 			chromeOptions.addArguments("--no-sandbox");
 
-			driver = new ChromeDriver(chromeOptions);
+			ChromeDriver driver = new ChromeDriver(chromeOptions);
 
 			// URL로 접속 (이때 address는 중요하지 않다. 위,경도 좌표만 제대로 입력하면 고도각이 출력된다)
 			driver.get(url + "?useElevation=1"
