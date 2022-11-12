@@ -73,7 +73,7 @@ public class HillShadeController {
 			ResponseEntity<PostHillShadeReq> responseEntity = new ResponseEntity<>(postHillShadeReq, httpHeaders,
 					HttpStatus.OK);
 
-			this.updateHillShade(postHillShadeReq, req);
+			// this.updateHillShade(postHillShadeReq, req);
 
 			return responseEntity;
 		} catch (Exception e) {

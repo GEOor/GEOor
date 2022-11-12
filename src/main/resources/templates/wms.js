@@ -34,6 +34,9 @@ const markerLayers = markerTypes.reduce((prev, type) => ({
     })
 }), {})
 
+// 각 마커를 담을 레이어를 map에 추가
+markerTypes.forEach(name => map.addLayer(markerLayers[name]))
+
 // 주어진 좌표에 주어진 id를 갖는 마커 생성
 const createMarker = (coord, id) => {
     const {latitude, longitude} = coord
@@ -144,7 +147,8 @@ const analysisStart = async (e) => {
     //map.addLayer(wmsLayer);
 
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
-    markerTypes.forEach(async (name) => await setMarkers(name))
+    // markerTypes.forEach(async (name) => await setMarkers(name))
+    await setMarkers('frozen')
 
     // 로딩창을 제거
     setLoading(false);
