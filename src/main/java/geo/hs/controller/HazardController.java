@@ -25,4 +25,9 @@ public class HazardController {
     public ArrayList<Hazard> tunnel(Model model) throws SQLException {
         return hazardRepository.getTunnel();
     }
+
+    @GetMapping("/frozen")
+    public ArrayList<Hazard> frozen(Model model) throws SQLException {
+        return hazardRepository.getFrozen();
+    }
 }
