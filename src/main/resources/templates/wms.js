@@ -114,9 +114,19 @@ const inputDataRange = () => {
     $date.max = dateToString(weekLater);
 }
 
+const setLoading = (toggle) => {
+    const $loading = document.getElementById('loading') 
+    const MODAL_HIDDEN = 'modal-hidden'
+
+    $loading.classList.toggle(MODAL_HIDDEN, !toggle)
+}
+
 // 사용자가 입력한 값을 이용해 hillShade 알고리즘 실행
 const analysisStart = (e) => {
     e.preventDefault();
+
+    // 로딩창을 노출
+    setLoading(true);
 
     // 이전에 생성한 마커 레이어 제거
     map.removeLayer(vectorLayer);
@@ -131,6 +141,9 @@ const analysisStart = (e) => {
     // setHazardMarker("tunnel");
     // setHazardMarker("bridge");
     // setHazardMarker("frozen");
+
+    // 로딩창을 제거
+    setLoading(false);
 }
 
 const $form = document.getElementById("form");
