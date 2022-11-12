@@ -130,7 +130,7 @@ const analysisStart = (e) => {
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
     // setHazardMarker("tunnel");
     // setHazardMarker("bridge");
-    // setHazardMarker("frozen");
+    setHazardMarker("frozen");
 }
 
 const $form = document.getElementById("form");

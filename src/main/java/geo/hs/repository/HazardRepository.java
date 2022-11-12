@@ -1,14 +1,19 @@
 package geo.hs.repository;
 
 import geo.hs.model.hazard.Hazard;
+import org.geotools.geometry.jts.WKBReader;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
+import org.postgresql.util.PGobject;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class HazardRepository {
     private final String url = "jdbc:postgresql://localhost:5431/geor";
     private final String user = "geor";
-    String password = "geor"; // password 입력
+    private final String password = "geor"; // password 입력
 
     public void saveBridge(ArrayList<Hazard> hazards) throws SQLException {
         try {
@@ -45,35 +50,32 @@ public class HazardRepository {
 
     public ArrayList<Hazard> getBridge() throws SQLException {
         ArrayList<Hazard> hazards = new ArrayList<>();
+        WKBReader wkbReader = new WKBReader();
 
         try {
-            Connection connect = null;
-            connect = DriverManager.getConnection(url, user, password);
-
-            if (connect != null) {
-                System.out.println("Connection successful!!");
-            } else {
-                throw new SQLException("no connection...");
-            }
+            Connection connect = DriverManager.getConnection(url, user, password);
 
             Statement stmt = connect.createStatement();
             // sql문
-            String sql = "SELECT latitude, longitude FROM bridge";
+            String sql = "SELECT the_geom FROM bridge";
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                Double latitude = rs.getDouble("latitude");
-                Double longitude = rs.getDouble("longitude");
+                PGobject pGobject = (PGobject) rs.getObject("the_geom");
+                byte[] geom = WKBReader.hexToBytes(Objects.requireNonNull(pGobject.getValue()));
+                Point point = (Point) wkbReader.read(geom);
+
+                double latitude = point.getX();
+                double longitude = point.getY();
 
                 if (latitude == 0.0 || longitude == 0.0)
                     continue;
 
-                Hazard hazard = new Hazard(latitude, longitude);
-                hazards.add(hazard);
+                hazards.add(new Hazard(latitude, longitude));
             }
 
-        } catch (SQLException ex) {
-            throw ex;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
         return hazards;
     }
@@ -113,37 +115,67 @@ public class HazardRepository {
 
     public ArrayList<Hazard> getTunnel() throws SQLException {
         ArrayList<Hazard> hazards = new ArrayList<>();
+        WKBReader wkbReader = new WKBReader();
 
         try {
-            Connection connect = null;
-            connect = DriverManager.getConnection(url, user, password);
-
-            if (connect != null) {
-                System.out.println("Connection successful!!");
-            } else {
-                throw new SQLException("no connection...");
-            }
+            Connection connect = DriverManager.getConnection(url, user, password);
 
             Statement stmt = connect.createStatement();
-            // sql문
-            String sql = "SELECT latitude, longitude FROM tunnel";
+
+            String sql = "SELECT the_geom FROM tunnel";
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                Double latitude = rs.getDouble("latitude");
-                Double longitude = rs.getDouble("longitude");
+                PGobject pGobject = (PGobject) rs.getObject("the_geom");
+                byte[] geom = WKBReader.hexToBytes(Objects.requireNonNull(pGobject.getValue()));
+                Point point = (Point) wkbReader.read(geom);
+
+                double latitude = point.getX();
+                double longitude = point.getY();
 
                 if (latitude == 0.0 || longitude == 0.0)
                     continue;
 
-                Hazard hazard = new Hazard(latitude, longitude);
-                hazards.add(hazard);
+                hazards.add(new Hazard(latitude, longitude));
             }
 
-        } catch (SQLException ex) {
-            throw ex;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
         return hazards;
     }
 
+    public ArrayList<Hazard> getFrozen() throws SQLException {
+        ArrayList<Hazard> hazards = new ArrayList<>();
+        WKBReader wkbReader = new WKBReader();
+
+        try {
+            Connection connect = DriverManager.getConnection(url, user, password);
+
+            Statement stmt = connect.createStatement();
+
+            String sql = "SELECT the_geom FROM frozen";
+
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                PGobject pGobject = (PGobject) rs.getObject("the_geom");
+                byte[] geom = WKBReader.hexToBytes(Objects.requireNonNull(pGobject.getValue()));
+                Point point = (Point) wkbReader.read(geom);
+
+                double latitude = point.getX();
+                double longitude = point.getY();
+
+                if (latitude == 0.0 || longitude == 0.0)
+                    continue;
+
+                hazards.add(new Hazard(latitude, longitude));
+            }
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        return hazards;
+    }
 }

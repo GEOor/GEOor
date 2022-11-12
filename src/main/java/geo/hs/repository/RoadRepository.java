@@ -17,7 +17,7 @@ public class RoadRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final WKB wkb = new WKB();
-    private final String sql = "SELECT origin_id FROM road_divide WHERE ST_Intersects(st_setSRID(? ::geometry, 4326), the_geom) and sig_cd = ?";
+    private final String sql = "SELECT origin_id FROM road_segment WHERE ST_Intersects(st_setSRID(? ::geometry, 4326), the_geom) and sig_cd = ?";
 
     public RoadRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
