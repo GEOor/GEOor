@@ -122,7 +122,7 @@ const setLoading = (toggle) => {
 }
 
 // 사용자가 입력한 값을 이용해 hillShade 알고리즘 실행
-const analysisStart = (e) => {
+const analysisStart = async (e) => {
     e.preventDefault();
 
     // 로딩창을 노출
@@ -132,15 +132,15 @@ const analysisStart = (e) => {
     map.removeLayer(vectorLayer);
 
     //1. 사용자가 입력한 위치 -> 위,경도 변환 후 지도 내 카메라 줌
-    requestHillShade();
+    await requestHillShade();
 
     //2. 사용자가 입력한 (위치, 날짜, 시간) -> 알맞은 wms를 받아올 수 있는 api 호출
     //map.addLayer(wmsLayer);
 
     //3. (교량, 터널, 상습결빙구역) -> 마커 생성
-    // setHazardMarker("tunnel");
-    // setHazardMarker("bridge");
-    // setHazardMarker("frozen");
+    await setHazardMarker("tunnel");
+    await setHazardMarker("bridge");
+    await setHazardMarker("frozen");
 
     // 로딩창을 제거
     setLoading(false);
