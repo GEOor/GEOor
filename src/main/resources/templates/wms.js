@@ -147,16 +147,10 @@ const analysisStart = async (e) => {
 
     // 이전에 생성한 마커 레이어 제거
     markerTypes.forEach(name => markerLayers[name].getSource().clear())
-
-    //1. 사용자가 입력한 위치 -> 위,경도 변환 후 지도 내 카메라 줌
+    // 사용자가 입력한 위치 -> 위,경도 변환 후 지도 내 카메라 줌
     await requestHillShade();
-
-    //2. 사용자가 입력한 (위치, 날짜, 시간) -> 알맞은 wms를 받아올 수 있는 api 호출
-    //map.addLayer(wmsLayer);
-
-    //3. (교량, 터널, 상습결빙구역) -> 마커 생성
-    // markerTypes.forEach(async (name) => await setMarkers(name))
-    await setMarkers('frozen')
+    // (교량, 터널, 상습결빙구역) -> 마커 생성
+    await Promise.all(markerTypes.map(setMarkers))
 
     // 로딩창을 제거
     setLoading(false);
