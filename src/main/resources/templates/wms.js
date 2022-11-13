@@ -21,20 +21,18 @@ const map = new ol.Map({
 
 // 마커의 종류
 const markerTypes = ['tunnel', 'bridge', 'frozen'];
-
-// 마커를 담을 레이어의 집합
-const markerLayers = markerTypes.reduce((prev, type) => ({
-    ...prev, 
-    [type]: new ol.layer.Vector({
-        source: new ol.source.Vector(),
-        style: new ol.style.Style({
-            image: new ol.style.Icon({
-                scale: 0.05,
-                src: `img/${type}.png`
-            })
+// 마커 타입 이름을 마커를 저장할 레이어로 변환하는 함수
+const typeToLayer = (type) => new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+        image: new ol.style.Icon({
+            scale: 0.05,
+            src: `img/${type}.png`
         })
     })
-}), {})
+})
+// 마커를 담을 레이어의 집합
+const markerLayers = arrToObj(markerTypes, typeToLayer)
 
 // 각 마커를 담을 레이어를 map에 추가
 markerTypes.forEach(name => map.addLayer(markerLayers[name]))
