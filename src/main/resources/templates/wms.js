@@ -1,3 +1,5 @@
+const arrToObj = (arr, func) => arr.reduce((acc, val) => (acc[val] = func(val), acc), {})
+
 // 대한민국 지도가 한눈에 들어오는 위치를 기준으로
 // VWorld 지도를 openlayers를 이용해 표시
 const map = new ol.Map({
@@ -36,6 +38,7 @@ const markerLayers = markerTypes.reduce((prev, type) => ({
 
 // 각 마커를 담을 레이어를 map에 추가
 markerTypes.forEach(name => map.addLayer(markerLayers[name]))
+
 
 // 주어진 좌표에 주어진 id를 갖는 마커 생성
 const createMarker = (coord, id) => {
@@ -89,20 +92,14 @@ const { checkLayer, getLayer, createLayer } = (() => {
 })()
 
 const requestHillShade = async () => {
-    const $address = document.getElementById('address');
-    const $date = document.getElementById('date');
-    const $time = document.getElementById('time');
+    // 특정 id를 지닌 input의 value를 각각 그 id의 value값으로 저장
+    const data = arrToObj(['address', 'date', 'time'], (id) => document.getElementById(id).value)
+    console.log(data)
 
     const res = await fetch('/hillShade', { 
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json; charset=UTF-8"
-        },
-        body: JSON.stringify({ 
-            address: $address.value, 
-            date: $date.value,
-            time: $time.value
-        })
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        body: JSON.stringify(data)
     });
     const { latitude, longitude, cityId } = await res.json()
 
