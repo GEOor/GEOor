@@ -26,24 +26,19 @@ const map = new ol.Map({
 // 마커의 종류
 const markerTypes = ['tunnel', 'bridge', 'frozen'];
 // 마커 타입 이름을 마커를 저장할 레이어로 변환하는 함수
-const typeToLayer = (type) => {
-    const layer = new ol.layer.Vector({
-        source: new ol.source.Vector(),
-        style: new ol.style.Style({
-            image: new ol.style.Icon({
-                scale: 0.05,
-                src: `img/${type}.png`
-            })
+const typeToLayer = (type) => new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: new ol.style.Style({
+        image: new ol.style.Icon({
+            scale: 0.05,
+            src: `img/${type}.png`
         })
-    });
-
-    // 레이어를 생성한 뒤 map에 추가
-    map.addLayer(layer);
-    
-    return layer;
-}
+    })
+});
 // 마커를 담을 레이어의 집합
 const markerLayers = arrToObj(markerTypes, typeToLayer)
+// markerLayers의 각 레이어를 map에 추가
+markerLayers.forEach(markerLayer => map.addLayer(markerLayer))
 
 // 주어진 좌표에 주어진 id를 갖는 마커 생성
 const createMarker = (coord, id) => {
