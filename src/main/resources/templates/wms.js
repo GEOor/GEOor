@@ -67,6 +67,27 @@ const setMarkers = async (markerType) => {
     }
 }
 
+const { checkLayer, getLayer, createLayer } = (() => {
+    const layers = {}
+
+    const checkLayer = (cityId) => cityId in layers
+    const getLayer = (cityId) => layers[cityId]
+    const createLayer = (cityId) => layers[cityId] = new ol.layer.Tile({
+        visible: true,
+        source: new ol.source.TileWMS({
+            url: 'http://localhost:8600/geoserver/geor/wms', //행정구역 16개 따로?
+            params: {
+                FORMAT: 'image/png',
+                TILED : true,
+                LAYERS: 'geor:road',
+                CQL_FILTER: `sig_cd = ${cityId}`
+            }
+        })
+    })
+
+    return { checkLayer, getLayer, createLayer }
+})()
+
 const requestHillShade = async () => {
     const $address = document.getElementById('address');
     const $date = document.getElementById('date');
@@ -86,25 +107,12 @@ const requestHillShade = async () => {
     const { latitude, longitude, cityId } = await res.json()
 
     // 검색한 지역 쪽으로 지도를 이동
-    // 이 떄 위도와 경도를 openlayers의 지도에서 사용할 수 있는 방식으로 먼저 변환해야 함
     map.getView().setCenter([parseFloat(latitude), parseFloat(longitude)]);
     map.getView().setZoom(16);
 
     // 도로 데이터를 geoserver로부터 받아와 map에 표시
-    map.addLayer(new ol.layer.Tile({
-        visible: true,
-        source: new ol.source.TileWMS({
-            url: 'http://localhost:8600/geoserver/geor/wms', //행정구역 16개 따로?
-            params: {
-                FORMAT: 'image/png',
-                TILED : true,
-                LAYERS: 'geor:road',
-                CQL_FILTER: 'sig_cd = ' + cityId
-            }
-        })
-    }));
-
-    return [Number(latitude), Number(longitude)];
+    if (checkLayer(cityId)) map.removeLayer(getLayer(cityId))
+    map.addLayer(createLayer(cityId));
 }
 
 // 검색할 날짜의 범위를 제한
