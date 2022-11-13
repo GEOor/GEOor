@@ -19,6 +19,10 @@ const map = new ol.Map({
     })
 });
 
+
+
+/* ---------- 마커 설정 ---------- */
+
 // 마커의 종류
 const markerTypes = ['tunnel', 'bridge', 'frozen'];
 // 마커 타입 이름을 마커를 저장할 레이어로 변환하는 함수
@@ -36,7 +40,6 @@ const markerLayers = arrToObj(markerTypes, typeToLayer)
 
 // 각 마커를 담을 레이어를 map에 추가
 markerTypes.forEach(name => map.addLayer(markerLayers[name]))
-
 
 // 주어진 좌표에 주어진 id를 갖는 마커 생성
 const createMarker = (coord, id) => {
@@ -68,9 +71,15 @@ const setMarkers = async (markerType) => {
     }
 }
 
+/* ---------- 마커 설정 ---------- */
+
+
+
+/* ---------- 레이어 설정 ---------- */
+
 const { checkLayer, getLayer, createLayer } = (() => {
     const layers = {}
-
+    
     const checkLayer = (cityId) => cityId in layers
     const getLayer = (cityId) => layers[cityId]
     const createLayer = (cityId) => layers[cityId] = new ol.layer.Tile({
@@ -85,7 +94,7 @@ const { checkLayer, getLayer, createLayer } = (() => {
             }
         })
     })
-
+    
     return { checkLayer, getLayer, createLayer }
 })()
 
@@ -93,27 +102,33 @@ const requestHillShade = async () => {
     // 특정 id를 지닌 input의 value를 각각 그 id의 value값으로 저장
     const data = arrToObj(['address', 'date', 'time'], (id) => document.getElementById(id).value)
     console.log(data)
-
+    
     const res = await fetch('/hillShade', { 
         method: 'POST',
         headers: { "Content-Type": "application/json; charset=UTF-8" },
         body: JSON.stringify(data)
     });
     const { latitude, longitude, cityId } = await res.json()
-
+    
     // 검색한 지역 쪽으로 지도를 이동
     map.getView().setCenter([parseFloat(latitude), parseFloat(longitude)]);
     map.getView().setZoom(16);
-
+    
     // 도로 데이터를 geoserver로부터 받아와 map에 표시
     if (checkLayer(cityId)) map.removeLayer(getLayer(cityId))
     map.addLayer(createLayer(cityId));
 }
 
+/* ---------- 레이어 설정 ---------- */
+
+
+
+/* ---------- 프로젝트 설정 ---------- */
+
 // 검색할 날짜의 범위를 제한
 const inputDataRange = () => {
     const $date = document.getElementById('date');
-
+    
     // 오늘 날짜
     const today = new Date();
     // 일주일 뒤
@@ -134,7 +149,7 @@ const setLoading = (toggle) => {
 }
 
 // 사용자가 입력한 값을 이용해 hillShade 알고리즘 실행
-const analysisStart = async (e) => {
+const runHillShade = async (e) => {
     e.preventDefault();
 
     // 로딩창을 노출
@@ -142,7 +157,7 @@ const analysisStart = async (e) => {
 
     // 이전에 생성한 마커 레이어 제거
     markerTypes.forEach(name => markerLayers[name].getSource().clear())
-    // 사용자가 입력한 위치 -> 위,경도 변환 후 지도 내 카메라 줌
+    // 
     await requestHillShade();
     // (교량, 터널, 상습결빙구역) -> 마커 생성
     await Promise.all(markerTypes.map(setMarkers))
@@ -151,8 +166,14 @@ const analysisStart = async (e) => {
     setLoading(false);
 }
 
-const $form = document.getElementById("form");
-$form.onsubmit = analysisStart;
+const init = () => {
+    const $form = document.getElementById("form");
+    $form.onsubmit = runHillShade;
+    
+    // 날짜 범위 설정
+    inputDataRange();
+}
 
-// 날짜 범위 설정
-inputDataRange();
+init()
+
+/* ---------- 프로젝트 설정 ---------- */
