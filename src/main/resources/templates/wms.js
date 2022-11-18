@@ -38,7 +38,7 @@ const typeToLayer = (type) => new ol.layer.Vector({
 // 마커를 담을 레이어의 집합
 const markerLayers = arrToObj(markerTypes, typeToLayer)
 // markerLayers의 각 레이어를 map에 추가
-markerLayers.forEach(markerLayer => map.addLayer(markerLayer))
+markerTypes.forEach(markerType => map.addLayer(markerLayers[markerType]))
 
 // 주어진 좌표에 주어진 id를 갖는 마커 생성
 const createMarker = (coord, id) => {
