@@ -46,6 +46,11 @@ public class HillShadeController {
 		this.roadService = roadService;
 	}
 
+	/**
+	 * www.vworld.kr에서 한글 주소를 보내주어서 위도, 경도, 도시 번호를 가지고 옴 (ex. 강동구 → 11740)
+	 * @param req : address(한글 주소), date(현재 날짜), time(현재 시간)
+	 * @return postHillShadeReq : latitude(위도), longitude(경도), cityId(도시 번호)
+	 */
 	@PostMapping("/hillShade")
 	ResponseEntity<PostHillShadeReq> requestHillShade(@RequestBody BasicDataReq req) {
 		try {
@@ -73,7 +78,7 @@ public class HillShadeController {
 			ResponseEntity<PostHillShadeReq> responseEntity = new ResponseEntity<>(postHillShadeReq, httpHeaders,
 					HttpStatus.OK);
 
-			// this.updateHillShade(postHillShadeReq, req);
+			this.updateHillShade(postHillShadeReq, req);
 
 			return responseEntity;
 		} catch (Exception e) {
@@ -83,6 +88,11 @@ public class HillShadeController {
 		}
 	}
 
+	/**
+	 * URL에 대한 자세한 내용은 https://www.vworld.kr/dev/v4dv_geocoderguide2_s001.do 를 참조
+	 * @param address : 한글 주소(ex. 강동구)
+	 * @return
+	 */
 	private String getURL(String address) {
 		return "http://api.vworld.kr/req/address?service=address&request=getcoord&version=2.0"
 				+ "&crs=epsg:3857"
@@ -90,6 +100,11 @@ public class HillShadeController {
 				+ "&key=49EA5D21-2E61-3344-82B1-9E3F0B6C5805";
 	}
 
+	/**
+	 * vworld api를 통해 가져온 JSON을 파싱하여 위도, 경도, 도시 번호를 가지고 옴
+	 * @param obj
+	 * @return
+	 */
 	private PostHillShadeReq jsonToDTO(JSONObject obj) {
 		JSONObject response = (JSONObject) obj.get("response");
 		JSONObject result = (JSONObject) response.get("result");
