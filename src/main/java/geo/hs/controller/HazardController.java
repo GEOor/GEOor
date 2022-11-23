@@ -16,16 +16,25 @@ public class HazardController {
 
     private static final HazardRepository hazardRepository = new HazardRepository();
 
+    /**
+     * 교량 데이터를 가지고 옴
+     */
     @GetMapping("/bridge")
     public ArrayList<Hazard> bridge(Model model) throws SQLException {
         return hazardRepository.getBridge();
     }
 
+    /**
+     * 터널 데이터를 가지고 옴
+     */
     @GetMapping("/tunnel")
     public ArrayList<Hazard> tunnel(Model model) throws SQLException {
         return hazardRepository.getTunnel();
     }
 
+    /**
+     * 결빙 데이터를 가지고 옴
+     */
     @GetMapping("/frozen")
     public ArrayList<Hazard> frozen(Model model) throws SQLException {
         return hazardRepository.getFrozen();

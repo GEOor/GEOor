@@ -56,8 +56,10 @@ public class Crawler {
 			// 대기 설정
 			driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
-			// 20XX년 XX월 XX일 태양의 고도 및 방위각 변화 표 값을 가져오는 것
-			// 개발자 도구로 확인해볼 수 있음
+			/**
+			 * 20XX년 XX월 XX일 태양의 고도 및 방위각 변화 표 값을 가져오는 것
+			 * 개발자 도구로 확인해볼 수 있음
+ 			 */
 			List<WebElement> tr = driver.findElementsByXPath("//*[@id=\"sun-height-table\"]/table/tbody/tr");
 
 			// 출력 테스트
@@ -73,9 +75,9 @@ public class Crawler {
 
 	/**
 	 * 2021-11-24
-	 * 작성자 : 김태현
-	 * 내용 : 태양 고도각 관련 정보 크롤링 결과 파싱
-	 * 목적 : 크롤러 정보 get 함수로 깔끔하게 보내기 위함
+	 * <br/>작성자 : 김태현
+	 * <br/>내용 : 태양 고도각 관련 정보 크롤링 결과 파싱
+	 * <br/>목적 : 크롤러 정보 get 함수로 깔끔하게 보내기 위함
 	 */
 	private void crawlerParsing(List<WebElement> arr) {
 		for (int i = 0; i < arr.size(); i++) {
