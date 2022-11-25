@@ -36,6 +36,7 @@ const typeToLayer = (type) =>
                 src: `img/${type}.png`,
             }),
         }),
+        zIndex: 1,
     });
 // 마커를 담을 레이어의 집합
 const markerLayers = arrToObj(markerTypes, typeToLayer);
