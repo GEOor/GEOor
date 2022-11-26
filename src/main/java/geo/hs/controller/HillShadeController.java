@@ -140,7 +140,8 @@ public class HillShadeController {
 		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
 
 		// 각 DSM 파일들 HillShade 계산
-		int time = timeString.charAt(0) == '0' ? timeString.charAt(1) - '0' : Integer.parseInt(timeString);
+		// 특정 시간 데이터를 확인 (분은 필요 없음)
+		int time = Integer.parseInt(timeString.split(":")[0]);
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
 		roadService.calcRoadHillShade(hs1DArr, req.getCityId());
 		roadService.updateRoadHillShade();
