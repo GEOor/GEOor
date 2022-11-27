@@ -127,10 +127,6 @@ public class HillShadeController {
 		String dateString = basicDataReq.getDate();
 		String timeString = basicDataReq.getTime();
 
-		// 해당 cityCode에 맞는 지역의 DSM 가져오기
-		List<Dsm> dsms = dsmService.getDsm(req.getCityId());
-		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
-
 		// 태양고도각 크롤링
 		// crawler 호출
 		double lat = Double.parseDouble(req.getLatitude());
@@ -139,12 +135,16 @@ public class HillShadeController {
 
 		SchedulerSunInfo si = new SchedulerSunInfo(lat, lng, crawler.getSi());
 
+		// 해당 cityCode에 맞는 지역의 DSM 가져오기
+		List<Dsm> dsms = dsmService.getDsm(req.getCityId());
+		ArrayList<ArrayList<Dsm>> dsm2DArr = dsmService.dsm2DConverter(dsms);
+
 		// 각 DSM 파일들 HillShade 계산
 		// 특정 시간 데이터를 확인 (분은 필요 없음)
 		int time = Integer.parseInt(timeString.split(":")[0]);
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
+		log.info("hillshade update start");
 		roadService.calcRoadHillShade(hs1DArr, req.getCityId());
-		roadService.updateRoadHillShade();
-		roadService.printResult();
+		log.info("hillshade update end");
 	}
 }

@@ -7,6 +7,8 @@ import lombok.Setter;
 @Getter @Setter
 @AllArgsConstructor
 public class Dsm  implements Comparable<Dsm>{
+
+	private long address;
 	
 	private String x;
 	

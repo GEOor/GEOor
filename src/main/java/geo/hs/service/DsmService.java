@@ -72,7 +72,7 @@ public class DsmService {
 				if(mapXY.containsKey(iter_y.toString() + iter_x.toString())) {
 					dsmArrayList.add(mapXY.get(iter_y.toString() + iter_x.toString()));
 				} else {
-					dsmArrayList.add(new Dsm("1", "1", -1, -1));
+					dsmArrayList.add(new Dsm(1L, "1", "1",-1, -1));
 				}
 			}
 			arr.add(dsmArrayList);
@@ -80,14 +80,5 @@ public class DsmService {
 		
 		return arr;
 
-	}
-	
-	public List<Dsm> getAllDsm(){
-		// 만약 cityId가 길게 넘어온다면 parsing Code 짜기
-		List<Dsm> dsm = null;
-		/*ArrayList<Dsm> dsm = new ArrayList<>();
-		dsm.addAll(getDsmRepository.getAllDsm());*/
-		// Collections.sort(dsm);
-		return dsm;
 	}
 }
