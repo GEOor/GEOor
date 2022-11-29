@@ -142,8 +142,8 @@ public class HillShadeController {
 		dsmService.getDsm(hexagonMap, req.getCityId());
 
 		// 각 DSM 파일들 HillShade 계산
-		// 특정 시간 데이터를 확인 (분은 필요 없음)
 		int time = Integer.parseInt(timeString.split(":")[0]);
+		log.info(String.valueOf(req.getCityId()));
 		ArrayList<HillShade> hs1DArr = hillShadeService.run(hexagonMap, si.getArr().get(time));
 		log.info("hillshade update start");
 		roadService.calcRoadHillShade(hs1DArr, req.getCityId());

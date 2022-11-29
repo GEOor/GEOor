@@ -22,9 +22,7 @@ public class DsmService {
 	}
 	
 	public List<Hexagon> getDsm(Map<Long, Hexagon> hexagonMap, int cityId){
-		// 만약 cityId가 길게 넘어온다면 parsing Code 짜기
 		List<Hexagon> hexagon = getDsmRepository.getDsm(hexagonMap, cityId);
-		//Collections.sort(hexagon);
 		return hexagon;
 	}
 }

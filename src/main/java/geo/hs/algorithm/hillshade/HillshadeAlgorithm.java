@@ -22,7 +22,7 @@ public class HillshadeAlgorithm {
 
     private H3Core h3;
     private final int gridDistance = 1;
-    private final int cellSpacing = 9; // h3 res 값
+    private final int cellSpacing = 10; // h3 res 값 반드시 모듈 레포에서 설정한 res 값과 같아야 한다.
 
     public HillshadeAlgorithm() {
         try {
@@ -67,11 +67,11 @@ public class HillshadeAlgorithm {
             Zenith_rad = Math.PI / 2 - si.getAltitude();
 
             // (4) Azimuth_math = 360.0 - Azimuth + 90
-            Azimuth_math = 360.0 - si.getAzimuth();
+            Azimuth_math = 360.0 - si.getAzimuth() + 90;
 
             // (5) if Azimuth_math >= 360.0, then: Azimuth_math = Azimuth_math - 360.0
             if (Azimuth_math >= 360.0)
-                Azimuth_math = Azimuth_math - 360.0;
+                Azimuth_math -= 360.0;
 
             // (6) Azimuth_rad = Azimuth_math * pi / 180.0
             Azimuth_rad = (Azimuth_math * Math.PI) / 180.0;
