@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 public class RoadRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final WKB wkb = new WKB();
     private H3Core h3;
 
     public RoadRepository(DataSource dataSource) throws IOException {
@@ -25,9 +26,30 @@ public class RoadRepository {
         this.h3 = H3Core.newInstance();
     }
 
+    public void findByGeom(HashMap<Integer, Road> roadHashMap, List<Hillshade> hillShades, int cityId) {
+        String sql = "SELECT r.origin_id \n"
+            + "FROM road_segment as r, testdsm as d\n"
+            + "WHERE ST_Intersects(d.the_geom, r.the_geom) \n"
+            + "and r.sig_cd = ? \n"
+            + "and d.sig_cd = ? \n"
+            + "and d.address = ?";
+        for (Hillshade hillShade : hillShades) {
+            jdbcTemplate.query(sql, new RowMapper<Integer>() {
+                @Override
+                public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    int roadId = rs.getInt(1);
+                    if (!roadHashMap.containsKey(roadId)) {
+                        roadHashMap.put(roadId, new Road(roadId));
+                    }
+                    roadHashMap.get(roadId).interSects(hillShade.getHillshade().intValue());
+                    return 0;
+                }
+            }, cityId, cityId, hillShade.getAddress());
+        }
+    }
 
-    public void updateHillShade(Hillshade dsm, int cityId) {
-        String sql = "UPDATE testdsm SET hillshade = ? WHERE address = ? and sig_cd = ?";
-        jdbcTemplate.update(sql, dsm.getHillshade(), h3.latLngToCell(dsm.getX(), dsm.getY(), 9), cityId);
+    public void updateHillShade(Road road) {
+        String sql = "UPDATE road SET hillshade = ? WHERE id = ?";
+        jdbcTemplate.update(sql, road.getHillShadeAverage(), road.getId());
     }
 }

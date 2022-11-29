@@ -145,6 +145,7 @@ public class HillShadeController {
 		ArrayList<Hillshade> hs1DArr = hillShadeService.run(dsm2DArr, si.getArr().get(time));
 		log.info("hillshade update start");
 		roadService.calcRoadHillShade(hs1DArr, req.getCityId());
+		roadService.updateRoadHillShade();
 		log.info("hillshade update end");
 	}
 }

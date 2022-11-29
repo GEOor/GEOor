@@ -1,6 +1,5 @@
 package geo.hs.service;
 
-import com.uber.h3core.H3Core;
 import geo.hs.model.hillshade.Hillshade;
 import geo.hs.model.road.Road;
 import geo.hs.repository.RoadRepository;
@@ -14,11 +13,16 @@ import org.springframework.stereotype.Service;
 public class RoadService {
 
     private final RoadRepository roadRepository;
+    private final HashMap<Integer, Road> roadHashMap = new HashMap<>();
 
     public void calcRoadHillShade(List<Hillshade> hillShades, int cityId) {
-        for (Hillshade hillShade : hillShades) {
-            roadRepository.updateHillShade(hillShade, cityId);
-        }
+        roadHashMap.clear();
+        roadRepository.findByGeom(roadHashMap, hillShades, cityId);
+    }
 
+    public void updateRoadHillShade() {
+        for (Road value : roadHashMap.values()) {
+            roadRepository.updateHillShade(value);
+        }
     }
 }

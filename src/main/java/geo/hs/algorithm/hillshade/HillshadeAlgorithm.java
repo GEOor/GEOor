@@ -44,11 +44,12 @@ public class HillshadeAlgorithm {
                     for(int x=j-1; x<=j+1; x++){
                         windows.put((char) ('a' + cnt), di.get(y).get(x).getZ());
                         cnt++;
-                        if(di.get(y).get(x).getZ() == -1) flag = 1;
+                        if(di.get(y).get(x).getZ() == -1)
+                            flag += 1;
                     }
                 }
 
-                if(flag == 1) continue;
+                if(flag == 9) continue;
 
                 // (2) Zenith_deg = 90 - Altitude
                 Zenith_deg = 90 - si.getAltitude();
@@ -118,8 +119,8 @@ public class HillshadeAlgorithm {
                         }
                     }
                 }
-
-                hs_xy = new Hillshade(si.getX(), si.getY(), hs_cell, tmp_grid);
+                long address = di.get(i).get(j).getAddress();
+                hs_xy = new Hillshade(si.getX(), si.getY(), address, hs_cell, tmp_grid);
 
                 hs.add(hs_xy);
             }

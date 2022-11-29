@@ -17,6 +17,8 @@ public class Hillshade {
     private Double x;
     private Double y;
 
+    private long address;
+
     //hillshade 값
     private Double hillshade;
 
