@@ -11,18 +11,9 @@ import java.util.ArrayList;
 @Setter
 @AllArgsConstructor
 @ToString
-public class Hillshade {
-
-    //x,y 좌표 값
-    private Double x;
-    private Double y;
+public class HillShade {
 
     private long address;
 
-    //hillshade 값
     private Double hillshade;
-
-    //4방향 모서리 위,경도 값 (왼쪽 위, 아래, 오른쪽 위, 아래 순)
-    private ArrayList<Double> grid = new ArrayList<Double>();
-
 }

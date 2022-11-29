@@ -49,10 +49,10 @@ public class Scheduler {
 	// @Scheduled(cron = "0 0 0 * * * " ) 매일 0시에 호출
 	/*public void scheduler_128_37(){ // Thread로 만들기 위해 이렇게 이름 지었음
 		// get dsm from db
-		List<Dsm> dsm = getDsmRepository.getDsm(12837);
+		List<Hexagon> dsm = getDsmRepository.getDsm(12837);
 
 		// 1차원 dsm -> 2차원 dsm으로 변환
-		ArrayList<ArrayList<Dsm>> dsm2DArr = getDsmRepository.dsm2DConverter(dsm);
+		ArrayList<ArrayList<Hexagon>> dsm2DArr = getDsmRepository.dsm2DConverter(dsm);
 
 		// hillShade 값 계산
 		ArrayList<HillShade> hs1DArr;

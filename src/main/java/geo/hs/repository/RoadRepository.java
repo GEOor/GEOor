@@ -2,7 +2,7 @@ package geo.hs.repository;
 
 import com.uber.h3core.H3Core;
 import geo.hs.geoUtil.WKB;
-import geo.hs.model.hillshade.Hillshade;
+import geo.hs.model.hillshade.HillShade;
 import geo.hs.model.road.Road;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -26,14 +26,14 @@ public class RoadRepository {
         this.h3 = H3Core.newInstance();
     }
 
-    public void findByGeom(HashMap<Integer, Road> roadHashMap, List<Hillshade> hillShades, int cityId) {
+    public void findByGeom(HashMap<Integer, Road> roadHashMap, List<HillShade> hillShades, int cityId) {
         String sql = "SELECT r.origin_id \n"
             + "FROM road_segment as r, testdsm as d\n"
             + "WHERE ST_Intersects(d.the_geom, r.the_geom) \n"
             + "and r.sig_cd = ? \n"
             + "and d.sig_cd = ? \n"
             + "and d.address = ?";
-        for (Hillshade hillShade : hillShades) {
+        for (HillShade hillShade : hillShades) {
             jdbcTemplate.query(sql, new RowMapper<Integer>() {
                 @Override
                 public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -1,6 +1,6 @@
 package geo.hs.service;
 
-import geo.hs.model.hillshade.Hillshade;
+import geo.hs.model.hillshade.HillShade;
 import geo.hs.model.road.Road;
 import geo.hs.repository.RoadRepository;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class RoadService {
     private final RoadRepository roadRepository;
     private final HashMap<Integer, Road> roadHashMap = new HashMap<>();
 
-    public void calcRoadHillShade(List<Hillshade> hillShades, int cityId) {
+    public void calcRoadHillShade(List<HillShade> hillShades, int cityId) {
         roadHashMap.clear();
         roadRepository.findByGeom(roadHashMap, hillShades, cityId);
     }
