@@ -145,6 +145,7 @@ public class HillShadeController {
 		int time = Integer.parseInt(timeString.split(":")[0]);
 		log.info(String.valueOf(req.getCityId()));
 		ArrayList<HillShade> hs1DArr = hillShadeService.run(hexagonMap, si.getArr().get(time));
+
 		log.info("hillshade update start");
 		roadService.calcRoadHillShade(hs1DArr, req.getCityId());
 		roadService.updateRoadHillShade();
