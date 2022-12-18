@@ -1,9 +1,11 @@
 package geo.hs.service;
 
 import geo.hs.algorithm.hillshade.HillshadeAlgorithm;
-import geo.hs.model.dsm.Dsm;
-import geo.hs.model.hillshade.Hillshade;
+import geo.hs.model.dsm.Hexagon;
+import geo.hs.model.hillshade.HillShade;
 import geo.hs.model.sun.SunInfo;
+import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,10 +15,8 @@ public class HillShadeService {
 
     HillshadeAlgorithm hillshadeAlgorithm = new HillshadeAlgorithm();
 
-    public ArrayList<Hillshade> run(ArrayList<ArrayList<Dsm>> dsm2DArr, SunInfo sunInfo){
-
-        ArrayList<Hillshade> hillShades = hillshadeAlgorithm.hsConverter(sunInfo, dsm2DArr);
-
+    public ArrayList<HillShade> run(Map<Long, Hexagon> hexagonMap, SunInfo sunInfo){
+        ArrayList<HillShade> hillShades = hillshadeAlgorithm.hsConverter(hexagonMap, sunInfo);
         return hillShades;
     }
 }
