@@ -1,8 +1,10 @@
 package geo.hs.repository;
 
+import com.uber.h3core.H3Core;
 import geo.hs.geoUtil.WKB;
-import geo.hs.model.hillshade.Hillshade;
+import geo.hs.model.hillshade.HillShade;
 import geo.hs.model.road.Road;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -17,14 +19,18 @@ public class RoadRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final WKB wkb = new WKB();
-    private final String sql = "SELECT origin_id FROM road_segment WHERE ST_Intersects(st_setSRID(? ::geometry, 4326), the_geom) and sig_cd = ?";
+    private H3Core h3;
 
-    public RoadRepository(DataSource dataSource) {
+    public RoadRepository(DataSource dataSource) throws IOException {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        this.h3 = H3Core.newInstance();
     }
 
-    public void findByGeom(HashMap<Integer, Road> roadHashMap, List<Hillshade> hillShades, int cityId) {
-        for (Hillshade hillShade : hillShades) {
+    public void findByGeom(HashMap<Integer, Road> roadHashMap, List<HillShade> hillShades) {
+        String sql = "SELECT road_id \n"
+            + "FROM hexagon_road \n"
+            + "WHERE hexagon_id = ?";
+        for (HillShade hillShade : hillShades) {
             jdbcTemplate.query(sql, new RowMapper<Integer>() {
                 @Override
                 public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -35,7 +41,7 @@ public class RoadRepository {
                     roadHashMap.get(roadId).interSects(hillShade.getHillshade().intValue());
                     return 0;
                 }
-            }, wkb.convertPolygonWKB(hillShade), cityId);
+            }, hillShade.getAddress());
         }
     }
 
