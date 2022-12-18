@@ -26,13 +26,10 @@ public class RoadRepository {
         this.h3 = H3Core.newInstance();
     }
 
-    public void findByGeom(HashMap<Integer, Road> roadHashMap, List<HillShade> hillShades, int cityId) {
-        String sql = "SELECT r.origin_id \n"
-            + "FROM road_segment as r, testdsm as d\n"
-            + "WHERE ST_Intersects(d.the_geom, r.the_geom) \n"
-            + "and r.sig_cd = ? \n"
-            + "and d.sig_cd = ? \n"
-            + "and d.address = ?";
+    public void findByGeom(HashMap<Integer, Road> roadHashMap, List<HillShade> hillShades) {
+        String sql = "SELECT road_id \n"
+            + "FROM hexagon_road \n"
+            + "WHERE hexagon_id = ?";
         for (HillShade hillShade : hillShades) {
             jdbcTemplate.query(sql, new RowMapper<Integer>() {
                 @Override
@@ -44,7 +41,7 @@ public class RoadRepository {
                     roadHashMap.get(roadId).interSects(hillShade.getHillshade().intValue());
                     return 0;
                 }
-            }, cityId, cityId, hillShade.getAddress());
+            }, hillShade.getAddress());
         }
     }
 

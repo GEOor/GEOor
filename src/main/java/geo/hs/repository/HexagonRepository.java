@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-public class GetDsmRepository {
+public class HexagonRepository {
 	
 	private JdbcTemplate jdbcTemplate;
 	private H3Core h3;
@@ -23,9 +23,10 @@ public class GetDsmRepository {
 		this.h3 = H3Core.newInstance();
 	}
 	
-	public List<Hexagon> getDsm(Map<Long, Hexagon> hexagonMap, int cityId){
-		// where 문의 city 부분은 db의 컬럼에 따라 변경
-		String query = "select address, height from testdsm where sig_cd = ?";
+	public List<Hexagon> getHexagon(Map<Long, Hexagon> hexagonMap, int cityId){
+		String query = "SELECT h.id, h.height"
+			+ " FROM hexagon as h, hexagon_admin as a"
+			+ " where a.sig_cd = ? and h.id = a.hexagon_id";
 		return this.jdbcTemplate.query(query,
 				(rs, rowNum) -> hexagonMap.put(
 					rs.getLong(1),

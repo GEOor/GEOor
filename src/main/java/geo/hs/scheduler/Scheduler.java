@@ -2,7 +2,7 @@ package geo.hs.scheduler;
 
 import geo.hs.crawling.Crawler;
 import geo.hs.model.scheduler.SchedulerSunInfo;
-import geo.hs.repository.GetDsmRepository;
+import geo.hs.repository.HexagonRepository;
 import geo.hs.service.HillShadeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class Scheduler {
 	
 	private Crawler crawler = new Crawler();
 	private ArrayList<SchedulerSunInfo> ssi = new ArrayList<>();
-	private GetDsmRepository getDsmRepository = new GetDsmRepository();
+	private HexagonRepository hexagonRepository = new HexagonRepository();
 	private HillShadeService hillShadeService = new HillShadeService();
 	
 	/**
